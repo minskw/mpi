@@ -1297,11 +1297,9 @@
     </style>
 </head>
 <body>
-	<!-- Floating Home Button -->
-<a href="index.html" 
-   class="fixed top-4 left-4 z-50 bg-emerald-500 text-white px-4 py-2 rounded-full shadow-lg flex items-center space-x-2 hover:bg-emerald-600 transition">
-    <i class="fas fa-home"></i>
-    <span>Home</span>
+<a href="index.html" id="homeBtn" 
+   class="hidden fixed bottom-4 right-4 z-50 bg-emerald-500 text-white p-4 rounded-full shadow-xl hover:bg-emerald-600 transition animate-pulse">
+    <i class="fas fa-home text-xl"></i>
 </a>
 
     <!-- Floating Islamic decorations -->
@@ -2293,6 +2291,18 @@
             // Auto-load student data when page loads
             loadStudentData();
         });
+
+		  const homeBtn = document.getElementById("homeBtn");
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 200) { 
+      homeBtn.classList.remove("hidden");
+      homeBtn.classList.add("block");
+    } else {
+      homeBtn.classList.remove("block");
+      homeBtn.classList.add("hidden");
+    }
+  });
     </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'978dbf1f744bfd32',t:'MTc1NjgyMzg1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
