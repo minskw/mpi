@@ -1,0 +1,2290 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🕌 Belajar Khitan Yuk! - Kelas 4 MI/SD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Comic+Neue:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            min-height: 100vh;
+            color: #2d3748;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Floating Islamic decorations */
+        .floating-decoration {
+            position: fixed;
+            font-size: 2rem;
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .floating-decoration:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+        .floating-decoration:nth-child(2) { top: 20%; right: 10%; animation-delay: 1s; }
+        .floating-decoration:nth-child(3) { top: 60%; left: 8%; animation-delay: 2s; }
+        .floating-decoration:nth-child(4) { top: 70%; right: 5%; animation-delay: 3s; }
+        .floating-decoration:nth-child(5) { top: 40%; left: 15%; animation-delay: 4s; }
+        .floating-decoration:nth-child(6) { top: 80%; right: 15%; animation-delay: 5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            min-height: 100vh;
+            box-shadow: 0 0 50px rgba(0,0,0,0.1);
+            border-radius: 0 0 30px 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0 0 30px 30px;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars" patternUnits="userSpaceOnUse" width="20" height="20"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.2)"/><circle cx="5" cy="5" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="15" cy="15" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23stars)"/></svg>');
+            animation: twinkle 10s linear infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-10px) rotate(180deg); opacity: 0.6; }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            font-weight: 400;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .islamic-decoration {
+            position: absolute;
+            font-size: 4rem;
+            opacity: 0.4;
+            color: #ffd700;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .islamic-decoration.left {
+            top: 15px;
+            left: 20px;
+        }
+
+        .islamic-decoration.right {
+            top: 15px;
+            right: 20px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-bottom: 4px solid #ff6b6b;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 0 0 20px 20px;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 25px 15px;
+            text-align: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            color: #2d3748;
+            transition: all 0.3s ease;
+            position: relative;
+            font-family: 'Comic Neue', cursive;
+            border-radius: 15px 15px 0 0;
+            margin: 0 2px;
+        }
+
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            color: #1a202c;
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #ffd700;
+            border-radius: 2px;
+        }
+
+        .nav-tab i {
+            display: block;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .content {
+            padding: 30px 20px;
+            display: none;
+            max-width: 100%;
+        }
+
+        .content.active {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            border-radius: 25px;
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 3px solid #e2e8f0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(255,107,107,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: cardFloat 8s ease-in-out infinite;
+        }
+
+        @keyframes cardFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-20px, -20px) rotate(180deg); }
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.15);
+            border-color: #ff6b6b;
+        }
+
+        .card h2 {
+            color: #2d3748;
+            margin-bottom: 25px;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card h2 i {
+            color: #ff6b6b;
+            font-size: 2.2rem;
+            animation: wiggle 2s ease-in-out infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+        }
+
+        .card h3 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            font-size: 2.2rem;
+            text-align: center;
+            margin: 25px 0;
+            color: #667eea;
+            font-weight: 700;
+            direction: rtl;
+            line-height: 2;
+            padding: 25px;
+            background: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%);
+            border-radius: 20px;
+            border: 3px solid #29b6f6;
+            box-shadow: 0 8px 25px rgba(41, 182, 246, 0.2);
+            position: relative;
+        }
+
+        .arabic-text::before {
+            content: '✨';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 1.5rem;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        .arabic-text::after {
+            content: '✨';
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            animation: sparkle 2s ease-in-out infinite 1s;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .rule-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 25px 0;
+            border: 3px solid #28a745;
+            position: relative;
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.2);
+        }
+
+        .rule-box::before {
+            content: '📚';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            animation: bookFlip 3s ease-in-out infinite;
+        }
+
+        @keyframes bookFlip {
+            0%, 100% { transform: rotateY(0deg); }
+            50% { transform: rotateY(180deg); }
+        }
+
+        .example-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 25px 0;
+            border: 3px solid #ffc107;
+            position: relative;
+            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.2);
+        }
+
+        .example-box::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            animation: lightBulb 2s ease-in-out infinite;
+        }
+
+        @keyframes lightBulb {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; filter: brightness(1.3); }
+        }
+
+        .hadith-box {
+            background: linear-gradient(135deg, #e1bee7 0%, #ce93d8 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 25px 0;
+            border: 3px solid #9c27b0;
+            position: relative;
+            box-shadow: 0 8px 25px rgba(156, 39, 176, 0.2);
+        }
+
+        .hadith-box::before {
+            content: '📜';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            animation: scroll 4s ease-in-out infinite;
+        }
+
+        @keyframes scroll {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 700;
+            width: 100%;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-family: 'Comic Neue', cursive;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .btn:disabled {
+            background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            box-shadow: 0 8px 25px rgba(0, 184, 148, 0.3);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 15px 35px rgba(0, 184, 148, 0.4);
+        }
+
+        .quiz-question {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
+            border-radius: 25px;
+            padding: 35px;
+            margin: 25px 0;
+            border: 3px solid #74b9ff;
+            box-shadow: 0 10px 30px rgba(116, 185, 255, 0.2);
+            position: relative;
+        }
+
+        .quiz-question::before {
+            content: '🤔';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            animation: think 2s ease-in-out infinite;
+        }
+
+        @keyframes think {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        .quiz-options {
+            margin: 25px 0;
+            display: grid;
+            gap: 15px;
+        }
+
+        .quiz-option {
+            background: linear-gradient(135deg, #ffffff 0%, #f1f3f4 100%);
+            border: 3px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 16px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .quiz-option .option-letter {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .quiz-option:hover::before {
+            left: 100%;
+        }
+
+        .quiz-option:hover {
+            border-color: #ff6b6b;
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.2);
+        }
+
+        .quiz-option:hover .option-letter {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            transform: scale(1.1);
+        }
+
+        .quiz-option.selected .option-letter {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+        }
+
+        .quiz-option.correct {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            color: white;
+            border-color: #00a085;
+            animation: correctPulse 0.6s ease-in-out;
+        }
+
+        .quiz-option.correct .option-letter {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1.05); }
+        }
+
+        .quiz-option.incorrect {
+            background: linear-gradient(135deg, #e17055 0%, #d63031 100%);
+            color: white;
+            border-color: #d63031;
+            animation: shake 0.6s ease-in-out;
+        }
+
+        .quiz-option.incorrect .option-letter {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .login-form {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            border-radius: 30px;
+            padding: 45px;
+            margin: 30px auto;
+            max-width: 550px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+            border: 3px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-form::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,107,107,0.05) 0%, transparent 70%);
+            animation: loginFloat 10s ease-in-out infinite;
+        }
+
+        @keyframes loginFloat {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 35px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .login-header i {
+            font-size: 4rem;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            animation: studentBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes studentBounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-15px); }
+            60% { transform: translateY(-8px); }
+        }
+
+        .login-header h2 {
+            color: #2d3748;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: #4a5568;
+            font-size: 16px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 18px 20px;
+            border: 3px solid #e5e7eb;
+            border-radius: 20px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+            font-family: 'Comic Neue', cursive;
+            font-weight: 600;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
+            transform: scale(1.02);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            padding: 30px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 3px solid #e2e8f0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, rgba(255,107,107,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: statFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes statFloat {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-10px, -10px); }
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.05);
+            border-color: #ff6b6b;
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #64748b;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+        }
+
+        .progress-container {
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            border-radius: 25px;
+            height: 16px;
+            margin: 25px 0;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress-bar {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            height: 100%;
+            transition: width 0.8s ease;
+            border-radius: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: progressShine 2s ease-in-out infinite;
+        }
+
+        @keyframes progressShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .alert {
+            padding: 25px;
+            border-radius: 20px;
+            margin: 25px 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+            border: 3px solid #28a745;
+        }
+
+        .alert-error {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+            border: 3px solid #dc3545;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            color: #0c5460;
+            border: 3px solid #17a2b8;
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            color: white;
+            padding: 50px;
+            border-radius: 30px;
+            text-align: center;
+            margin: 35px 0;
+            box-shadow: 0 25px 60px rgba(0, 184, 148, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .score-display::before {
+            content: '🎉';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 3rem;
+            animation: celebrate 2s ease-in-out infinite;
+        }
+
+        .score-display::after {
+            content: '🎊';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 3rem;
+            animation: celebrate 2s ease-in-out infinite 1s;
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(20deg) scale(1.2); }
+        }
+
+        .final-score {
+            font-size: 5rem;
+            font-weight: 700;
+            margin: 25px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 80px;
+            color: #64748b;
+        }
+
+        .spinner {
+            border: 6px solid #e2e8f0;
+            border-top: 6px solid #ff6b6b;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 40px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Horse Racing Game Styles */
+        .racing-track {
+            background: linear-gradient(135deg, #228B22 0%, #32CD32 50%, #90EE90 100%);
+            border-radius: 30px;
+            padding: 35px;
+            margin: 35px 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 450px;
+            box-shadow: 0 15px 40px rgba(34, 139, 34, 0.3);
+        }
+
+        .racing-lanes {
+            position: absolute;
+            top: 50px;
+            left: 20px;
+            right: 20px;
+            height: 350px;
+            background: linear-gradient(to bottom, 
+                #8B4513 0%, #8B4513 15%,
+                #D2B48C 15%, #D2B48C 30%,
+                #8B4513 30%, #8B4513 45%,
+                #D2B48C 45%, #D2B48C 60%,
+                #8B4513 60%, #8B4513 75%,
+                #D2B48C 75%, #D2B48C 90%,
+                #8B4513 90%, #8B4513 100%);
+            border-radius: 20px;
+            border: 4px solid #654321;
+            z-index: 1;
+        }
+
+        .racing-lanes::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent 0px,
+                transparent 48px,
+                rgba(255,255,255,0.3) 48px,
+                rgba(255,255,255,0.3) 52px
+            );
+            border-radius: 16px;
+        }
+
+		.racing-horse {
+			position: absolute;
+			left: 45px;
+			font-size: 2.5rem;
+			transition: all 2s ease-in-out;
+			z-index: 5;
+			animation: horseGallop 1s ease-in-out infinite;
+			text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+			transform: scaleX(-1); /* Membalik kuda menghadap kanan */
+		}
+
+
+        .racing-horse.player {
+            top: 80px;
+        }
+
+        .racing-horse.opponent1 {
+            top: 140px;
+        }
+
+        .racing-horse.opponent2 {
+            top: 200px;
+        }
+
+        .racing-horse.opponent3 {
+            top: 260px;
+        }
+
+        .racing-horse.opponent4 {
+            top: 320px;
+        }
+
+        @keyframes horseGallop {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-5px) scale(1.05); }
+        }
+
+        .racing-start {
+            position: absolute;
+            top: 50px;
+            left: 25px;
+            width: 8px;
+            height: 350px;
+            background: repeating-linear-gradient(
+                to bottom,
+                #ff0000 0px,
+                #ff0000 20px,
+                #ffffff 20px,
+                #ffffff 40px
+            );
+            z-index: 6;
+            border-radius: 4px;
+        }
+
+        .racing-finish {
+            position: absolute;
+            top: 50px;
+            right: 25px;
+            width: 8px;
+            height: 350px;
+            background: repeating-linear-gradient(
+                to bottom,
+                #000000 0px,
+                #000000 20px,
+                #ffffff 20px,
+                #ffffff 40px
+            );
+            z-index: 6;
+            border-radius: 4px;
+        }
+
+        .racing-question {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            border-radius: 25px;
+            padding: 30px;
+            margin: 25px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 3px solid #e2e8f0;
+            position: relative;
+        }
+
+        .racing-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .racing-option {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 3px solid #cbd5e1;
+            border-radius: 20px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .racing-option .option-letter {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .racing-option::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,107,107,0.1) 0%, transparent 70%);
+            transform: scale(0);
+            transition: transform 0.3s ease;
+        }
+
+        .racing-option:hover::before {
+            transform: scale(1);
+        }
+
+        .racing-option:hover {
+            border-color: #ff6b6b;
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.2);
+        }
+
+        .racing-option:hover .option-letter {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            transform: scale(1.1);
+        }
+
+        .racing-option.selected .option-letter {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+        }
+
+		.racing-option.correct {
+			background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+			color: white;
+			border-color: #00a085;
+		}
+
+		.racing-option.incorrect {
+			background: linear-gradient(135deg, #e17055 0%, #d63031 100%);
+			color: white;
+			border-color: #d63031;
+		}
+
+        @keyframes racingCorrect {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1.08); }
+        }
+
+        .racing-option.incorrect {
+            background: linear-gradient(135deg, #e17055 0%, #d63031 100%);
+            color: white;
+            border-color: #d63031;
+            animation: racingShake 0.8s ease-in-out;
+        }
+
+        .racing-option.incorrect .option-letter {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        @keyframes racingShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        .racing-feedback {
+            text-align: center;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 18px;
+            display: none;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .racing-feedback.correct {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+            border: 3px solid #28a745;
+        }
+
+        .racing-feedback.incorrect {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+            border: 3px solid #dc3545;
+        }
+
+        .racing-complete {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+            color: #2d3748;
+            text-align: center;
+            padding: 50px;
+            border-radius: 30px;
+            margin: 35px 0;
+            box-shadow: 0 25px 60px rgba(255, 215, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .racing-complete::before {
+            content: '🏆';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 3rem;
+            animation: trophy 2s ease-in-out infinite;
+        }
+
+        .racing-complete::after {
+            content: '🥇';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 3rem;
+            animation: trophy 2s ease-in-out infinite 1s;
+        }
+
+        @keyframes trophy {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(15deg) scale(1.2); }
+        }
+
+        .racing-complete h3 {
+            font-size: 2.8rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 3px solid #e2e8f0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(255,107,107,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: infoFloat 8s ease-in-out infinite;
+        }
+
+        @keyframes infoFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-15px, -15px) rotate(180deg); }
+        }
+
+        .info-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            border-color: #ff6b6b;
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.2);
+        }
+
+        .info-card h4 {
+            color: #667eea;
+            margin-bottom: 18px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+
+        .info-card h4 i {
+            font-size: 1.6rem;
+            animation: iconBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes iconBounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-5px); }
+            60% { transform: translateY(-3px); }
+        }
+
+        .info-card ul {
+            position: relative;
+            z-index: 2;
+        }
+
+        .info-card ul li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .header {
+                padding: 25px 15px;
+                border-radius: 0;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .content {
+                padding: 25px 15px;
+            }
+            
+            .nav-tab {
+                font-size: 14px;
+                padding: 20px 10px;
+            }
+            
+            .nav-tab i {
+                font-size: 1.2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .card {
+                padding: 25px;
+            }
+            
+            .arabic-text {
+                font-size: 1.8rem;
+            }
+            
+            .login-form {
+                margin: 25px 15px;
+                padding: 35px 25px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .racing-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .final-score {
+                font-size: 4rem;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .floating-decoration {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Islamic decorations -->
+    <div class="floating-decoration">🕌</div>
+    <div class="floating-decoration">☪️</div>
+    <div class="floating-decoration">📿</div>
+    <div class="floating-decoration">🤲</div>
+    <div class="floating-decoration">✨</div>
+    <div class="floating-decoration">🌙</div>
+
+    <div class="container">
+        <div class="header">
+            <div class="islamic-decoration left">☪️</div>
+            <div class="islamic-decoration right">🕌</div>
+            <div class="header-content">
+                <h1><i class="fas fa-mosque"></i> Belajar Khitan Yuk!</h1>
+                <p>🌟 Untuk Anak-Anak Kelas 4 MI/SD 🌟</p>
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('materi')">
+                <i class="fas fa-book-open"></i>
+                Materi Seru
+            </button>
+            <button class="nav-tab" onclick="showTab('climbing')">
+                <i class="fas fa-horse"></i>
+                Balapan Kuda
+            </button>
+            <button class="nav-tab" onclick="showTab('quiz')">
+                <i class="fas fa-gamepad"></i>
+                Quiz Pintar
+            </button>
+        </div>
+
+        <!-- Materi Content -->
+        <div id="materi" class="content active">
+            <div class="card">
+                <h2><i class="fas fa-star-and-crescent"></i> Apa itu Khitan? 🤔</h2>
+                <div class="rule-box">
+                    <h3>Yuk Kenalan dengan Khitan! 👋</h3>
+                    <p><strong>Khitan</strong> adalah memotong kulit yang menutupi ujung kemaluan laki-laki. Khitan itu sangat penting lho dalam Islam dan termasuk fitrah (sifat alami) manusia. Seperti memotong kuku dan mencukur kumis! 😊</p>
+                </div>
+                
+                <div class="hadith-box">
+                    <h4>📖 Dalil dari Al-Quran dan Hadits:</h4>
+                    <div class="arabic-text">وَإِذِ ابْتَلَىٰ إِبْرَاهِيمَ رَبُّهُ بِكَلِمَاتٍ فَأَتَمَّهُنَّ</div>
+                    <p><strong>Artinya:</strong> "Dan (ingatlah), ketika Ibrahim diuji Tuhannya dengan beberapa kalimat (perintah dan larangan), lalu Ibrahim menunaikannya." (QS. Al-Baqarah: 124)</p>
+                    
+                    <div style="margin-top: 25px;">
+                        <div class="arabic-text">الْفِطْرَةُ خَمْسٌ: الْخِتَانُ وَالاِسْتِحْدَادُ وَنَتْفُ الإِبْطِ وَتَقْلِيمُ الأَظْفَارِ وَقَصُّ الشَّارِبِ</div>
+                        <p><strong>Artinya:</strong> "Fitrah itu ada lima: khitan, mencukur bulu kemaluan, mencabut bulu ketiak, memotong kuku, dan memotong kumis." (HR. Bukhari Muslim)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-balance-scale"></i> Hukum Khitan 📏</h2>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h4><i class="fas fa-male"></i> Untuk Anak Laki-laki</h4>
+                        <p><strong>Wajib</strong> menurut mayoritas ulama. Khitan bagi laki-laki adalah kewajiban yang harus dilaksanakan karena termasuk syariat Nabi Ibrahim AS yang diperintahkan Allah. 👦✨</p>
+                    </div>
+                    <div class="info-card">
+                        <h4><i class="fas fa-female"></i> Untuk Anak Perempuan</h4>
+                        <p><strong>Sunnah</strong> menurut mayoritas ulama. Khitan bagi perempuan dianjurkan tetapi tidak wajib, dan harus dilakukan dengan cara yang tidak membahayakan. 👧💖</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-clock"></i> Kapan Waktu Khitan? ⏰</h2>
+                <div class="example-box">
+                    <h4>🗓️ Waktu yang Dianjurkan:</h4>
+                    <ul style="margin-left: 20px; line-height: 2;">
+                        <li><strong>🍼 Hari ke-7:</strong> Paling utama dilakukan pada hari ketujuh setelah lahir</li>
+                        <li><strong>👶 Sebelum Baligh:</strong> Sebaiknya sebelum anak mencapai usia dewasa</li>
+                        <li><strong>🎒 Usia 7-10 tahun:</strong> Waktu yang baik karena anak sudah bisa memahami</li>
+                        <li><strong>🌟 Kapan saja:</strong> Boleh dilakukan kapan saja sesuai kondisi dan kemampuan</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-heart"></i> Manfaat Khitan yang Keren! 🌟</h2>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h4><i class="fas fa-shield-alt"></i> Untuk Kesehatan 🏥</h4>
+                        <ul style="margin-left: 15px; line-height: 1.8;">
+                            <li>🧼 Mencegah penumpukan kotoran</li>
+                            <li>🦠 Mengurangi risiko infeksi</li>
+                            <li>✨ Menjaga kebersihan organ intim</li>
+                            <li>💪 Mencegah penyakit tertentu</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h4><i class="fas fa-pray"></i> Untuk Rohani 🤲</h4>
+                        <ul style="margin-left: 15px; line-height: 1.8;">
+                            <li>👨‍👦 Mengikuti sunnah Nabi Ibrahim AS</li>
+                            <li>🌱 Menjalankan fitrah manusia</li>
+                            <li>🕌 Tanda keislaman seseorang</li>
+                            <li>⭐ Mendapat pahala dari Allah</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h4><i class="fas fa-users"></i> Untuk Pergaulan 👥</h4>
+                        <ul style="margin-left: 15px; line-height: 1.8;">
+                            <li>🤝 Diterima dalam masyarakat Muslim</li>
+                            <li>🕌 Dapat menjadi imam shalat</li>
+                            <li>💒 Syarat untuk menikah</li>
+                            <li>🆔 Identitas sebagai Muslim</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-exclamation-triangle"></i> Yang Perlu Diperhatikan 📝</h2>
+                <div class="rule-box">
+                    <h4>🔍 Sebelum Khitan:</h4>
+                    <ul style="margin-left: 20px; line-height: 2;">
+                        <li>💪 Pastikan kondisi kesehatan anak baik</li>
+                        <li>👨‍⚕️ Pilih dokter yang berpengalaman</li>
+                        <li>💬 Siapkan mental anak dengan penjelasan yang baik</li>
+                        <li>🤲 Berdoa kepada Allah agar diberi kemudahan</li>
+                    </ul>
+                </div>
+                
+                <div class="example-box">
+                    <h4>🩹 Setelah Khitan:</h4>
+                    <ul style="margin-left: 20px; line-height: 2;">
+                        <li>🧼 Jaga kebersihan luka agar tidak infeksi</li>
+                        <li>💊 Ikuti petunjuk dokter untuk perawatan</li>
+                        <li>🥗 Berikan makanan bergizi untuk pemulihan</li>
+                        <li>🙏 Bersyukur kepada Allah atas kelancaran khitan</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-hands-praying"></i> Doa Setelah Khitan 🤲</h2>
+                <div class="hadith-box">
+                    <div class="arabic-text">اللَّهُمَّ هَذِهِ سُنَّتُكَ وَسُنَّةُ نَبِيِّكَ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ وَاتِّبَاعٌ مِنَّا لَكَ وَلِنَبِيِّكَ بِمَشِيئَتِكَ وَبِإِرَادَتِكَ وَقَضَائِكَ</div>
+                    <p><strong>Artinya:</strong> "Ya Allah, ini adalah sunnah-Mu dan sunnah Nabi-Mu Muhammad SAW, dan ini adalah ketaatan kami kepada-Mu dan kepada Nabi-Mu dengan kehendak-Mu, keinginan-Mu, dan ketetapan-Mu." 🌟</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horse Racing Game Content -->
+        <div id="climbing" class="content">
+            <div class="card">
+                <h2><i class="fas fa-horse"></i> Balapan Kuda Seru! 🐎</h2>
+                <p>Ayo jawab soal dengan benar untuk memenangkan balapan! Setiap jawaban benar akan membuat kudamu berlari lebih cepat! 🏇✨</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="climbScore">0</div>
+                        <div class="stat-label">🏆 Skor</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="climbProgress">0</div>
+                        <div class="stat-label">🏁 Posisi</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="climbTotal">25</div>
+                        <div class="stat-label">🎯 Target</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-success" onclick="startClimbingGame()">
+                    <i class="fas fa-play"></i> 🏇 Mulai Balapan!
+                </button>
+                
+                <div id="climbingGame"></div>
+            </div>
+        </div>
+
+        <!-- Quiz Content -->
+        <div id="quiz" class="content">
+            <div id="loginSection">
+                <div class="login-form">
+                    <div class="login-header">
+                        <i class="fas fa-user-graduate"></i>
+                        <h2>Halo Adik-Adik! 👋</h2>
+                        <p>Masukkan NIS untuk mulai quiz seru! 🎮</p>
+                        <div style="background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); padding: 20px; border-radius: 15px; margin-top: 20px; border: 2px solid #74b9ff;">
+                            <small><strong>📚 Materi:</strong> <span id="currentSubjectName"></span></small><br>
+                            <small><strong>🎒 Kelas:</strong> <span id="currentSubjectClass"></span></small><br>
+                            <small><strong>📊 Status:</strong> <span id="dataStatus">Memuat data siswa...</span></small>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nisInput"><i class="fas fa-id-card"></i> 🆔 Nomor Induk Siswa (NIS)</label>
+                        <input type="text" id="nisInput" placeholder="Masukkan NIS kamu ya..." maxlength="10">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nameInput"><i class="fas fa-user"></i> 👤 Nama Lengkap</label>
+                        <input type="text" id="nameInput" placeholder="Nama akan muncul otomatis ✨" readonly>
+                    </div>
+                    
+                    <button class="btn" onclick="validateLogin()">
+                        <i class="fas fa-rocket"></i> 🎯 Mulai Quiz Seru!
+                    </button>
+                    
+                    <div id="loginMessage"></div>
+                </div>
+            </div>
+
+            <div id="quizSection" style="display: none;">
+                <div class="card">
+                    <div class="progress-container">
+                        <div class="progress-bar" id="quizProgress"></div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="currentQuestion">1</div>
+                            <div class="stat-label">📝 Soal</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="quizScore">0</div>
+                            <div class="stat-label">⭐ Skor</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="quizTime">0</div>
+                            <div class="stat-label">⏱️ Detik</div>
+                        </div>
+                    </div>
+
+                    <div id="quizContainer"></div>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="score-display">
+                    <h2><i class="fas fa-trophy"></i> Selamat! Quiz Selesai! 🎊</h2>
+                    <div class="final-score" id="finalScore">0%</div>
+                    <p>🌟 Skor Akhir Kamu 🌟</p>
+                </div>
+                
+                <div class="card">
+                    <h3><i class="fas fa-chart-bar"></i> 📊 Hasil Detail Kamu</h3>
+                    <div id="resultDetails"></div>
+                    <button class="btn" onclick="resetQuiz()">
+                        <i class="fas fa-redo"></i> 🔄 Main Lagi Yuk!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzbMpTbU9tWBQl7PTouoA1To-T74ipUyhyz1CBHTsNY1--q0Xftq5gtfCdV98jVXKajlQ/exec';
+        const STUDENT_DATA_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQjEcqnRRj-5rtoTaYOXizP8-iFOXVATdn7F-Z_AHUeqUkLvkoGi339RsFGtzbyca2oBpSdxEr7L8l3/pub?gid=0&single=true&output=csv';
+        
+        // Subject Configuration
+        const CURRENT_SUBJECT = {
+            id: 'khitan-fikih',
+            name: 'Khitan',
+            class: '4 MI/SD',
+            teacher: 'Guru Fikih'
+        };
+        
+        // Global variables
+        let currentUser = null;
+        let quizQuestions = [];
+        let currentQuestionIndex = 0;
+        let quizScore = 0;
+        let quizAnswers = [];
+        let quizTimer = null;
+        let quizStartTime = null;
+        let studentDatabase = [];
+        let isLoadingStudents = false;
+
+        // Quiz questions - 25 questions (shared for both game and quiz)
+        const allQuestions = [
+            {
+                question: "Apa pengertian khitan dalam Islam?",
+                options: ["Memotong rambut", "Memotong kulit yang menutupi ujung kemaluan laki-laki", "Memotong kuku", "Mencukur kumis"],
+                correct: 1,
+                arabic: ""
+            },
+            {
+                question: "Khitan termasuk dalam kategori:",
+                options: ["Rukun Islam", "Fitrah manusia", "Rukun Iman", "Sunnah biasa"],
+                correct: 1,
+                arabic: ""
+            },
+            {
+                question: "Berapa jumlah fitrah yang disebutkan dalam hadits?",
+                options: ["3", "4", "5", "6"],
+                correct: 2,
+                arabic: ""
+            },
+            {
+                question: "Hukum khitan bagi laki-laki menurut mayoritas ulama adalah:",
+                options: ["Sunnah", "Wajib", "Mubah", "Makruh"],
+                correct: 1,
+                arabic: ""
+            },
+            {
+                question: "Hukum khitan bagi perempuan menurut mayoritas ulama adalah:",
+                options: ["Wajib", "Sunnah", "Haram", "Makruh"],
+                correct: 1,
+                arabic: ""
+            },
+            {
+                question: "Waktu yang paling utama untuk melakukan khitan adalah:",
+                options: ["Hari ke-3 setelah lahir", "Hari ke-7 setelah lahir", "Hari ke-14 setelah lahir", "Hari ke-40 setelah lahir"],
+                correct: 1,
+                arabic: ""
+            },
+            {
+                question: "Khitan sebaiknya dilakukan sebelum anak:",
+                options: ["Bisa berjalan", "Bisa bicara", "Mencapai usia baligh", "Masuk sekolah"],
+                correct: 2,
+                arabic: ""
+            },
+            {
+                question: "Siapa nabi yang pertama kali melakukan khitan?",
+                options: ["Nabi Muhammad SAW", "Nabi Ibrahim AS", "Nabi Musa AS", "Nabi Isa AS"],
+                correct: 1,
+                arabic: ""
+            },
+            {
+                question: "Manakah yang BUKAN termasuk fitrah manusia?",
+                options: ["Khitan", "Memotong kuku", "Mencukur jenggot", "Mencabut bulu ketiak"],
+                correct: 2,
+                arabic: ""
+            },
+            {
+                question: "Manfaat khitan dari segi kesehatan adalah:",
+                options: ["Menambah kekuatan", "Mencegah penumpukan kotoran", "Menambah tinggi badan", "Mempercepat pertumbuhan"],
+                correct: 1,
+                arabic: ""
+            },
+            {
+                question: "Dalam Al-Quran, kisah khitan dikaitkan dengan nabi:",
+                options: ["Muhammad SAW", "Ibrahim AS", "Musa AS", "Yusuf AS"],
+                correct: 1,
+                arabic: "وَإِذِ ابْتَلَىٰ إِبْرَاهِيمَ رَبُّهُ بِكَلِمَاتٍ فَأَتَمَّهُنَّ"
+            },
+            {
+                question: "Yang harus diperhatikan sebelum khitan adalah:",
+                options: ["Kondisi cuaca", "Kondisi kesehatan anak", "Hari yang baik", "Umur orang tua"],
+                correct: 1,
+                arabic: ""
+            },
+            {
+                question: "Setelah khitan, yang paling penting dilakukan adalah:",
+                options: ["Makan banyak", "Minum obat", "Jaga kebersihan luka", "Banyak tidur"],
+                correct: 2,
+                arabic: ""
+            },
+            {
+                question: "Khitan bagi laki-laki menjadi syarat untuk:",
+                options: ["Masuk sekolah", "Menjadi imam shalat", "Bermain bola", "Naik haji"],
+                correct: 1,
+                arabic: ""
+            },
+            {
+                question: "Hikmah spiritual dari khitan adalah:",
+                options: ["Mendapat uang", "Mengikuti sunnah Nabi Ibrahim AS", "Menjadi terkenal", "Mendapat hadiah"],
+                correct: 1,
+                arabic: ""
+            },
+            {
+                question: "Usia yang baik untuk khitan adalah:",
+                options: ["0-1 tahun", "7-10 tahun", "15-20 tahun", "Setelah menikah"],
+                correct: 1,
+                arabic: ""
+            },
+            {
+                question: "Yang melakukan khitan sebaiknya adalah:",
+                options: ["Orang tua sendiri", "Teman", "Tenaga medis berpengalaman", "Siapa saja"],
+                correct: 2,
+                arabic: ""
+            },
+            {
+                question: "Khitan dapat mencegah:",
+                options: ["Sakit kepala", "Sakit perut", "Infeksi pada organ intim", "Sakit gigi"],
+                correct: 2,
+                arabic: ""
+            },
+            {
+                question: "Dalam hadits, fitrah yang disebutkan selain khitan adalah:",
+                options: ["Mandi", "Memotong kuku", "Gosok gigi", "Keramas"],
+                correct: 1,
+                arabic: "الْفِطْرَةُ خَمْسٌ: الْخِتَانُ وَالاِسْتِحْدَادُ وَنَتْفُ الإِبْطِ وَتَقْلِيمُ الأَظْفَارِ وَقَصُّ الشَّارِبِ"
+            },
+            {
+                question: "Khitan merupakan tanda:",
+                options: ["Kekayaan", "Keislaman seseorang", "Kepandaian", "Keberanian"],
+                correct: 1,
+                arabic: ""
+            },
+            {
+                question: "Setelah khitan, kita harus:",
+                options: ["Sombong", "Bersyukur kepada Allah", "Marah-marah", "Sedih"],
+                correct: 1,
+                arabic: ""
+            },
+            {
+                question: "Khitan bagi perempuan harus dilakukan dengan cara:",
+                options: ["Sama seperti laki-laki", "Yang tidak membahayakan", "Yang menyakitkan", "Yang cepat"],
+                correct: 1,
+                arabic: ""
+            },
+            {
+                question: "Manfaat sosial dari khitan adalah:",
+                options: ["Menjadi kaya", "Diterima dalam masyarakat Muslim", "Menjadi pintar", "Menjadi tinggi"],
+                correct: 1,
+                arabic: ""
+            },
+            {
+                question: "Khitan sebaiknya dilakukan pada saat:",
+                options: ["Anak sakit", "Anak sehat", "Anak sedih", "Anak marah"],
+                correct: 1,
+                arabic: ""
+            },
+            {
+                question: "Doa setelah khitan dimulai dengan:",
+                options: ["Alhamdulillah", "Subhanallah", "Allahumma", "Bismillah"],
+                correct: 2,
+                arabic: "اللَّهُمَّ هَذِهِ سُنَّتُكَ وَسُنَّةُ نَبِيِّكَ"
+            }
+        ];
+
+        // Tab navigation
+        function showTab(tabName) {
+            document.querySelectorAll('.content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Horse Racing Game Variables
+        let climbQuestions = [];
+        let currentClimbQuestion = 0;
+        let climbScore = 0;
+        let climbProgress = 0;
+        let opponentPositions = [0, 0, 0, 0]; // Posisi 4 kuda lawan
+        
+        // Mountain Climbing Game Functions
+        function startClimbingGame() {
+            climbQuestions = shuffleArray([...allQuestions]).slice(0, 25);
+            currentClimbQuestion = 0;
+            climbScore = 0;
+            climbProgress = 0;
+            opponentPositions = [0, 0, 0, 0]; // Reset posisi kuda lawan
+            
+            document.getElementById('climbScore').textContent = '0';
+            document.getElementById('climbProgress').textContent = '0';
+            
+            renderClimbingGame();
+        }
+
+        function renderClimbingGame() {
+            const container = document.getElementById('climbingGame');
+            const question = climbQuestions[currentClimbQuestion];
+            const progressPercentage = (climbProgress / 25) * 100;
+            
+            // Calculate horse position (left to right across the track - towards finish line on right)
+            const trackWidth = 280; // Available racing space between start and finish lines
+            const startPosition = 45; // Starting position from left edge (after start line)
+            const playerLeft = startPosition + (progressPercentage / 100) * trackWidth;
+            
+            // Generate positions for opponent horses (they start at same line but move randomly)
+            const opponentLefts = opponentPositions.map((pos, index) => {
+                const opponentProgress = (pos / 25) * 100; // Convert to percentage
+                return startPosition + (opponentProgress / 100) * trackWidth;
+            });
+            
+            container.innerHTML = `
+                <div class="racing-track">
+                    <div class="racing-lanes"></div>
+                    <div class="racing-start"></div>
+                    <div class="racing-finish"></div>
+                    
+                    <!-- Kuda Pemain -->
+                    <div class="racing-horse player" style="left: ${playerLeft}px;">🏇</div>
+                    
+                    <!-- Kuda Lawan -->
+                    <div class="racing-horse opponent1" style="left: ${opponentLefts[0]}px;">🏇</div>
+                    <div class="racing-horse opponent2" style="left: ${opponentLefts[1]}px;">🏇</div>
+                    <div class="racing-horse opponent3" style="left: ${opponentLefts[2]}px;">🏇</div>
+                    <div class="racing-horse opponent4" style="left: ${opponentLefts[3]}px;">🏇</div>
+                    
+                    <div style="position: absolute; top: 15px; left: 35px; color: white; font-weight: bold; z-index: 7; text-shadow: 2px 2px 4px rgba(0,0,0,0.7); font-size: 1rem;">
+                        🚩 START
+                    </div>
+                    <div style="position: absolute; top: 15px; right: 45px; color: white; font-weight: bold; z-index: 7; text-shadow: 2px 2px 4px rgba(0,0,0,0.7); font-size: 1rem;">
+                        🏁 FINISH
+                    </div>
+                </div>
+                
+                <div class="racing-question">
+                    <h3><i class="fas fa-question-circle"></i> 🤔 Soal ${currentClimbQuestion + 1} dari 25</h3>
+                    ${question.arabic ? `<div class="arabic-text">${question.arabic}</div>` : ''}
+                    <p><strong>${question.question}</strong></p>
+                    
+                    <div class="racing-options">
+                        ${question.options.map((option, index) => `
+                            <div class="racing-option" onclick="selectClimbAnswer(${index})">
+                                <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                                <div>${option}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="racing-feedback" id="climbFeedback"></div>
+            `;
+        }
+
+        function selectClimbAnswer(selectedIndex) {
+            const question = climbQuestions[currentClimbQuestion];
+            const options = document.querySelectorAll('.racing-option');
+            const feedback = document.getElementById('climbFeedback');
+            
+            // Disable all options
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected answer
+            options[selectedIndex].classList.add('selected');
+            
+            // Show correct answer after a delay
+            setTimeout(() => {
+                options[question.correct].classList.add('correct');
+                if (selectedIndex !== question.correct) {
+                    options[selectedIndex].classList.add('incorrect');
+                }
+                
+                // Update opponent positions (they also move randomly)
+                opponentPositions = opponentPositions.map(pos => {
+                    const randomMove = Math.random() * 1.5; // Kuda lawan bergerak random 0-1.5 langkah
+                    return Math.min(25, pos + randomMove);
+                });
+                
+                // Show feedback
+                feedback.style.display = 'block';
+                if (selectedIndex === question.correct) {
+                    climbScore += 4;
+                    climbProgress++;
+                    feedback.className = 'racing-feedback correct';
+                    feedback.innerHTML = '<i class="fas fa-check-circle"></i> 🎉 Benar! Kudamu berlari lebih cepat! 🐎💨';
+                } else {
+                    feedback.className = 'racing-feedback incorrect';
+                    feedback.innerHTML = '<i class="fas fa-times-circle"></i> 😅 Salah! Tetap semangat balapan ya!';
+                }
+                
+                // Update display
+                document.getElementById('climbScore').textContent = climbScore;
+                document.getElementById('climbProgress').textContent = climbProgress;
+                
+                // Auto advance to next question or finish
+                setTimeout(() => {
+                    if (currentClimbQuestion < climbQuestions.length - 1) {
+                        nextClimbQuestion();
+                    } else {
+                        showClimbComplete();
+                    }
+                }, 2500);
+            }, 1000);
+        }
+        
+        function nextClimbQuestion() {
+            currentClimbQuestion++;
+            renderClimbingGame();
+        }
+        
+        function showClimbComplete() {
+            const container = document.getElementById('climbingGame');
+            const percentage = Math.round((climbProgress / 25) * 100);
+            
+            container.innerHTML = `
+                <div class="racing-complete">
+                    <h3>🏁 Balapan Selesai! 🎉</h3>
+                    <div style="font-size: 4rem; margin: 25px 0;">${percentage}%</div>
+                    <p><strong>🌟 Skor Akhir: ${climbScore} 🌟</strong></p>
+                    <p>📊 Soal Benar: ${climbProgress} dari 25</p>
+                    <div style="margin-top: 35px; font-size: 1.2rem;">
+                        ${percentage >= 80 ? 
+                            '<p>🥇 Wow! Juara 1! Kudamu memenangkan balapan dengan sempurna! 🏆</p>' :
+                            percentage >= 60 ?
+                            '<p>🥈 Hebat! Juara 2! Terus berlatih untuk menjadi yang terdepan! 💪</p>' :
+                            '<p>🥉 Bagus! Juara 3! Pelajari materi lagi untuk balapan yang lebih baik! 📚</p>'
+                        }
+                    </div>
+                    <button class="btn btn-success" onclick="startClimbingGame()" style="margin-top: 25px;">
+                        <i class="fas fa-redo"></i> 🔄 Balapan Lagi Yuk!
+                    </button>
+                </div>
+            `;
+        }
+
+        // Student Data Functions
+        async function loadStudentData() {
+            if (isLoadingStudents) return;
+            
+            isLoadingStudents = true;
+            const statusElement = document.getElementById('dataStatus');
+            
+            try {
+                if (statusElement) statusElement.textContent = 'Memuat data siswa... 📡';
+                
+                const response = await fetch(STUDENT_DATA_CSV_URL);
+                if (!response.ok) {
+                    throw new Error('Gagal mengambil data siswa');
+                }
+                
+                const csvText = await response.text();
+                studentDatabase = parseCSV(csvText);
+                
+                if (statusElement) {
+                    statusElement.textContent = `${studentDatabase.length} siswa terdaftar ✅`;
+                    statusElement.style.color = '#00b894';
+                }
+                
+            } catch (error) {
+                console.error('Error loading student data:', error);
+                if (statusElement) {
+                    statusElement.textContent = 'Mode demo (offline) ⚠️';
+                    statusElement.style.color = '#ffc107';
+                }
+                studentDatabase = []; // Fallback to demo mode
+            } finally {
+                isLoadingStudents = false;
+            }
+        }
+
+        function parseCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+            const students = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                const values = parseCSVLine(lines[i]);
+                if (values.length >= 2) {
+                    const student = {};
+                    headers.forEach((header, index) => {
+                        student[header.toLowerCase()] = values[index] || '';
+                    });
+                    
+                    // Ensure we have NIS and Name
+                    if (student.nis && student.nama) {
+                        students.push({
+                            nis: student.nis.toString().trim(),
+                            name: student.nama.trim(),
+                            class: student.kelas || '',
+                            gender: student.jk || student['jenis kelamin'] || '',
+                            address: student.alamat || ''
+                        });
+                    }
+                }
+            }
+            
+            return students;
+        }
+
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            
+            result.push(current.trim());
+            return result.map(item => item.replace(/"/g, ''));
+        }
+
+        function findStudentByNIS(nis) {
+            return studentDatabase.find(student => student.nis === nis.toString().trim());
+        }
+
+        // Quiz Functions
+        async function validateLogin() {
+            const nis = document.getElementById('nisInput').value.trim();
+            const messageDiv = document.getElementById('loginMessage');
+            
+            if (!nis) {
+                showMessage(messageDiv, 'Mohon masukkan NIS kamu ya! 😊', 'error');
+                return;
+            }
+            
+            // Basic NIS validation
+            if (nis.length < 3) {
+                showMessage(messageDiv, 'NIS minimal 3 karakter ya! 📝', 'error');
+                return;
+            }
+            
+            showMessage(messageDiv, 'Sedang mengecek NIS kamu... 🔍', 'info');
+            
+            // Load student data if not loaded yet
+            if (studentDatabase.length === 0 && !isLoadingStudents) {
+                await loadStudentData();
+            }
+            
+            // Find student in database
+            const student = findStudentByNIS(nis);
+            
+            if (student) {
+                // Student found in database
+                currentUser = { 
+                    nis: student.nis, 
+                    name: student.name,
+                    class: student.class,
+                    gender: student.gender,
+                    address: student.address
+                };
+                
+                document.getElementById('nameInput').value = student.name;
+                showMessage(messageDiv, `Selamat datang, ${student.name}! 🎉`, 'success');
+                
+                setTimeout(() => {
+                    document.getElementById('loginSection').style.display = 'none';
+                    document.getElementById('quizSection').style.display = 'block';
+                    startQuiz();
+                }, 1500);
+                
+            } else {
+                // Student not found - use demo mode
+                const studentName = `Siswa ${nis}`;
+                currentUser = { nis: nis, name: studentName };
+                
+                document.getElementById('nameInput').value = studentName;
+                showMessage(messageDiv, `Mode Demo: ${studentName} 🎮`, 'info');
+                
+                setTimeout(() => {
+                    document.getElementById('loginSection').style.display = 'none';
+                    document.getElementById('quizSection').style.display = 'block';
+                    startQuiz();
+                }, 1500);
+            }
+        }
+
+        function startQuiz() {
+            quizQuestions = shuffleArray([...allQuestions]).slice(0, 20); // Use 20 questions for quiz
+            currentQuestionIndex = 0;
+            quizScore = 0;
+            quizAnswers = [];
+            
+            quizStartTime = Date.now();
+            quizTimer = setInterval(updateQuizTimer, 1000);
+            
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = quizQuestions[currentQuestionIndex];
+            const container = document.getElementById('quizContainer');
+            
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('quizProgress').style.width = `${((currentQuestionIndex + 1) / quizQuestions.length) * 100}%`;
+            
+            container.innerHTML = `
+                <div class="quiz-question">
+                    <h3><i class="fas fa-question-circle"></i> 🤔 Soal ${currentQuestionIndex + 1} dari ${quizQuestions.length}</h3>
+                    ${question.arabic ? `<div class="arabic-text">${question.arabic}</div>` : ''}
+                    <p><strong>${question.question}</strong></p>
+                    
+                    <div class="quiz-options">
+                        ${question.options.map((option, index) => `
+                            <div class="quiz-option" onclick="selectAnswer(${index})">
+                                <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                                <div>${option}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectAnswer(selectedIndex) {
+            const question = quizQuestions[currentQuestionIndex];
+            const options = document.querySelectorAll('.quiz-option');
+            
+            // Disable all options
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected answer
+            options[selectedIndex].classList.add('selected');
+            
+            // Show correct answer after a delay
+            setTimeout(() => {
+                options[question.correct].classList.add('correct');
+                if (selectedIndex !== question.correct) {
+                    options[selectedIndex].classList.add('incorrect');
+                }
+                
+                // Record answer
+                quizAnswers.push({
+                    question: question.question,
+                    selected: selectedIndex,
+                    correct: question.correct,
+                    isCorrect: selectedIndex === question.correct,
+                    arabic: question.arabic || ''
+                });
+                
+                if (selectedIndex === question.correct) {
+                    quizScore += 5;
+                    document.getElementById('quizScore').textContent = quizScore;
+                }
+                
+                // Auto advance to next question or finish
+                setTimeout(() => {
+                    if (currentQuestionIndex < quizQuestions.length - 1) {
+                        nextQuestion();
+                    } else {
+                        finishQuiz();
+                    }
+                }, 2500);
+            }, 1000);
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            showQuestion();
+        }
+
+        async function finishQuiz() {
+            clearInterval(quizTimer);
+            
+            const totalTime = Math.floor((Date.now() - quizStartTime) / 1000);
+            const correctAnswers = quizAnswers.filter(a => a.isCorrect).length;
+            const percentage = Math.round((correctAnswers / quizQuestions.length) * 100);
+            
+            const quizResult = {
+                nis: currentUser.nis,
+                name: currentUser.name,
+                subject_id: CURRENT_SUBJECT.id,
+                subject_name: CURRENT_SUBJECT.name,
+                class: CURRENT_SUBJECT.class,
+                teacher: CURRENT_SUBJECT.teacher,
+                score: quizScore,
+                correct: correctAnswers,
+                total: quizQuestions.length,
+                percentage: percentage,
+                time: totalTime,
+                date: new Date().toISOString(),
+                answers: quizAnswers
+            };
+            
+            // Save to Google Sheets
+            try {
+                await saveQuizResult(quizResult);
+            } catch (error) {
+                console.error('Error saving quiz result:', error);
+            }
+            
+            // Show results
+            document.getElementById('quizSection').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'block';
+            
+            document.getElementById('finalScore').textContent = `${percentage}%`;
+            
+            const resultDetails = document.getElementById('resultDetails');
+            resultDetails.innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">${correctAnswers}</div>
+                        <div class="stat-label">✅ Benar</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${quizQuestions.length - correctAnswers}</div>
+                        <div class="stat-label">❌ Salah</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${totalTime}s</div>
+                        <div class="stat-label">⏱️ Waktu</div>
+                    </div>
+                </div>
+                
+                <div class="alert ${percentage >= 70 ? 'alert-success' : 'alert-error'}">
+                    <i class="fas ${percentage >= 70 ? 'fa-trophy' : 'fa-book'}"></i>
+                    ${percentage >= 70 ? 
+                        '🎉 Selamat! Kamu lulus dengan nilai bagus! Hebat sekali! 🌟' : 
+                        '📚 Belajar lagi ya! Nilai masih kurang dari 70. Semangat! 💪'
+                    }
+                </div>
+            `;
+        }
+
+        function resetQuiz() {
+            document.getElementById('resultSection').style.display = 'none';
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('nisInput').value = '';
+            document.getElementById('nameInput').value = '';
+            document.getElementById('loginMessage').innerHTML = '';
+            currentUser = null;
+        }
+
+        function updateQuizTimer() {
+            const elapsed = Math.floor((Date.now() - quizStartTime) / 1000);
+            document.getElementById('quizTime').textContent = elapsed;
+        }
+
+        // Google Sheets Integration
+        async function saveQuizResult(result) {
+            try {
+                const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'saveQuizResult',
+                        data: result
+                    })
+                });
+                
+                const responseData = await response.json();
+                
+                if (responseData.success) {
+                    showAlert('success', '✅ Hasil quiz berhasil disimpan! 🎉');
+                } else {
+                    throw new Error(responseData.message || 'Failed to save');
+                }
+            } catch (error) {
+                console.error('Error saving quiz result:', error);
+                showAlert('info', '📝 Quiz selesai! Hasil tersimpan di browser kamu. 💾');
+            }
+        }
+
+        // Utility Functions
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function showMessage(element, message, type) {
+            element.innerHTML = `<div class="alert alert-${type}"><i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i> ${message}</div>`;
+        }
+
+        function showAlert(type, message) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
+            
+            document.body.appendChild(alert);
+            alert.style.position = 'fixed';
+            alert.style.top = '20px';
+            alert.style.right = '20px';
+            alert.style.zIndex = '9999';
+            alert.style.maxWidth = '350px';
+            alert.style.borderRadius = '15px';
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 4000);
+        }
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize subject info
+            document.getElementById('currentSubjectName').textContent = CURRENT_SUBJECT.name;
+            document.getElementById('currentSubjectClass').textContent = CURRENT_SUBJECT.class;
+            
+            // Auto-load student data when page loads
+            loadStudentData();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'978dbf1f744bfd32',t:'MTc1NjgyMzg1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
