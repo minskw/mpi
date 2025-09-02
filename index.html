@@ -20,24 +20,30 @@
         
         .page-transition {
             transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            padding: 1rem;
+            box-sizing: border-box;
         }
         
         .page-hidden {
             transform: translateX(100%);
             opacity: 0;
-            display: none;
+            pointer-events: none;
         }
         
         .page-visible {
             transform: translateX(0);
             opacity: 1;
-            display: block;
+            pointer-events: all;
         }
         
         .page-back {
             transform: translateX(-100%);
             opacity: 0;
-            display: none;
+            pointer-events: none;
         }
         
         .logo-hexagon {
@@ -163,27 +169,27 @@
             100% { background-position: 0% 50%; }
         }
         
-        .scrollable-container {
+        .content-container {
             max-height: calc(100vh - 180px);
             overflow-y: auto;
             padding-right: 5px;
         }
         
-        .scrollable-container::-webkit-scrollbar {
+        .content-container::-webkit-scrollbar {
             width: 6px;
         }
         
-        .scrollable-container::-webkit-scrollbar-track {
+        .content-container::-webkit-scrollbar-track {
             background: #f1f1f1;
             border-radius: 10px;
         }
         
-        .scrollable-container::-webkit-scrollbar-thumb {
+        .content-container::-webkit-scrollbar-thumb {
             background: #888;
             border-radius: 10px;
         }
         
-        .scrollable-container::-webkit-scrollbar-thumb:hover {
+        .content-container::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
     </style>
@@ -191,10 +197,10 @@
 <body class="bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 min-h-screen font-['Inter'] bg-pattern">
 
     <!-- Main Container -->
-    <div class="max-w-md mx-auto relative overflow-hidden min-h-screen">
+    <div class="max-w-md mx-auto relative min-h-screen">
         
         <!-- Halaman Utama -->
-        <div id="homePage" class="page-transition page-visible absolute inset-0 p-4">
+        <div id="homePage" class="page-transition page-visible">
             <!-- Header Title -->
             <div class="text-center mb-6 pt-4">
                 <div class="flex items-center justify-center space-x-3 mb-3">
@@ -231,7 +237,7 @@
                 <p class="text-purple-600 text-sm font-medium">Ayo belajar agama Islam dengan menyenangkan!</p>
             </div>
             
-            <div class="space-y-4">
+            <div class="space-y-4 content-container">
                 <div class="menu-card-4 rounded-3xl p-5 cursor-pointer shadow-xl floating" onclick="navigateToClass(4)" style="animation-delay: 0.2s">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
@@ -312,7 +318,7 @@
         </div>
 
         <!-- Halaman Kelas 4 -->
-        <div id="class4Page" class="page-transition page-hidden absolute inset-0 p-4">
+        <div id="class4Page" class="page-transition page-hidden">
             <!-- Back Button -->
             <div class="flex items-center mb-6 pt-4">
                 <button id="backBtn4" onclick="goBack()" class="w-12 h-12 rounded-full bg-emerald-500 flex items-center justify-center text-white hover:bg-emerald-600 transition-all shadow-lg mr-4">
@@ -324,7 +330,7 @@
                 </div>
             </div>
             
-            <div class="space-y-6">
+            <div class="space-y-6 content-container">
                 <a href="#" onclick="navigateToSubject('alquranHaditsClass4Page')" class="block subject-card rounded-3xl p-6 cursor-pointer bounce-in hover:no-underline" style="animation-delay: 0.2s">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
@@ -364,7 +370,7 @@
         </div>
 
         <!-- Halaman Kelas 5 -->
-        <div id="class5Page" class="page-transition page-hidden absolute inset-0 p-4">
+        <div id="class5Page" class="page-transition page-hidden">
             <!-- Back Button -->
             <div class="flex items-center mb-6 pt-4">
                 <button id="backBtn5" onclick="goBack()" class="w-12 h-12 rounded-full bg-sky-500 flex items-center justify-center text-white hover:bg-sky-600 transition-all shadow-lg mr-4">
@@ -376,7 +382,7 @@
                 </div>
             </div>
             
-            <div class="space-y-6">
+            <div class="space-y-6 content-container">
                 <a href="#" onclick="navigateToSubject('alquranHaditsClass5Page')" class="block subject-card rounded-3xl p-6 cursor-pointer bounce-in hover:no-underline" style="animation-delay: 0.2s">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
@@ -416,7 +422,7 @@
         </div>
 
         <!-- Halaman Kelas 6 -->
-        <div id="class6Page" class="page-transition page-hidden absolute inset-0 p-4">
+        <div id="class6Page" class="page-transition page-hidden">
             <!-- Back Button -->
             <div class="flex items-center mb-6 pt-4">
                 <button id="backBtn6" onclick="goBack()" class="w-12 h-12 rounded-full bg-amber-500 flex items-center justify-center text-white hover:bg-amber-600 transition-all shadow-lg mr-4">
@@ -428,7 +434,7 @@
                 </div>
             </div>
             
-            <div class="space-y-6">
+            <div class="space-y-6 content-container">
                 <a href="#" onclick="navigateToSubject('akidahAkhlakClass6Page')" class="block subject-card rounded-3xl p-6 cursor-pointer bounce-in hover:no-underline" style="animation-delay: 0.2s">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
@@ -468,7 +474,7 @@
         </div>
 
         <!-- Halaman Al-Qur'an Hadits Kelas 4 -->
-        <div id="alquranHaditsClass4Page" class="page-transition page-hidden absolute inset-0 p-4">
+        <div id="alquranHaditsClass4Page" class="page-transition page-hidden">
             <!-- Back Button -->
             <div class="flex items-center mb-6 pt-4">
                 <button onclick="goBack()" class="w-12 h-12 rounded-full bg-sky-500 flex items-center justify-center text-white hover:bg-sky-600 transition-all shadow-lg mr-4">
@@ -480,7 +486,7 @@
                 </div>
             </div>
             
-            <div class="scrollable-container space-y-4">
+            <div class="space-y-4 content-container">
                 <a href="#" onclick="showMaterialAlert('Bacaan Izhar & Ikhfa\'', 'Al-Qur\'an Hadits', 4)" class="block subject-card rounded-2xl p-4 cursor-pointer bounce-in hover:no-underline" style="animation-delay: 0.1s">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
@@ -589,7 +595,7 @@
         </div>
 
         <!-- Halaman Fikih Kelas 4 -->
-        <div id="fikihClass4Page" class="page-transition page-hidden absolute inset-0 p-4">
+        <div id="fikihClass4Page" class="page-transition page-hidden">
             <!-- Back Button -->
             <div class="flex items-center mb-6 pt-4">
                 <button onclick="goBack()" class="w-12 h-12 rounded-full bg-emerald-500 flex items-center justify-center text-white hover:bg-emerald-600 transition-all shadow-lg mr-4">
@@ -601,7 +607,7 @@
                 </div>
             </div>
             
-            <div class="scrollable-container space-y-4">
+            <div class="space-y-4 content-container">
                 <a href="#" onclick="showMaterialAlert('Khitan', 'Fikih', 4)" class="block subject-card rounded-2xl p-4 cursor-pointer bounce-in hover:no-underline" style="animation-delay: 0.1s">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
@@ -635,67 +641,22 @@
                 <a href="#" onclick="showMaterialAlert('Bersuci dari Hadas Besar', 'Fikih', 4)" class="block subject-card rounded-2xl p-4 cursor-pointer bounce-in hover:no-underline" style="animation-delay: 0.3s">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
-                            <div class="bg-purple-500 rounded-full p-3 shadow-lg">
+                            <div class="bg-cyan-500 rounded-full p-3 shadow-lg">
                                 <i class="fas fa-shower text-xl text-white"></i>
                             </div>
                             <div>
-                                <h3 class="font-bold text-purple-800">Bersuci dari Hadas Besar</h3>
-                                <p class="text-purple-600 text-sm">Tata cara mandi wajib</p>
+                                <h3 class="font-bold text-cyan-800">Bersuci dari Hadas Besar</h3>
+                                <p class="text-cyan-600 text-sm">Tata cara mandi wajib</p>
                             </div>
                         </div>
-                        <i class="fas fa-chevron-right text-purple-500"></i>
-                    </div>
-                </a>
-
-                <a href="#" onclick="showMaterialAlert('Tayammum', 'Fikih', 4)" class="block subject-card rounded-2xl p-4 cursor-pointer bounce-in hover:no-underline" style="animation-delay: 0.4s">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <div class="bg-yellow-500 rounded-full p-3 shadow-lg">
-                                <i class="fas fa-hands text-xl text-white"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-yellow-800">Tayammum</h3>
-                                <p class="text-yellow-600 text-sm">Alternatif bersuci tanpa air</p>
-                            </div>
-                        </div>
-                        <i class="fas fa-chevron-right text-yellow-500"></i>
-                    </div>
-                </a>
-
-                <a href="#" onclick="showMaterialAlert('Shalat Jama\'', 'Fikih', 4)" class="block subject-card rounded-2xl p-4 cursor-pointer bounce-in hover:no-underline" style="animation-delay: 0.5s">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <div class="bg-red-500 rounded-full p-3 shadow-lg">
-                                <i class="fas fa-clock text-xl text-white"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-red-800">Shalat Jama'</h3>
-                                <p class="text-red-600 text-sm">Menggabungkan dua shalat</p>
-                            </div>
-                        </div>
-                        <i class="fas fa-chevron-right text-red-500"></i>
-                    </div>
-                </a>
-
-                <a href="#" onclick="showMaterialAlert('Shalat Qashar', 'Fikih', 4)" class="block subject-card rounded-2xl p-4 cursor-pointer bounce-in hover:no-underline" style="animation-delay: 0.6s">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <div class="bg-indigo-500 rounded-full p-3 shadow-lg">
-                                <i class="fas fa-road text-xl text-white"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-indigo-800">Shalat Qashar</h3>
-                                <p class="text-indigo-600 text-sm">Memendekkan shalat saat bepergian</p>
-                            </div>
-                        </div>
-                        <i class="fas fa-chevron-right text-indigo-500"></i>
+                        <i class="fas fa-chevron-right text-cyan-500"></i>
                     </div>
                 </a>
             </div>
         </div>
 
         <!-- Halaman Al-Qur'an Hadits Kelas 5 -->
-        <div id="alquranHaditsClass5Page" class="page-transition page-hidden absolute inset-0 p-4">
+        <div id="alquranHaditsClass5Page" class="page-transition page-hidden">
             <!-- Back Button -->
             <div class="flex items-center mb-6 pt-4">
                 <button onclick="goBack()" class="w-12 h-12 rounded-full bg-indigo-500 flex items-center justify-center text-white hover:bg-indigo-600 transition-all shadow-lg mr-4">
@@ -707,7 +668,7 @@
                 </div>
             </div>
             
-            <div class="scrollable-container space-y-4">
+            <div class="space-y-4 content-container">
                 <a href="#" onclick="showMaterialAlert('Hukum Mim Mati', 'Al-Qur\'an Hadits', 5)" class="block subject-card rounded-2xl p-4 cursor-pointer bounce-in hover:no-underline" style="animation-delay: 0.1s">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
@@ -771,7 +732,7 @@
         </div>
 
         <!-- Halaman Fikih Kelas 5 -->
-        <div id="fikihClass5Page" class="page-transition page-hidden absolute inset-0 p-4">
+        <div id="fikihClass5Page" class="page-transition page-hidden">
             <!-- Back Button -->
             <div class="flex items-center mb-6 pt-4">
                 <button onclick="goBack()" class="w-12 h-12 rounded-full bg-teal-500 flex items-center justify-center text-white hover:bg-teal-600 transition-all shadow-lg mr-4">
@@ -783,7 +744,7 @@
                 </div>
             </div>
             
-            <div class="scrollable-container space-y-4">
+            <div class="space-y-4 content-container">
                 <a href="#" onclick="showMaterialAlert('Zakat Fitrah', 'Fikih', 5)" class="block subject-card rounded-2xl p-4 cursor-pointer bounce-in hover:no-underline" style="animation-delay: 0.1s">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
@@ -862,7 +823,7 @@
         </div>
 
         <!-- Halaman Akidah Akhlak Kelas 6 -->
-        <div id="akidahAkhlakClass6Page" class="page-transition page-hidden absolute inset-0 p-4">
+        <div id="akidahAkhlakClass6Page" class="page-transition page-hidden">
             <!-- Back Button -->
             <div class="flex items-center mb-6 pt-4">
                 <button onclick="goBack()" class="w-12 h-12 rounded-full bg-rose-500 flex items-center justify-center text-white hover:bg-rose-600 transition-all shadow-lg mr-4">
@@ -874,7 +835,7 @@
                 </div>
             </div>
             
-            <div class="scrollable-container space-y-4">
+            <div class="space-y-4 content-container">
                 <a href="#" onclick="showMaterialAlert('Asmaul Husna al-Gaffar, al-Wasi\'', 'Akidah Akhlak', 6)" class="block subject-card rounded-2xl p-4 cursor-pointer bounce-in hover:no-underline" style="animation-delay: 0.1s">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
@@ -968,7 +929,7 @@
         </div>
 
         <!-- Halaman Fikih Kelas 6 -->
-        <div id="fikihClass6Page" class="page-transition page-hidden absolute inset-0 p-4">
+        <div id="fikihClass6Page" class="page-transition page-hidden">
             <!-- Back Button -->
             <div class="flex items-center mb-6 pt-4">
                 <button onclick="goBack()" class="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center text-white hover:bg-orange-600 transition-all shadow-lg mr-4">
@@ -980,7 +941,7 @@
                 </div>
             </div>
             
-            <div class="scrollable-container space-y-4">
+            <div class="space-y-4 content-container">
                 <a href="#" onclick="showMaterialAlert('Jual Beli', 'Fikih', 6)" class="block subject-card rounded-2xl p-4 cursor-pointer bounce-in hover:no-underline" style="animation-delay: 0.1s">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
