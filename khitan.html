@@ -895,42 +895,43 @@
             border-radius: 16px;
         }
 
-		.racing-horse {
-			position: absolute;
-			left: 45px;
-			font-size: 2.5rem;
-			transition: all 2s ease-in-out;
-			z-index: 5;
-			animation: horseGallop 1s ease-in-out infinite;
-			text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-			transform: scaleX(-1); /* Membalik kuda menghadap kanan */
-		}
+.racing-horse {
+    position: absolute;
+    left: 45px;
+    font-size: 2.5rem;
+    transition: all 2s ease-in-out;
+    z-index: 5;
+    animation: horseGallop 1s ease-in-out infinite;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    /* Hapus transform di sini agar tidak bentrok */
+}
 
+.racing-horse.player {
+    top: 80px;
+}
 
-        .racing-horse.player {
-            top: 80px;
-        }
+.racing-horse.opponent1 {
+    top: 140px;
+}
 
-        .racing-horse.opponent1 {
-            top: 140px;
-        }
+.racing-horse.opponent2 {
+    top: 200px;
+}
 
-        .racing-horse.opponent2 {
-            top: 200px;
-        }
+.racing-horse.opponent3 {
+    top: 260px;
+}
 
-        .racing-horse.opponent3 {
-            top: 260px;
-        }
+.racing-horse.opponent4 {
+    top: 320px;
+}
 
-        .racing-horse.opponent4 {
-            top: 320px;
-        }
+/* Animasi dengan scaleX(-1) agar kuda selalu menghadap kanan */
+@keyframes horseGallop {
+    0%, 100% { transform: scaleX(-1) translateY(0px) scale(1); }
+    50%      { transform: scaleX(-1) translateY(-5px) scale(1.05); }
+}
 
-        @keyframes horseGallop {
-            0%, 100% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-5px) scale(1.05); }
-        }
 
         .racing-start {
             position: absolute;
@@ -1296,6 +1297,13 @@
     </style>
 </head>
 <body>
+	<!-- Floating Home Button -->
+<a href="index.html" 
+   class="fixed top-4 left-4 z-50 bg-emerald-500 text-white px-4 py-2 rounded-full shadow-lg flex items-center space-x-2 hover:bg-emerald-600 transition">
+    <i class="fas fa-home"></i>
+    <span>Home</span>
+</a>
+
     <!-- Floating Islamic decorations -->
     <div class="floating-decoration">🕌</div>
     <div class="floating-decoration">☪️</div>
