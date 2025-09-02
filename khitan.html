@@ -1297,10 +1297,40 @@
     </style>
 </head>
 <body>
-<a href="index.html" id="homeBtn" 
-   class="hidden fixed bottom-4 right-4 z-50 bg-emerald-500 text-white p-4 rounded-full shadow-xl hover:bg-emerald-600 transition animate-pulse">
-    <i class="fas fa-home text-xl"></i>
+<a href="index.html" class="floating-home">
+  <i class="fas fa-home"></i>
 </a>
+
+<style>
+.floating-home {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #10b981; /* hijau emerald */
+  color: white;
+  padding: 15px;
+  border-radius: 50%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  z-index: 9999;
+  text-decoration: none;
+  font-size: 20px;
+  animation: pulse 2s infinite;
+}
+.floating-home:hover {
+  background: #059669; /* hijau lebih gelap saat hover */
+}
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba(16,185,129,0.6);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(16,185,129,0.9);
+  }
+}
+</style>
+
 
     <!-- Floating Islamic decorations -->
     <div class="floating-decoration">🕌</div>
