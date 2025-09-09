@@ -121,10 +121,10 @@
         /* Live Scoreboard - Game Show Style */
         .scoreboard {
             background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.6));
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 8px;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             backdrop-filter: blur(20px);
             border: 2px solid rgba(255,255,255,0.2);
             animation: slideInUp 1s ease-out;
@@ -132,42 +132,42 @@
 
         .scoreboard-header {
             text-align: center;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             background: linear-gradient(45deg, #007cf0, #00d4aa);
             color: white;
-            padding: 10px;
-            border-radius: 10px;
+            padding: 6px;
+            border-radius: 6px;
             font-family: 'Fredoka One', cursive;
-            font-size: 1rem;
+            font-size: 0.8rem;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
         .current-player {
             background: linear-gradient(45deg, #ffd700, #ffed4e);
             color: #2c3e50;
-            padding: 8px 16px;
-            border-radius: 25px;
+            padding: 4px 12px;
+            border-radius: 15px;
             font-weight: 800;
-            font-size: 1rem;
+            font-size: 0.8rem;
             display: inline-block;
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            box-shadow: 0 3px 10px rgba(255, 215, 0, 0.4);
             border: 2px solid #fff;
         }
 
         .score-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 8px;
         }
 
         .score-card {
             background: linear-gradient(135deg, #2193b0, #1e3c72);
             color: white;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 6px;
+            border-radius: 6px;
             text-align: center;
             transition: all 0.3s ease;
-            box-shadow: 0 6px 15px rgba(33, 147, 176, 0.3);
+            box-shadow: 0 3px 8px rgba(33, 147, 176, 0.3);
             border: 2px solid rgba(255,255,255,0.2);
             position: relative;
             overflow: hidden;
@@ -214,23 +214,23 @@
         }
 
         .team-name {
-            font-size: 0.95rem;
+            font-size: 0.7rem;
             font-weight: 800;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
 
         .team-score {
-            font-size: 2rem;
+            font-size: 1.2rem;
             font-weight: 900;
             font-family: 'Fredoka One', cursive;
         }
 
         .team-correct {
-            font-size: 0.8rem;
+            font-size: 0.6rem;
             opacity: 0.9;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
         /* Setup Screen - Game Show Style */
@@ -730,8 +730,9 @@
         .questions-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            max-width: 500px;
+            gap: 12px;
+            width: 100%;
+            max-width: 800px;
             margin: 0 auto;
         }
 
@@ -739,24 +740,25 @@
             background: linear-gradient(135deg, #007cf0, #00c9ff);
             color: white;
             border: none;
-            border-radius: 8px;
-            padding: 10px 8px;
-            font-size: 0.9rem;
+            border-radius: 10px;
+            padding: 15px 10px;
+            font-size: 1rem;
             font-weight: 800;
             font-family: 'Fredoka One', cursive;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 3px 10px rgba(0, 124, 240, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 124, 240, 0.3);
             border: 2px solid rgba(255,255,255,0.2);
             text-align: center;
-            min-height: 65px;
+            min-height: 80px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 3px;
+            gap: 5px;
             position: relative;
             overflow: hidden;
+            aspect-ratio: 1;
         }
 
         .question-box::before {
@@ -797,12 +799,12 @@
         }
 
         .question-points {
-            font-size: 1.1rem;
+            font-size: 1.4rem;
             font-weight: 900;
         }
 
         .question-label {
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             opacity: 0.9;
         }
 
@@ -1852,5 +1854,5 @@
             }, 500);
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c6d842f258fce4',t:'MTc1NzQyMjU3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c6e20796c9ab68',t:'MTc1NzQyMjk3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
