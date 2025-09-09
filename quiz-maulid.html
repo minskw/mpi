@@ -804,10 +804,10 @@
                 <div class="supabase-config">
                     <input type="text" class="config-input" id="supabaseUrl" 
                            placeholder="Supabase URL (https://xxx.supabase.co)" 
-                           value="">
+                           value="https://zfpyrguqsgjwbalnueez.supabase.co">
                     <input type="password" class="config-input" id="supabaseKey" 
                            placeholder="Supabase Anon Key" 
-                           value="">
+                           value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmcHlyZ3Vxc2dqd2JhbG51ZWV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MTQ4MzIsImV4cCI6MjA3Mjk5MDgzMn0.EVgc5ma5rvRljSG440XzedQHBi4zLFyK-KA0rgvF-e4">
                     <button class="template-btn" onclick="testSupabaseConnection()" id="testConnectionBtn">
                         🔗 Test Koneksi
                     </button>
@@ -815,10 +815,9 @@
                         ❌ Belum terhubung ke database
                     </div>
                     <div class="import-info">
-                        <strong>Cara setup:</strong><br>
-                        1. Buka dashboard Supabase → Settings → API<br>
-                        2. Copy "Project URL" dan "anon public" key<br>
-                        3. Paste di form atas dan klik "Test Koneksi"
+                        <strong>Database sudah dikonfigurasi otomatis!</strong><br>
+                        Klik "Test Koneksi" untuk memverifikasi koneksi database.<br>
+                        Jika berhasil, Anda bisa langsung import soal dan mulai lomba.
                     </div>
                 </div>
             </div>
@@ -1429,18 +1428,20 @@
 
         // Load saved Supabase credentials
         function loadSupabaseCredentials() {
-            const savedUrl = localStorage.getItem(STORAGE_KEYS.SUPABASE_URL);
-            const savedKey = localStorage.getItem(STORAGE_KEYS.SUPABASE_KEY);
+            // Set default credentials
+            const defaultUrl = 'https://zfpyrguqsgjwbalnueez.supabase.co';
+            const defaultKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmcHlyZ3Vxc2dqd2JhbG51ZWV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MTQ4MzIsImV4cCI6MjA3Mjk5MDgzMn0.EVgc5ma5rvRljSG440XzedQHBi4zLFyK-KA0rgvF-e4';
             
-            if (savedUrl && savedKey) {
-                document.getElementById('supabaseUrl').value = savedUrl;
-                document.getElementById('supabaseKey').value = savedKey;
-                
-                // Auto-test connection
-                setTimeout(() => {
-                    testSupabaseConnection();
-                }, 1000);
-            }
+            const savedUrl = localStorage.getItem(STORAGE_KEYS.SUPABASE_URL) || defaultUrl;
+            const savedKey = localStorage.getItem(STORAGE_KEYS.SUPABASE_KEY) || defaultKey;
+            
+            document.getElementById('supabaseUrl').value = savedUrl;
+            document.getElementById('supabaseKey').value = savedKey;
+            
+            // Auto-test connection
+            setTimeout(() => {
+                testSupabaseConnection();
+            }, 1000);
         }
 
         // Clear saved game state
@@ -2084,5 +2085,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c6237fd0acce52',t:'MTc1NzQxNTE3My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c63e0dc698b5e2',t:'MTc1NzQxNjI2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
