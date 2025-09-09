@@ -209,6 +209,7 @@
             border: 5px solid #ffd700;
             border-radius: 20px;
             padding: 50px;
+            width: 1200px;
             max-width: 90vw;
             max-height: 90vh;
             text-align: center;
@@ -450,6 +451,24 @@
             background: linear-gradient(135deg, #1565c0, #1976d2);
         }
 
+        /* Import Section */
+        .import-section {
+            background: rgba(255,215,0,0.1);
+            border: 2px solid #ffd700;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .import-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
         /* Results Screen */
         .results-screen {
             background: linear-gradient(135deg, rgba(13,71,161,0.95), rgba(21,101,192,0.95));
@@ -583,6 +602,23 @@
         <div id="setupScreen" class="setup-screen">
             <h2 class="setup-title">🎯 PERSIAPAN JEOPARDY 🎯</h2>
             
+            <!-- Import Section -->
+            <div class="import-section">
+                <h3 style="font-family: 'Fredoka One', cursive; color: #ffd700; font-size: 1.8rem; margin-bottom: 20px;">📚 Import Soal Quiz</h3>
+                <div class="import-buttons">
+                    <button class="jeopardy-btn secondary" onclick="downloadTemplate()">
+                        📥 Download Template Excel
+                    </button>
+                    <label for="excelFile" class="jeopardy-btn">
+                        📤 Import Soal Excel
+                        <input type="file" id="excelFile" style="display: none;" accept=".xlsx,.xls" onchange="importExcel(event)">
+                    </label>
+                </div>
+                <div style="font-size: 1rem; color: white; margin-top: 15px; line-height: 1.5;">
+                    <strong>Format Excel (Jeopardy):</strong> Kolom A=Petunjuk (bukan pertanyaan), B-E=Jawaban dalam bentuk pertanyaan (dimulai "Apa/Siapa"), F=Jawaban Benar (A/B/C/D), G=Kategori, H=Poin
+                </div>
+            </div>
+            
             <div class="team-setup">
                 <div class="team-count-selector">
                     <label>👥 Jumlah Tim:</label>
@@ -602,6 +638,74 @@
             <button class="jeopardy-btn" onclick="startJeopardy()">
                 🚀 MULAI JEOPARDY!
             </button>
+        </div>
+
+        <!-- Rules Screen -->
+        <div id="rulesScreen" class="setup-screen hidden">
+            <h2 class="setup-title">📋 ATURAN MAIN JEOPARDY 📋</h2>
+            
+            <div style="background: rgba(255,215,0,0.1); border: 2px solid #ffd700; border-radius: 15px; padding: 30px; margin: 30px 0; text-align: left;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+                    <div>
+                        <h3 style="font-family: 'Fredoka One', cursive; color: #ffd700; font-size: 1.5rem; margin-bottom: 15px;">🎯 ATURAN UTAMA JEOPARDY:</h3>
+                        <ul style="font-size: 1.1rem; line-height: 1.8; color: white;">
+                            <li>• <strong>Jawab dalam bentuk PERTANYAAN!</strong></li>
+                            <li>• Mulai jawaban dengan "Apa" atau "Siapa"</li>
+                            <li>• Contoh: "Siapa Muhammad SAW?" bukan "Muhammad SAW"</li>
+                            <li>• Tim bergantian memilih kategori dan nilai poin</li>
+                            <li>• Semakin tinggi poin, semakin sulit petunjuknya</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 style="font-family: 'Fredoka One', cursive; color: #ffd700; font-size: 1.5rem; margin-bottom: 15px;">⏰ SISTEM WAKTU:</h3>
+                        <ul style="font-size: 1.1rem; line-height: 1.8; color: white;">
+                            <li>• Setiap petunjuk memiliki batas waktu 30 detik</li>
+                            <li>• Timer akan berubah merah saat tersisa 10 detik</li>
+                            <li>• Jika waktu habis, tidak ada poin yang didapat</li>
+                            <li>• Giliran otomatis pindah ke tim berikutnya</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 style="font-family: 'Fredoka One', cursive; color: #ffd700; font-size: 1.5rem; margin-bottom: 15px;">🏆 SISTEM POIN:</h3>
+                        <ul style="font-size: 1.1rem; line-height: 1.8; color: white;">
+                            <li>• <strong>Jawaban benar:</strong> Dapat poin sesuai nilai</li>
+                            <li>• <strong>Jawaban salah:</strong> Poin dikurangi!</li>
+                            <li>• <strong>Daily Double:</strong> Bisa bertaruh poin</li>
+                            <li>• <strong>Final Jeopardy:</strong> Taruhan terakhir menentukan juara</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 style="font-family: 'Fredoka One', cursive; color: #ffd700; font-size: 1.5rem; margin-bottom: 15px;">🎮 FITUR KHUSUS:</h3>
+                        <ul style="font-size: 1.1rem; line-height: 1.8; color: white;">
+                            <li>• <strong>Daily Double:</strong> Petunjuk tersembunyi untuk bertaruh</li>
+                            <li>• <strong>Double Jeopardy:</strong> Babak dengan poin lebih tinggi</li>
+                            <li>• <strong>Final Jeopardy:</strong> Semua tim bertaruh untuk kemenangan</li>
+                            <li>• Strategi penting: pilih kategori yang dikuasai!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: rgba(255,69,0,0.1); border: 2px solid #ff4500; border-radius: 15px; padding: 25px; margin: 30px 0;">
+                <h3 style="font-family: 'Fredoka One', cursive; color: #ff4500; font-size: 1.4rem; margin-bottom: 15px; text-align: center;">⚠️ PENTING UNTUK DIINGAT!</h3>
+                <div style="font-size: 1.1rem; line-height: 1.6; color: white; text-align: center;">
+                    <p>🔄 <strong>Soal dan jawaban diacak setiap permainan</strong> - Jadi setiap game akan berbeda!</p>
+                    <p>📱 <strong>Game ini responsif</strong> - Bisa dimainkan di HP, tablet, atau komputer</p>
+                    <p>🎯 <strong>Total 25 soal</strong> - 5 kategori × 5 tingkat kesulitan</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <button class="jeopardy-btn" onclick="startActualGame()">
+                    🚀 MULAI BERMAIN SEKARANG!
+                </button>
+                <button class="jeopardy-btn secondary" onclick="backToSetup()">
+                    ⬅️ KEMBALI KE PENGATURAN
+                </button>
+            </div>
         </div>
 
         <!-- Game Screen -->
@@ -655,6 +759,9 @@
 
     <!-- Question Modal (will be created dynamically) -->
 
+    <!-- Include SheetJS for Excel processing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
     <script>
         // Game state
         let teams = [];
@@ -663,48 +770,141 @@
         let answeredQuestions = new Set();
         let timeLeft = 30;
         let timer;
+        let importedQuestions = [];
+        let gameQuestions = {};
+        let dailyDoubleUsed = false;
+        let finalJeopardyActive = false;
+        let gameRound = 1; // 1 = Jeopardy, 2 = Double Jeopardy, 3 = Final Jeopardy
 
-        // Jeopardy categories and questions
+        // Jeopardy categories and clues (format Jeopardy asli - petunjuk, bukan pertanyaan)
         const jeopardyData = {
             "SEJARAH NABI": [
-                { question: "Siapa nama ayah Nabi Muhammad SAW?", answers: ["Abdullah", "Abu Thalib", "Abdul Muthalib", "Abu Bakar"], correct: 0, points: 100 },
-                { question: "Di kota mana Nabi Muhammad SAW dilahirkan?", answers: ["Madinah", "Makkah", "Thaif", "Yaman"], correct: 1, points: 200 },
-                { question: "Siapa nama ibu Nabi Muhammad SAW?", answers: ["Khadijah", "Aisyah", "Aminah", "Fatimah"], correct: 2, points: 300 },
-                { question: "Pada usia berapa Nabi Muhammad SAW diangkat menjadi Rasul?", answers: ["35 tahun", "40 tahun", "45 tahun", "50 tahun"], correct: 1, points: 400 },
-                { question: "Siapa yang merawat Nabi Muhammad SAW setelah ibunya wafat?", answers: ["Abu Thalib", "Abdul Muthalib", "Halimah As-Sa'diyah", "Abu Bakar"], correct: 1, points: 500 }
+                { question: "Nama ayah Nabi Muhammad SAW ini", answers: ["Siapa Abdullah?", "Siapa Abu Thalib?", "Siapa Abdul Muthalib?", "Siapa Abu Bakar?"], correct: 0, points: 100 },
+                { question: "Kota kelahiran Nabi Muhammad SAW", answers: ["Apa Madinah?", "Apa Makkah?", "Apa Thaif?", "Apa Yaman?"], correct: 1, points: 200 },
+                { question: "Nama ibu Nabi Muhammad SAW", answers: ["Siapa Khadijah?", "Siapa Aisyah?", "Siapa Aminah?", "Siapa Fatimah?"], correct: 2, points: 300 },
+                { question: "Usia Nabi Muhammad SAW saat diangkat menjadi Rasul", answers: ["Apa 35 tahun?", "Apa 40 tahun?", "Apa 45 tahun?", "Apa 50 tahun?"], correct: 1, points: 400 },
+                { question: "Orang yang merawat Nabi Muhammad SAW setelah ibunya wafat", answers: ["Siapa Abu Thalib?", "Siapa Abdul Muthalib?", "Siapa Halimah As-Sa'diyah?", "Siapa Abu Bakar?"], correct: 1, points: 500 }
             ],
             "AL-QURAN": [
-                { question: "Berapa jumlah surat dalam Al-Qur'an?", answers: ["112", "113", "114", "115"], correct: 2, points: 100 },
-                { question: "Apa nama surat pertama dalam Al-Qur'an?", answers: ["Al-Baqarah", "Al-Fatihah", "An-Nas", "Al-Falaq"], correct: 1, points: 200 },
-                { question: "Surat Al-Fatihah terdiri dari berapa ayat?", answers: ["5 ayat", "6 ayat", "7 ayat", "8 ayat"], correct: 2, points: 300 },
-                { question: "Apa nama surat terakhir dalam Al-Qur'an?", answers: ["Al-Falaq", "An-Nas", "Al-Ikhlas", "Al-Kafirun"], correct: 1, points: 400 },
-                { question: "Surat apa yang disebut 'Ummul Qur'an'?", answers: ["Al-Baqarah", "Al-Fatihah", "Al-Ikhlas", "Yasin"], correct: 1, points: 500 }
+                { question: "Jumlah surat dalam Al-Qur'an", answers: ["Apa 112?", "Apa 113?", "Apa 114?", "Apa 115?"], correct: 2, points: 100 },
+                { question: "Nama surat pertama dalam Al-Qur'an", answers: ["Apa Al-Baqarah?", "Apa Al-Fatihah?", "Apa An-Nas?", "Apa Al-Falaq?"], correct: 1, points: 200 },
+                { question: "Jumlah ayat dalam surat Al-Fatihah", answers: ["Apa 5 ayat?", "Apa 6 ayat?", "Apa 7 ayat?", "Apa 8 ayat?"], correct: 2, points: 300 },
+                { question: "Nama surat terakhir dalam Al-Qur'an", answers: ["Apa Al-Falaq?", "Apa An-Nas?", "Apa Al-Ikhlas?", "Apa Al-Kafirun?"], correct: 1, points: 400 },
+                { question: "Surat yang disebut 'Ummul Qur'an'", answers: ["Apa Al-Baqarah?", "Apa Al-Fatihah?", "Apa Al-Ikhlas?", "Apa Yasin?"], correct: 1, points: 500 }
             ],
             "SAHABAT": [
-                { question: "Siapa sahabat pertama yang masuk Islam?", answers: ["Umar bin Khattab", "Utsman bin Affan", "Ali bin Abi Thalib", "Abu Bakar Ash-Shiddiq"], correct: 3, points: 100 },
-                { question: "Siapa yang dijuluki 'Al-Faruq'?", answers: ["Abu Bakar", "Umar bin Khattab", "Utsman bin Affan", "Ali bin Abi Thalib"], correct: 1, points: 200 },
-                { question: "Siapa yang dijuluki 'Dzun Nurayn'?", answers: ["Abu Bakar", "Umar bin Khattab", "Utsman bin Affan", "Ali bin Abi Thalib"], correct: 2, points: 300 },
-                { question: "Siapa sahabat yang paling banyak meriwayatkan hadits?", answers: ["Abu Bakar", "Umar bin Khattab", "Abu Hurairah", "Ali bin Abi Thalib"], correct: 2, points: 400 },
-                { question: "Siapa sahabat yang dijuluki 'Sayful Allah Al-Maslul'?", answers: ["Khalid bin Walid", "Sa'd bin Abi Waqqas", "Amr bin Ash", "Abu Ubaidah"], correct: 0, points: 500 }
+                { question: "Sahabat pertama yang masuk Islam", answers: ["Siapa Umar bin Khattab?", "Siapa Utsman bin Affan?", "Siapa Ali bin Abi Thalib?", "Siapa Abu Bakar Ash-Shiddiq?"], correct: 3, points: 100 },
+                { question: "Sahabat yang dijuluki 'Al-Faruq'", answers: ["Siapa Abu Bakar?", "Siapa Umar bin Khattab?", "Siapa Utsman bin Affan?", "Siapa Ali bin Abi Thalib?"], correct: 1, points: 200 },
+                { question: "Sahabat yang dijuluki 'Dzun Nurayn'", answers: ["Siapa Abu Bakar?", "Siapa Umar bin Khattab?", "Siapa Utsman bin Affan?", "Siapa Ali bin Abi Thalib?"], correct: 2, points: 300 },
+                { question: "Sahabat yang paling banyak meriwayatkan hadits", answers: ["Siapa Abu Bakar?", "Siapa Umar bin Khattab?", "Siapa Abu Hurairah?", "Siapa Ali bin Abi Thalib?"], correct: 2, points: 400 },
+                { question: "Sahabat yang dijuluki 'Sayful Allah Al-Maslul'", answers: ["Siapa Khalid bin Walid?", "Siapa Sa'd bin Abi Waqqas?", "Siapa Amr bin Ash?", "Siapa Abu Ubaidah?"], correct: 0, points: 500 }
             ],
             "RUKUN ISLAM": [
-                { question: "Berapa jumlah rukun Islam?", answers: ["4", "5", "6", "7"], correct: 1, points: 100 },
-                { question: "Apa rukun Islam yang pertama?", answers: ["Shalat", "Syahadat", "Zakat", "Puasa"], correct: 1, points: 200 },
-                { question: "Berapa kali shalat wajib dalam sehari?", answers: ["3 kali", "4 kali", "5 kali", "6 kali"], correct: 2, points: 300 },
-                { question: "Pada bulan apa umat Islam menjalankan puasa?", answers: ["Rajab", "Sya'ban", "Ramadhan", "Syawal"], correct: 2, points: 400 },
-                { question: "Di kota mana umat Islam menunaikan ibadah haji?", answers: ["Madinah", "Makkah", "Yerusalem", "Baghdad"], correct: 1, points: 500 }
+                { question: "Jumlah rukun Islam", answers: ["Apa 4?", "Apa 5?", "Apa 6?", "Apa 7?"], correct: 1, points: 100 },
+                { question: "Rukun Islam yang pertama", answers: ["Apa Shalat?", "Apa Syahadat?", "Apa Zakat?", "Apa Puasa?"], correct: 1, points: 200 },
+                { question: "Jumlah shalat wajib dalam sehari", answers: ["Apa 3 kali?", "Apa 4 kali?", "Apa 5 kali?", "Apa 6 kali?"], correct: 2, points: 300 },
+                { question: "Bulan pelaksanaan puasa wajib bagi umat Islam", answers: ["Apa Rajab?", "Apa Sya'ban?", "Apa Ramadhan?", "Apa Syawal?"], correct: 2, points: 400 },
+                { question: "Kota tempat menunaikan ibadah haji", answers: ["Apa Madinah?", "Apa Makkah?", "Apa Yerusalem?", "Apa Baghdad?"], correct: 1, points: 500 }
             ],
             "AKHLAK": [
-                { question: "Apa sifat terpuji yang harus dimiliki seorang Muslim?", answers: ["Sombong", "Jujur", "Marah", "Iri"], correct: 1, points: 100 },
-                { question: "Bagaimana cara berbakti kepada orang tua?", answers: ["Membantah", "Menuruti semua keinginan", "Berbuat baik dan patuh", "Mengabaikan"], correct: 2, points: 200 },
-                { question: "Apa yang harus dilakukan ketika bertemu dengan orang lain?", answers: ["Mengabaikan", "Mengucapkan salam", "Berlari", "Bersembunyi"], correct: 1, points: 300 },
-                { question: "Apa yang diajarkan Islam tentang bertetangga?", answers: ["Acuh tak acuh", "Berbuat baik", "Mengganggu", "Menghindari"], correct: 1, points: 400 },
-                { question: "Bagaimana Islam mengajarkan tentang kebersihan?", answers: ["Tidak penting", "Sebagian dari iman", "Hanya untuk orang kaya", "Pilihan"], correct: 1, points: 500 }
+                { question: "Sifat terpuji yang harus dimiliki seorang Muslim", answers: ["Apa Sombong?", "Apa Jujur?", "Apa Marah?", "Apa Iri?"], correct: 1, points: 100 },
+                { question: "Cara berbakti kepada orang tua menurut Islam", answers: ["Apa Membantah?", "Apa Menuruti semua keinginan?", "Apa Berbuat baik dan patuh?", "Apa Mengabaikan?"], correct: 2, points: 200 },
+                { question: "Yang harus dilakukan ketika bertemu dengan orang lain", answers: ["Apa Mengabaikan?", "Apa Mengucapkan salam?", "Apa Berlari?", "Apa Bersembunyi?"], correct: 1, points: 300 },
+                { question: "Ajaran Islam tentang bertetangga", answers: ["Apa Acuh tak acuh?", "Apa Berbuat baik?", "Apa Mengganggu?", "Apa Menghindari?"], correct: 1, points: 400 },
+                { question: "Ajaran Islam tentang kebersihan", answers: ["Apa Tidak penting?", "Apa Sebagian dari iman?", "Apa Hanya untuk orang kaya?", "Apa Pilihan?"], correct: 1, points: 500 }
             ]
         };
 
         // Default team names
         const defaultTeamNames = ['🌟 Tim Sahabat', '⭐ Tim Tabi\'in', '✨ Tim Salafus Shalih', '🎯 Tim Muhajirin', '🏆 Tim Anshar'];
+
+        // Download Excel template
+        function downloadTemplate() {
+            const templateData = [
+                ['Petunjuk (Clue)', 'Jawaban A', 'Jawaban B', 'Jawaban C', 'Jawaban D', 'Jawaban Benar', 'Kategori', 'Poin'],
+                ['Nama ayah Nabi Muhammad SAW ini', 'Siapa Abdullah?', 'Siapa Abu Thalib?', 'Siapa Abdul Muthalib?', 'Siapa Abu Bakar?', 'A', 'SEJARAH NABI', '100'],
+                ['Kota kelahiran Nabi Muhammad SAW', 'Apa Madinah?', 'Apa Makkah?', 'Apa Thaif?', 'Apa Yaman?', 'B', 'SEJARAH NABI', '200'],
+                ['Jumlah surat dalam Al-Qur\'an', 'Apa 112?', 'Apa 113?', 'Apa 114?', 'Apa 115?', 'C', 'AL-QURAN', '300'],
+                ['Sahabat pertama yang masuk Islam', 'Siapa Umar bin Khattab?', 'Siapa Utsman bin Affan?', 'Siapa Ali bin Abi Thalib?', 'Siapa Abu Bakar Ash-Shiddiq?', 'D', 'SAHABAT', '400'],
+                ['Jumlah rukun Islam', 'Apa 4?', 'Apa 5?', 'Apa 6?', 'Apa 7?', 'B', 'RUKUN ISLAM', '500']
+            ];
+
+            const ws = XLSX.utils.aoa_to_sheet(templateData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Template Soal Jeopardy');
+            
+            // Set column widths
+            ws['!cols'] = [
+                {wch: 50}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 15}, {wch: 15}, {wch: 10}
+            ];
+
+            XLSX.writeFile(wb, 'Template_Soal_Jeopardy_Maulid.xlsx');
+        }
+
+        // Import Excel file
+        function importExcel(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    const sheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+
+                    // Skip header row
+                    const questionsData = jsonData.slice(1);
+                    importedQuestions = [];
+
+                    questionsData.forEach((row, index) => {
+                        if (row.length >= 7 && row[0]) {
+                            const correctAnswerLetter = row[5]?.toString().toUpperCase();
+                            let correctIndex = 0;
+                            
+                            switch(correctAnswerLetter) {
+                                case 'A': correctIndex = 0; break;
+                                case 'B': correctIndex = 1; break;
+                                case 'C': correctIndex = 2; break;
+                                case 'D': correctIndex = 3; break;
+                                default: correctIndex = 0;
+                            }
+
+                            importedQuestions.push({
+                                question: row[0],
+                                answers: [row[1], row[2], row[3], row[4]],
+                                correct: correctIndex,
+                                category: row[6] || 'UMUM',
+                                points: parseInt(row[7]) || 100
+                            });
+                        }
+                    });
+
+                    if (importedQuestions.length > 0) {
+                        // Count questions by category
+                        const categoryCount = {};
+                        importedQuestions.forEach(q => {
+                            categoryCount[q.category] = (categoryCount[q.category] || 0) + 1;
+                        });
+                        
+                        let countInfo = Object.entries(categoryCount)
+                            .map(([cat, count]) => `${cat}: ${count} soal`)
+                            .join('\n');
+                        
+                        showMessage(`✅ Berhasil import ${importedQuestions.length} soal!\n\nRincian per kategori:\n${countInfo}`, 'correct');
+                    } else {
+                        showMessage('❌ Tidak ada soal valid yang ditemukan. Periksa format Excel Anda.', 'wrong');
+                    }
+
+                } catch (error) {
+                    showMessage('❌ Error membaca file Excel. Pastikan format file benar.', 'wrong');
+                    console.error('Excel import error:', error);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
 
         // Initialize team setup
         function updateTeamSetup() {
@@ -724,7 +924,7 @@
             }
         }
 
-        // Start Jeopardy
+        // Start Jeopardy (show rules first)
         function startJeopardy() {
             const teamCount = parseInt(document.getElementById('teamCount').value);
             teams = [];
@@ -735,6 +935,15 @@
             }
 
             document.getElementById('setupScreen').classList.add('hidden');
+            document.getElementById('rulesScreen').classList.remove('hidden');
+        }
+
+        // Start actual game after rules
+        function startActualGame() {
+            // Prepare randomized questions
+            prepareGameQuestions();
+
+            document.getElementById('rulesScreen').classList.add('hidden');
             document.getElementById('gameScreen').classList.remove('hidden');
             
             currentTeam = 0;
@@ -747,6 +956,78 @@
             showMessage('🎉 JEOPARDY DIMULAI! 🎉', 'correct');
         }
 
+        // Back to setup from rules
+        function backToSetup() {
+            document.getElementById('rulesScreen').classList.add('hidden');
+            document.getElementById('setupScreen').classList.remove('hidden');
+        }
+
+        // Prepare game questions with randomization
+        function prepareGameQuestions() {
+            const questionsToUse = importedQuestions.length > 0 ? importedQuestions : Object.values(jeopardyData).flat();
+            
+            // Group questions by category
+            const questionsByCategory = {};
+            questionsToUse.forEach(q => {
+                if (!questionsByCategory[q.category]) {
+                    questionsByCategory[q.category] = [];
+                }
+                questionsByCategory[q.category].push(q);
+            });
+            
+            // Get 5 categories (or all available if less than 5)
+            const availableCategories = Object.keys(questionsByCategory);
+            shuffleArray(availableCategories);
+            const selectedCategories = availableCategories.slice(0, 5);
+            
+            // If we have less than 5 categories, use default data
+            if (selectedCategories.length < 5) {
+                gameQuestions = { ...jeopardyData };
+            } else {
+                gameQuestions = {};
+                selectedCategories.forEach(category => {
+                    const categoryQuestions = [...questionsByCategory[category]];
+                    shuffleArray(categoryQuestions);
+                    
+                    // Take up to 5 questions per category, ensuring we have different point values
+                    const pointValues = [100, 200, 300, 400, 500];
+                    gameQuestions[category] = [];
+                    
+                    for (let i = 0; i < 5; i++) {
+                        if (categoryQuestions[i]) {
+                            const question = { ...categoryQuestions[i] };
+                            question.points = pointValues[i];
+                            // Shuffle answers
+                            shuffleAnswers(question);
+                            gameQuestions[category].push(question);
+                        }
+                    }
+                });
+            }
+            
+            // Shuffle answers for default questions too
+            Object.keys(gameQuestions).forEach(category => {
+                gameQuestions[category].forEach(question => {
+                    shuffleAnswers(question);
+                });
+            });
+        }
+
+        // Shuffle array utility
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Shuffle answers while keeping track of correct answer
+        function shuffleAnswers(question) {
+            const correctAnswer = question.answers[question.correct];
+            shuffleArray(question.answers);
+            question.correct = question.answers.indexOf(correctAnswer);
+        }
+
         // Create Jeopardy board
         function createJeopardyBoard() {
             const categoriesHeader = document.getElementById('categoriesHeader');
@@ -755,7 +1036,7 @@
             categoriesHeader.innerHTML = '';
             questionsBoard.innerHTML = '';
             
-            const categories = Object.keys(jeopardyData);
+            const categories = Object.keys(gameQuestions);
             
             // Create category headers
             categories.forEach(category => {
@@ -768,7 +1049,7 @@
             // Create question tiles
             for (let row = 0; row < 5; row++) {
                 categories.forEach((category, colIndex) => {
-                    const question = jeopardyData[category][row];
+                    const question = gameQuestions[category][row];
                     const questionTile = document.createElement('div');
                     questionTile.className = 'question-tile';
                     questionTile.textContent = `$${question.points}`;
@@ -781,14 +1062,80 @@
 
         // Select question
         function selectQuestion(category, questionIndex) {
-            const tileId = `tile-${Object.keys(jeopardyData).indexOf(category)}-${questionIndex}`;
+            const tileId = `tile-${Object.keys(gameQuestions).indexOf(category)}-${questionIndex}`;
             
             if (answeredQuestions.has(tileId)) {
                 showMessage('❌ Soal sudah dijawab!', 'wrong');
                 return;
             }
             
-            const question = jeopardyData[category][questionIndex];
+            const question = gameQuestions[category][questionIndex];
+            
+            // Check for Daily Double (10% chance pada soal dengan poin 300-500)
+            if (!dailyDoubleUsed && question.points >= 300 && Math.random() < 0.3) {
+                dailyDoubleUsed = true;
+                showDailyDoubleModal(question, category, tileId);
+            } else {
+                showQuestionModal(question, category, tileId);
+            }
+        }
+
+        // Show Daily Double modal
+        function showDailyDoubleModal(question, category, tileId) {
+            const modal = document.createElement('div');
+            modal.className = 'question-modal';
+            modal.id = 'dailyDoubleModal';
+            
+            const currentTeamScore = teams[currentTeam].score;
+            const maxBet = Math.max(currentTeamScore, 1000);
+            
+            modal.innerHTML = `
+                <div class="question-content">
+                    <div style="text-align: center; margin-bottom: 40px;">
+                        <h2 style="font-family: 'Fredoka One', cursive; font-size: 4rem; color: #ffd700; text-shadow: 3px 3px 6px rgba(0,0,0,0.5); animation: winnerGlow 2s ease-in-out infinite;">
+                            🎯 DAILY DOUBLE! 🎯
+                        </h2>
+                        <p style="font-size: 1.5rem; color: white; margin: 20px 0;">
+                            ${teams[currentTeam].name}, Anda menemukan Daily Double!<br>
+                            Berapa poin yang ingin Anda pertaruhkan?
+                        </p>
+                        <p style="font-size: 1.2rem; color: #ffd700;">
+                            Skor saat ini: $${currentTeamScore} | Maksimal taruhan: $${maxBet}
+                        </p>
+                    </div>
+                    
+                    <div style="margin: 30px 0;">
+                        <input type="number" id="betAmount" min="100" max="${maxBet}" value="500" 
+                               style="width: 200px; padding: 15px; font-size: 1.5rem; text-align: center; border: 3px solid #ffd700; border-radius: 10px; background: white; color: #0d47a1; font-weight: 900;">
+                    </div>
+                    
+                    <button class="jeopardy-btn" onclick="confirmDailyDoubleBet('${category}', ${question.points}, '${tileId}')">
+                        💰 KONFIRMASI TARUHAN
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        // Confirm Daily Double bet
+        function confirmDailyDoubleBet(category, questionIndex, tileId) {
+            const betAmount = parseInt(document.getElementById('betAmount').value);
+            const maxBet = Math.max(teams[currentTeam].score, 1000);
+            
+            if (betAmount < 100 || betAmount > maxBet) {
+                showMessage(`❌ Taruhan harus antara $100 - $${maxBet}!`, 'wrong');
+                return;
+            }
+            
+            // Close Daily Double modal
+            const modal = document.getElementById('dailyDoubleModal');
+            if (modal) modal.remove();
+            
+            // Find the question
+            const question = gameQuestions[category][questionIndex];
+            question.dailyDoubleBet = betAmount;
+            
             showQuestionModal(question, category, tileId);
         }
 
@@ -841,16 +1188,24 @@
             const answers = document.querySelectorAll('.answer-option');
             answers.forEach(answer => answer.style.pointerEvents = 'none');
             
+            // Determine points (Daily Double or regular)
+            const actualPoints = question.dailyDoubleBet || points;
+            
             if (selectedIndex === correctIndex) {
                 answers[selectedIndex].classList.add('correct');
-                teams[currentTeam].score += points;
-                showMessage('🎉 BENAR! 🎉', 'correct');
+                teams[currentTeam].score += actualPoints;
+                
+                if (question.dailyDoubleBet) {
+                    showMessage('🎯 DAILY DOUBLE BENAR! 🎯\n💰 +$' + actualPoints + ' poin!', 'correct');
+                } else {
+                    showMessage('🎉 BENAR! 🎉\n💰 +$' + actualPoints + ' poin!', 'correct');
+                }
                 
                 setTimeout(() => {
                     closeQuestionModal();
                     markQuestionAnswered(tileId);
                     updateScoreboard();
-                    nextTeam();
+                    // Tim yang benar tetap dapat giliran
                 }, 2000);
             } else {
                 answers[selectedIndex].classList.add('wrong');
@@ -858,7 +1213,14 @@
                     answers[correctIndex].classList.add('correct');
                 }, 500);
                 
-                showMessage('❌ SALAH!', 'wrong');
+                // PENGURANGAN POIN untuk jawaban salah (aturan Jeopardy asli)
+                teams[currentTeam].score -= actualPoints;
+                
+                if (question.dailyDoubleBet) {
+                    showMessage('💥 DAILY DOUBLE SALAH!\n💸 -$' + actualPoints + ' poin!', 'wrong');
+                } else {
+                    showMessage('❌ SALAH!\n💸 -$' + actualPoints + ' poin!', 'wrong');
+                }
                 
                 setTimeout(() => {
                     closeQuestionModal();
@@ -903,7 +1265,7 @@
             
             // Check if all questions are answered
             if (answeredQuestions.size >= 25) {
-                setTimeout(() => endJeopardy(), 1000);
+                setTimeout(() => startFinalJeopardy(), 1000);
             }
         }
 
@@ -927,6 +1289,133 @@
                 `;
                 teamsScores.appendChild(scoreCard);
             });
+        }
+
+        // Start Final Jeopardy
+        function startFinalJeopardy() {
+            finalJeopardyActive = true;
+            
+            const finalQuestion = {
+                category: "SEJARAH ISLAM",
+                question: "Peristiwa penting yang terjadi pada tahun 622 M ini menandai dimulainya kalender Hijriah",
+                answer: "Apa Hijrah Nabi Muhammad SAW ke Madinah?"
+            };
+            
+            showFinalJeopardyModal(finalQuestion);
+        }
+
+        // Show Final Jeopardy modal
+        function showFinalJeopardyModal(finalQuestion) {
+            const modal = document.createElement('div');
+            modal.className = 'question-modal';
+            modal.id = 'finalJeopardyModal';
+            
+            modal.innerHTML = `
+                <div class="question-content">
+                    <div style="text-align: center; margin-bottom: 40px;">
+                        <h2 style="font-family: 'Fredoka One', cursive; font-size: 4rem; color: #ffd700; text-shadow: 3px 3px 6px rgba(0,0,0,0.5); animation: winnerGlow 2s ease-in-out infinite;">
+                            🏆 FINAL JEOPARDY! 🏆
+                        </h2>
+                        <p style="font-size: 1.8rem; color: white; margin: 20px 0; font-weight: 700;">
+                            Kategori: ${finalQuestion.category}
+                        </p>
+                        <p style="font-size: 1.3rem; color: #ffd700;">
+                            Semua tim harus memasang taruhan sebelum melihat petunjuk!
+                        </p>
+                    </div>
+                    
+                    <div id="bettingPhase">
+                        <div style="background: rgba(255,215,0,0.1); border: 2px solid #ffd700; border-radius: 15px; padding: 30px; margin: 20px 0;">
+                            <h3 style="color: #ffd700; font-family: 'Fredoka One', cursive; font-size: 1.5rem; margin-bottom: 20px;">
+                                💰 FASE TARUHAN
+                            </h3>
+                            <div id="teamBets"></div>
+                        </div>
+                        <button class="jeopardy-btn" onclick="showFinalClue()">
+                            📜 LIHAT PETUNJUK FINAL
+                        </button>
+                    </div>
+                    
+                    <div id="answerPhase" style="display: none;">
+                        <div style="font-size: 2.5rem; color: #ffd700; margin: 30px 0; font-family: 'Fredoka One', cursive;">
+                            ${finalQuestion.question}
+                        </div>
+                        <p style="font-size: 1.2rem; color: white; margin: 20px 0;">
+                            Jawaban yang benar: <strong style="color: #ffd700;">${finalQuestion.answer}</strong>
+                        </p>
+                        <button class="jeopardy-btn" onclick="calculateFinalScores()">
+                            🏁 HITUNG SKOR FINAL
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            createBettingInterface();
+        }
+
+        // Create betting interface for Final Jeopardy
+        function createBettingInterface() {
+            const teamBetsDiv = document.getElementById('teamBets');
+            teamBetsDiv.innerHTML = '';
+            
+            teams.forEach((team, index) => {
+                const maxBet = Math.max(team.score, 0);
+                const teamBetDiv = document.createElement('div');
+                teamBetDiv.style.cssText = 'margin: 15px 0; padding: 20px; background: rgba(25,118,210,0.3); border-radius: 10px; border: 2px solid #1976d2;';
+                
+                teamBetDiv.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                        <div style="font-family: 'Fredoka One', cursive; font-size: 1.2rem; color: white; min-width: 150px;">
+                            ${team.name}
+                        </div>
+                        <div style="color: #ffd700; font-weight: 700;">
+                            Skor: $${team.score}
+                        </div>
+                        <div>
+                            <label style="color: white; margin-right: 10px;">Taruhan:</label>
+                            <input type="number" id="finalBet${index}" min="0" max="${maxBet}" value="${Math.min(maxBet, 500)}" 
+                                   style="width: 120px; padding: 8px; border: 2px solid #ffd700; border-radius: 5px; text-align: center; font-weight: 700;">
+                        </div>
+                        <div style="color: #ffd700; font-size: 0.9rem;">
+                            Max: $${maxBet}
+                        </div>
+                    </div>
+                `;
+                
+                teamBetsDiv.appendChild(teamBetDiv);
+            });
+        }
+
+        // Show final clue
+        function showFinalClue() {
+            // Collect all bets
+            teams.forEach((team, index) => {
+                const betInput = document.getElementById(`finalBet${index}`);
+                team.finalBet = parseInt(betInput.value) || 0;
+            });
+            
+            document.getElementById('bettingPhase').style.display = 'none';
+            document.getElementById('answerPhase').style.display = 'block';
+        }
+
+        // Calculate final scores
+        function calculateFinalScores() {
+            // For demo purposes, randomly determine who got it right
+            // In real game, this would be based on actual answers
+            teams.forEach(team => {
+                const gotItRight = Math.random() > 0.5; // 50% chance
+                if (gotItRight) {
+                    team.score += team.finalBet;
+                } else {
+                    team.score -= team.finalBet;
+                }
+            });
+            
+            const modal = document.getElementById('finalJeopardyModal');
+            if (modal) modal.remove();
+            
+            endJeopardy();
         }
 
         // End Jeopardy
@@ -959,6 +1448,8 @@
         // Restart Jeopardy
         function restartJeopardy() {
             document.getElementById('resultsScreen').classList.add('hidden');
+            document.getElementById('rulesScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.add('hidden');
             document.getElementById('setupScreen').classList.remove('hidden');
             
             // Reset game state
@@ -967,6 +1458,13 @@
             gameActive = false;
             answeredQuestions.clear();
             clearInterval(timer);
+            gameQuestions = {};
+            dailyDoubleUsed = false;
+            finalJeopardyActive = false;
+            gameRound = 1;
+            
+            // Reset file input
+            document.getElementById('excelFile').value = '';
             
             updateTeamSetup();
         }
@@ -990,5 +1488,5 @@
             updateTeamSetup();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c6fb03657b3231',t:'MTc1NzQyNDAwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c71bd646983231',t:'MTc1NzQyNTM0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
