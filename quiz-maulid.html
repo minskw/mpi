@@ -776,6 +776,34 @@
         let finalJeopardyActive = false;
         let gameRound = 1; // 1 = Jeopardy, 2 = Double Jeopardy, 3 = Final Jeopardy
 
+        // Sound effects
+        const sounds = {
+            rightAnswer: new Audio('https://archive.org/download/jeopardy_202509/rightanswer.mp3'),
+            wrongAnswer: new Audio('https://archive.org/download/jeopardy_202509/jeopardy-incorrect-answer.mp3'),
+            dailyDouble: new Audio('https://archive.org/download/jeopardy_202509/jeopardy-daily-double-sound-effect-from-youtube_76mCCAq.mp3'),
+            timesUp: new Audio('https://archive.org/download/jeopardy_202509/times-up_AN8OlqZ.mp3'),
+            fillingBoard: new Audio('https://archive.org/download/jeopardy_202509/jeopardy-filling-board.mp3')
+        };
+
+        // Preload and configure sounds
+        Object.values(sounds).forEach(sound => {
+            sound.preload = 'auto';
+            sound.volume = 0.7;
+        });
+
+        // Play sound function
+        function playSound(soundName) {
+            try {
+                const sound = sounds[soundName];
+                if (sound) {
+                    sound.currentTime = 0;
+                    sound.play().catch(e => console.log('Sound play failed:', e));
+                }
+            } catch (error) {
+                console.log('Sound error:', error);
+            }
+        }
+
         // Jeopardy categories and clues (format Jeopardy asli - petunjuk, bukan pertanyaan)
         const jeopardyData = {
             "SEJARAH NABI": [
@@ -1038,6 +1066,9 @@
             
             const categories = Object.keys(gameQuestions);
             
+            // Play filling board sound
+            playSound('fillingBoard');
+            
             // Create category headers
             categories.forEach(category => {
                 const categoryDiv = document.createElement('div');
@@ -1082,6 +1113,9 @@
 
         // Show Daily Double modal
         function showDailyDoubleModal(question, category, tileId) {
+            // Play Daily Double sound
+            playSound('dailyDouble');
+            
             const modal = document.createElement('div');
             modal.className = 'question-modal';
             modal.id = 'dailyDoubleModal';
@@ -1208,6 +1242,9 @@
                 answers[selectedIndex].classList.add('correct');
                 teams[currentTeam].score += actualPoints;
                 
+                // Play correct answer sound
+                playSound('rightAnswer');
+                
                 if (currentQuestionData?.dailyDoubleBet) {
                     showMessage('🎯 DAILY DOUBLE BENAR! 🎯\n💰 +$' + actualPoints + ' poin!', 'correct');
                 } else {
@@ -1222,6 +1259,10 @@
                 }, 2000);
             } else {
                 answers[selectedIndex].classList.add('wrong');
+                
+                // Play wrong answer sound
+                playSound('wrongAnswer');
+                
                 setTimeout(() => {
                     answers[correctIndex].classList.add('correct');
                 }, 500);
@@ -1248,6 +1289,9 @@
         function timeoutQuestion(tileId) {
             const answers = document.querySelectorAll('.answer-option');
             answers.forEach(answer => answer.style.pointerEvents = 'none');
+            
+            // Play times up sound
+            playSound('timesUp');
             
             showMessage('⏰ WAKTU HABIS!', 'timeout');
             
@@ -1529,5 +1573,5 @@
             updateTeamSetup();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c7278533dbb5e2',t:'MTc1NzQyNTgyMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c74a45d252fce4',t:'MTc1NzQyNzI0Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
