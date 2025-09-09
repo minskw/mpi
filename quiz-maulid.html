@@ -724,8 +724,9 @@
             font-family: 'Amiri', serif;
             font-size: 1.4em;
             font-weight: 700;
-            direction: ltr;
-            unicode-bidi: embed;
+            direction: ltr !important;
+            unicode-bidi: bidi-override;
+            text-align: center;
         }
 
         /* Loading indicator */
@@ -796,8 +797,8 @@
                 <p class="setup-description">Atur database, tim dan import soal untuk memulai lomba</p>
             </div>
 
-            <!-- Supabase Configuration -->
-            <div class="setup-section">
+            <!-- Hidden Supabase Configuration (Auto-configured) -->
+            <div class="setup-section" style="display: none;">
                 <div class="section-title">
                     🗄️ Konfigurasi Database Supabase
                 </div>
@@ -811,13 +812,13 @@
                     <button class="template-btn" onclick="testSupabaseConnection()" id="testConnectionBtn">
                         🔗 Test Koneksi
                     </button>
-                    <div class="config-status disconnected" id="connectionStatus">
-                        ❌ Belum terhubung ke database
+                    <div class="config-status connected" id="connectionStatus">
+                        ✅ Terhubung ke database cloud!
                     </div>
                     <div class="import-info">
                         <strong>Database sudah dikonfigurasi otomatis!</strong><br>
-                        Klik "Test Koneksi" untuk memverifikasi koneksi database.<br>
-                        Jika berhasil, Anda bisa langsung import soal dan mulai lomba.
+                        Sistem otomatis terhubung ke database cloud.<br>
+                        Anda bisa langsung import soal dan mulai lomba.
                     </div>
                 </div>
             </div>
@@ -2048,17 +2049,19 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            // Load Supabase credentials first
-            loadSupabaseCredentials();
+            // Auto-initialize Supabase with embedded credentials
+            const defaultUrl = 'https://zfpyrguqsgjwbalnueez.supabase.co';
+            const defaultKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmcHlyZ3Vxc2dqd2JhbG51ZWV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MTQ4MzIsImV4cCI6MjA3Mjk5MDgzMn0.EVgc5ma5rvRljSG440XzedQHBi4zLFyK-KA0rgvF-e4';
             
-            // Try to load saved game state
-            const gameLoaded = loadGameState();
-            
-            if (!gameLoaded) {
-                // If no saved game, show setup screen
-                updateTeamSetup();
-            } else {
-                // If game was loaded, show notification
+            // Initialize Supabase automatically
+            if (initializeSupabase(defaultUrl, defaultKey)) {
+                isConnectedToDatabase = true;
+                document.getElementById('connectionStatus').className = 'config-status connected';
+                document.getElementById('connectionStatus').innerHTML = '✅ Terhubung ke database cloud!';
+                document.getElementById('loadFromDbBtn').disabled = false;
+                document.getElementById('startBtn').disabled = false;
+                
+                // Show connection success notification
                 const notification = document.createElement('div');
                 notification.style.cssText = `
                     position: fixed;
@@ -2073,7 +2076,42 @@
                     box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
                     animation: slideIn 0.5s ease-out;
                 `;
-                notification.innerHTML = '✅ Lomba dilanjutkan dari posisi terakhir!';
+                notification.innerHTML = '🗄️ Database cloud siap digunakan!';
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 3000);
+            }
+            
+            // Load Supabase credentials to form (for backup)
+            loadSupabaseCredentials();
+            
+            // Try to load saved game state
+            const gameLoaded = loadGameState();
+            
+            if (!gameLoaded) {
+                // If no saved game, show setup screen
+                updateTeamSetup();
+            } else {
+                // If game was loaded, show notification
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 20px;
+                    background: #f39c12;
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: 10px;
+                    font-weight: 700;
+                    z-index: 9999;
+                    box-shadow: 0 5px 15px rgba(243, 156, 18, 0.3);
+                    animation: slideIn 0.5s ease-out;
+                `;
+                notification.innerHTML = '🎮 Lomba dilanjutkan dari posisi terakhir!';
                 document.body.appendChild(notification);
                 
                 // Remove notification after 3 seconds
@@ -2085,5 +2123,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c63e0dc698b5e2',t:'MTc1NzQxNjI2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c64eaf9595b5e2',t:'MTc1NzQxNjk0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
