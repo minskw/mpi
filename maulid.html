@@ -378,6 +378,8 @@
                 this.questionTimer = null;
                 this.timeLeft = 30;
                 this.gamePaused = false;
+                this.teamAnswers = {}; // Store team answers for CERDAS CERMAT
+                this.answeredTeams = new Set(); // Track which teams have answered
                 this.stats = {
                     correct: 0,
                     wrong: 0,
@@ -853,33 +855,65 @@
                 
                 this.questionText.textContent = question.question;
                 
-                // Create option buttons
-                this.questionOptions.innerHTML = '';
-                const colors = ['bg-red-500 hover:bg-red-600', 'bg-blue-500 hover:bg-blue-600', 'bg-purple-500 hover:bg-purple-600', 'bg-green-500 hover:bg-green-600'];
-                const colorNames = ['red', 'blue', 'purple', 'green'];
-                const labels = ['A', 'B', 'C', 'D'];
+                // Reset team answers for new question
+                this.teamAnswers = {};
+                this.answeredTeams = new Set();
                 
-                question.options.forEach((option, index) => {
-                    const button = document.createElement('button');
-                    button.className = `option-btn ${colors[index]} text-white font-bold text-xl p-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-xl min-h-[80px] flex items-center justify-start w-full`;
-                    
-                    // Always LTR for mixed text, add Arabic font if needed
-                    button.style.direction = 'ltr';
-                    if (this.containsArabic(option)) {
-                        button.classList.add('arabic-font');
-                    }
-                    
-                    button.innerHTML = `
-                        <div class="flex items-center gap-4 w-full">
-                            <div class="bg-white text-${colorNames[index]}-500 font-black text-xl w-10 h-10 rounded-lg flex items-center justify-center shadow-md flex-shrink-0">
-                                ${labels[index]}
-                            </div>
-                            <div class="font-bold leading-relaxed text-left flex-1">${option}</div>
+                // Create CERDAS CERMAT team answer buttons
+                this.questionOptions.innerHTML = '';
+                
+                // Create team answer grid
+                const teamGrid = document.createElement('div');
+                teamGrid.className = 'grid gap-4 mb-6';
+                teamGrid.style.gridTemplateColumns = `repeat(${this.teams.length}, 1fr)`;
+                
+                this.teams.forEach((team, teamIndex) => {
+                    const teamCard = document.createElement('div');
+                    teamCard.className = `${team.color} rounded-xl p-4 text-center text-white shadow-lg`;
+                    teamCard.innerHTML = `
+                        <h3 class="font-bold text-lg mb-3">${team.name}</h3>
+                        <div class="grid grid-cols-2 gap-2">
+                            ${['A', 'B', 'C', 'D'].map((letter, optionIndex) => `
+                                <button class="team-answer-btn bg-white/20 hover:bg-white/30 text-white font-bold py-2 px-3 rounded-lg transition-all duration-300 transform hover:scale-105" 
+                                        data-team="${teamIndex}" data-option="${optionIndex}">
+                                    ${letter}
+                                </button>
+                            `).join('')}
+                        </div>
+                        <div class="mt-3 text-sm opacity-75" id="team-status-${teamIndex}">
+                            Menunggu jawaban...
                         </div>
                     `;
-                    
-                    button.addEventListener('click', () => this.selectAnswer(index));
-                    this.questionOptions.appendChild(button);
+                    teamGrid.appendChild(teamCard);
+                });
+                
+                this.questionOptions.appendChild(teamGrid);
+                
+                // Add answer options display
+                const optionsDisplay = document.createElement('div');
+                optionsDisplay.className = 'bg-white/90 rounded-xl p-6 mt-4';
+                optionsDisplay.innerHTML = `
+                    <h4 class="font-bold text-lg mb-4 text-center text-gray-800">Pilihan Jawaban:</h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        ${question.options.map((option, index) => `
+                            <div class="flex items-center gap-3 p-3 bg-gray-100 rounded-lg">
+                                <div class="bg-blue-500 text-white font-bold w-8 h-8 rounded-full flex items-center justify-center">
+                                    ${['A', 'B', 'C', 'D'][index]}
+                                </div>
+                                <span class="font-medium ${this.containsArabic(option) ? 'arabic-font' : ''}">${option}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                this.questionOptions.appendChild(optionsDisplay);
+                
+                // Bind team answer events
+                document.querySelectorAll('.team-answer-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const teamIndex = parseInt(e.target.dataset.team);
+                        const optionIndex = parseInt(e.target.dataset.option);
+                        this.submitTeamAnswer(teamIndex, optionIndex);
+                    });
                 });
                 
                 this.updateCurrentTeam();
@@ -887,18 +921,205 @@
             }
             
             updateCurrentTeam() {
-                const currentTeam = this.teams[this.currentTeamIndex];
-                this.currentTeamElement.textContent = currentTeam.name;
+                // In CERDAS CERMAT mode, show "SEMUA TIM" instead of specific team
+                this.currentTeamElement.textContent = "SEMUA TIM SIAP!";
                 
-                // Highlight current team in scoreboard
+                // Remove individual team highlighting since all teams can answer
                 document.querySelectorAll('.team-score').forEach((scoreEl, index) => {
                     const teamCard = scoreEl.closest('div');
-                    if (index === this.currentTeamIndex) {
-                        teamCard.classList.add('ring-4', 'ring-yellow-300', 'scale-110', 'z-10');
+                    teamCard.classList.remove('ring-4', 'ring-yellow-300', 'scale-110', 'z-10');
+                });
+            }
+            
+            submitTeamAnswer(teamIndex, optionIndex) {
+                // Prevent team from answering twice
+                if (this.answeredTeams.has(teamIndex)) {
+                    return;
+                }
+                
+                // Record team's answer
+                this.teamAnswers[teamIndex] = {
+                    option: optionIndex,
+                    timestamp: Date.now()
+                };
+                this.answeredTeams.add(teamIndex);
+                
+                // Update team's answer buttons visual state
+                const teamCard = document.querySelector(`[data-team="${teamIndex}"]`).closest('div');
+                const answerButtons = teamCard.querySelectorAll('.team-answer-btn');
+                
+                answerButtons.forEach((btn, index) => {
+                    if (index === optionIndex) {
+                        btn.classList.remove('bg-white/20', 'hover:bg-white/30');
+                        btn.classList.add('bg-yellow-400', 'text-black', 'font-black', 'ring-4', 'ring-white');
+                        btn.innerHTML = `${['A', 'B', 'C', 'D'][index]} ✓`;
                     } else {
-                        teamCard.classList.remove('ring-4', 'ring-yellow-300', 'scale-110', 'z-10');
+                        btn.disabled = true;
+                        btn.classList.add('opacity-50');
                     }
                 });
+                
+                // Update team status
+                const statusElement = document.getElementById(`team-status-${teamIndex}`);
+                statusElement.textContent = `Jawaban: ${['A', 'B', 'C', 'D'][optionIndex]} ✓`;
+                statusElement.classList.add('font-bold');
+                
+                // Add visual feedback
+                teamCard.classList.add('ring-4', 'ring-yellow-300', 'scale-105');
+                
+                // Play sound effect
+                this.playSound('correct');
+                
+                // Check if all teams have answered or time is up
+                if (this.answeredTeams.size === this.teams.length) {
+                    // All teams answered - evaluate immediately
+                    setTimeout(() => {
+                        this.evaluateAllAnswers();
+                    }, 1000);
+                }
+            }
+            
+            evaluateAllAnswers() {
+                clearInterval(this.questionTimer);
+                this.timerDisplay.classList.add('hidden');
+                
+                const question = this.gameQuestions[this.currentQuestionIndex];
+                const correctAnswer = question.correct;
+                
+                // Disable all remaining buttons
+                document.querySelectorAll('.team-answer-btn').forEach(btn => {
+                    btn.disabled = true;
+                });
+                
+                // Evaluate each team's answer
+                const results = [];
+                
+                this.teams.forEach((team, teamIndex) => {
+                    const teamAnswer = this.teamAnswers[teamIndex];
+                    let result = {
+                        team: team,
+                        teamIndex: teamIndex,
+                        answered: !!teamAnswer,
+                        correct: false,
+                        points: 0
+                    };
+                    
+                    if (teamAnswer) {
+                        result.correct = teamAnswer.option === correctAnswer;
+                        result.timestamp = teamAnswer.timestamp;
+                        
+                        if (result.correct) {
+                            result.points = 100;
+                            team.score += 100;
+                            this.stats.correct++;
+                        } else {
+                            result.points = -50;
+                            team.score = Math.max(0, team.score - 50);
+                            this.stats.wrong++;
+                        }
+                    } else {
+                        // Team didn't answer
+                        result.points = -50;
+                        team.score = Math.max(0, team.score - 50);
+                        this.stats.timeout++;
+                    }
+                    
+                    results.push(result);
+                });
+                
+                // Sort by correctness first, then by timestamp for correct answers
+                const correctAnswers = results.filter(r => r.correct).sort((a, b) => a.timestamp - b.timestamp);
+                const wrongAnswers = results.filter(r => !r.correct);
+                
+                // Show results with animations
+                this.showCerdasCermatResults(correctAnswers, wrongAnswers, question);
+                
+                // Update scores
+                this.updateTeamScores();
+                
+                // Move to next question after showing results
+                setTimeout(() => {
+                    this.nextQuestion();
+                }, 5000);
+            }
+            
+            showCerdasCermatResults(correctAnswers, wrongAnswers, question) {
+                // Create results overlay
+                const resultsOverlay = document.createElement('div');
+                resultsOverlay.className = 'fixed inset-0 bg-black/80 flex items-center justify-center z-50';
+                resultsOverlay.innerHTML = `
+                    <div class="bg-white rounded-3xl p-8 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                        <h2 class="text-3xl font-bold text-center mb-6 text-purple-800">
+                            📊 HASIL JAWABAN 📊
+                        </h2>
+                        
+                        <div class="mb-6 p-4 bg-green-100 rounded-xl">
+                            <h3 class="font-bold text-lg mb-2 text-green-800">✅ Jawaban Benar: ${question.options[question.correct]}</h3>
+                        </div>
+                        
+                        ${correctAnswers.length > 0 ? `
+                            <div class="mb-6">
+                                <h3 class="text-xl font-bold mb-4 text-green-600">🎉 TIM YANG BENAR:</h3>
+                                <div class="space-y-3">
+                                    ${correctAnswers.map((result, index) => `
+                                        <div class="flex items-center justify-between p-4 bg-green-100 rounded-xl">
+                                            <div class="flex items-center gap-4">
+                                                <span class="text-2xl">${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '✅'}</span>
+                                                <span class="font-bold text-lg">${result.team.name}</span>
+                                                ${index === 0 ? '<span class="bg-yellow-400 text-black px-2 py-1 rounded-full text-sm font-bold">TERCEPAT!</span>' : ''}
+                                            </div>
+                                            <span class="text-green-600 font-bold text-xl">+100 poin</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        ${wrongAnswers.length > 0 ? `
+                            <div class="mb-6">
+                                <h3 class="text-xl font-bold mb-4 text-red-600">❌ TIM YANG SALAH/TIDAK JAWAB:</h3>
+                                <div class="space-y-3">
+                                    ${wrongAnswers.map(result => `
+                                        <div class="flex items-center justify-between p-4 bg-red-100 rounded-xl">
+                                            <div class="flex items-center gap-4">
+                                                <span class="text-2xl">❌</span>
+                                                <span class="font-bold text-lg">${result.team.name}</span>
+                                                <span class="text-sm text-gray-600">
+                                                    ${result.answered ? `Jawab: ${['A', 'B', 'C', 'D'][this.teamAnswers[result.teamIndex].option]}` : 'Tidak menjawab'}
+                                                </span>
+                                            </div>
+                                            <span class="text-red-600 font-bold text-xl">-50 poin</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="text-center">
+                            <div class="text-lg font-bold text-gray-600">Soal berikutnya dalam 5 detik...</div>
+                            <div class="mt-4">
+                                <div class="bg-blue-500 text-white px-6 py-2 rounded-full inline-block">
+                                    Soal ${this.currentQuestionIndex + 1} dari ${this.gameQuestions.length}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(resultsOverlay);
+                
+                // Play appropriate sound
+                if (correctAnswers.length > 0) {
+                    this.playSound('correct');
+                    this.createCelebrationEffect();
+                } else {
+                    this.playSound('wrong');
+                }
+                
+                // Remove overlay after 5 seconds
+                setTimeout(() => {
+                    resultsOverlay.remove();
+                }, 5000);
             }
             
             startQuestionTimer() {
@@ -935,263 +1156,26 @@
                 }
             }
             
-            selectAnswer(selectedIndex) {
-                if (!this.gameActive) return;
-                
-                clearInterval(this.questionTimer);
-                this.timerDisplay.classList.add('hidden');
-                
-                const question = this.gameQuestions[this.currentQuestionIndex];
-                const currentTeam = this.teams[this.currentTeamIndex];
-                const buttons = document.querySelectorAll('.option-btn');
-                
-                // Disable all buttons and remove hover effects
-                buttons.forEach(button => {
-                    button.disabled = true;
-                    button.style.pointerEvents = 'none';
-                    button.classList.remove('hover:scale-105');
-                });
-                
-                if (selectedIndex === question.correct) {
-                    // Correct answer - Enhanced animations with proper sequencing
-                    const correctBtn = buttons[selectedIndex];
-                    
-                    // Disable all buttons immediately
-                    buttons.forEach(btn => {
-                        btn.disabled = true;
-                        btn.style.pointerEvents = 'none';
-                    });
-                    
-                    // Step 1: Immediate visual feedback (0ms)
-                    correctBtn.style.backgroundColor = '#22c55e';
-                    correctBtn.style.transform = 'scale(1.05)';
-                    correctBtn.style.boxShadow = '0 0 20px rgba(34, 197, 94, 0.6)';
-                    correctBtn.style.transition = 'all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
-                    
-                    // Step 2: Bounce animation (100ms)
-                    setTimeout(() => {
-                        correctBtn.style.transform = 'scale(1.15)';
-                        correctBtn.style.boxShadow = '0 0 40px rgba(34, 197, 94, 0.8)';
-                        correctBtn.classList.add('bounce-in');
-                    }, 100);
-                    
-                    // Step 3: Pulse glow effect (300ms)
-                    setTimeout(() => {
-                        correctBtn.classList.add('pulse-glow');
-                        correctBtn.style.transform = 'scale(1.1)';
-                    }, 300);
-                    
-                    // Step 4: Sparkle effects (500ms)
-                    setTimeout(() => {
-                        this.addSparkleEffect(correctBtn);
-                    }, 500);
-                    
-                    // Step 5: Celebration confetti (700ms)
-                    setTimeout(() => {
-                        this.createCelebrationEffect();
-                    }, 700);
-                    
-                    // Step 6: Score update and animation (200ms)
-                    setTimeout(() => {
-                        currentTeam.score += 100;
-                        this.stats.correct++;
-                        this.showScoreAnimation('+100', currentTeam.id, '#22c55e');
-                        this.updateTeamScores();
-                    }, 200);
-                    
-                    // Step 7: Success message and sound (800ms)
-                    setTimeout(() => {
-                        this.playSound('correct');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Benar!',
-                            text: `${currentTeam.name} mendapat +100 poin!`,
-                            timer: 2000
-                        });
-                    }, 800);
-                    
-                } else {
-                    // Wrong answer - Enhanced animations with proper sequencing
-                    const wrongBtn = buttons[selectedIndex];
-                    const correctBtn = buttons[question.correct];
-                    
-                    // Disable all buttons immediately
-                    buttons.forEach(btn => {
-                        btn.disabled = true;
-                        btn.style.pointerEvents = 'none';
-                    });
-                    
-                    // Step 1: Wrong answer feedback (0ms)
-                    wrongBtn.style.backgroundColor = '#dc2626';
-                    wrongBtn.style.transform = 'scale(0.9)';
-                    wrongBtn.style.boxShadow = '0 0 20px rgba(220, 38, 38, 0.6)';
-                    wrongBtn.style.transition = 'all 0.3s ease';
-                    
-                    // Step 2: Shake animation for wrong answer (100ms)
-                    setTimeout(() => {
-                        wrongBtn.classList.add('shake');
-                        wrongBtn.style.transform = 'scale(0.85)';
-                    }, 100);
-                    
-                    // Step 3: Fade wrong answer and highlight correct (800ms)
-                    setTimeout(() => {
-                        wrongBtn.style.opacity = '0.5';
-                        wrongBtn.style.transform = 'scale(0.8)';
-                        
-                        // Show correct answer
-                        correctBtn.style.backgroundColor = '#22c55e';
-                        correctBtn.style.transform = 'scale(1.05)';
-                        correctBtn.style.boxShadow = '0 0 25px rgba(34, 197, 94, 0.7)';
-                        correctBtn.style.transition = 'all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
-                    }, 800);
-                    
-                    // Step 4: Bounce correct answer (1000ms)
-                    setTimeout(() => {
-                        correctBtn.style.transform = 'scale(1.15)';
-                        correctBtn.style.boxShadow = '0 0 40px rgba(34, 197, 94, 0.8)';
-                        correctBtn.classList.add('bounce-in');
-                    }, 1000);
-                    
-                    // Step 5: Pulse glow on correct answer (1200ms)
-                    setTimeout(() => {
-                        correctBtn.classList.add('pulse-glow');
-                        correctBtn.style.transform = 'scale(1.1)';
-                    }, 1200);
-                    
-                    // Step 6: Sparkle effects on correct answer (1400ms)
-                    setTimeout(() => {
-                        this.addSparkleEffect(correctBtn);
-                    }, 1400);
-                    
-                    // Step 7: Score update and animation (300ms)
-                    setTimeout(() => {
-                        currentTeam.score = Math.max(0, currentTeam.score - 50);
-                        this.stats.wrong++;
-                        this.showScoreAnimation('-50', currentTeam.id, '#dc2626');
-                        this.updateTeamScores();
-                    }, 300);
-                    
-                    // Step 8: Error message and sound (1000ms)
-                    setTimeout(() => {
-                        this.playSound('wrong');
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Salah!',
-                            text: `${currentTeam.name} kehilangan 50 poin! Jawaban benar: ${question.options[question.correct]}`,
-                            timer: 3000
-                        });
-                    }, 1000);
-                }
-                
-                // Scoreboard is always visible now
-                
-                // Game state updated
-                
-                // Move to next question with proper timing based on answer type
-                setTimeout(() => {
-                    this.nextQuestion();
-                }, selectedIndex === question.correct ? 3000 : 3500);
-            }
+            // selectAnswer function removed - now using CERDAS CERMAT mode with submitTeamAnswer
             
             timeUp() {
                 if (!this.gameActive) return;
                 
-                clearInterval(this.questionTimer);
-                this.timerDisplay.classList.add('hidden');
-                
-                const question = this.gameQuestions[this.currentQuestionIndex];
-                const currentTeam = this.teams[this.currentTeamIndex];
-                const buttons = document.querySelectorAll('.option-btn');
-                
-                // Disable all buttons
-                buttons.forEach(button => {
-                    button.disabled = true;
-                    button.style.pointerEvents = 'none';
-                    button.classList.remove('hover:scale-105');
-                });
-                
-                // Show correct answer with enhanced animations
-                const correctBtn = buttons[question.correct];
-                
-                // Step 1: Immediate correct answer highlight (0ms)
-                correctBtn.style.backgroundColor = '#22c55e';
-                correctBtn.style.transform = 'scale(1.05)';
-                correctBtn.style.boxShadow = '0 0 25px rgba(34, 197, 94, 0.7)';
-                correctBtn.style.transition = 'all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
-                
-                // Step 2: Bounce animation (100ms)
-                setTimeout(() => {
-                    correctBtn.style.transform = 'scale(1.15)';
-                    correctBtn.style.boxShadow = '0 0 40px rgba(34, 197, 94, 0.8)';
-                    correctBtn.classList.add('bounce-in');
-                }, 100);
-                
-                // Step 3: Pulse glow effect (300ms)
-                setTimeout(() => {
-                    correctBtn.classList.add('pulse-glow');
-                    correctBtn.style.transform = 'scale(1.1)';
-                }, 300);
-                
-                // Step 4: Sparkle effects (500ms)
-                setTimeout(() => {
-                    this.addSparkleEffect(correctBtn);
-                }, 500);
-                
-                // Step 5: Score update and animation (200ms)
-                setTimeout(() => {
-                    currentTeam.score = Math.max(0, currentTeam.score - 50);
-                    this.stats.timeout++;
-                    this.showScoreAnimation('-50', currentTeam.id, '#f59e0b');
-                    this.updateTeamScores();
-                }, 200);
-                
-                // Step 6: Timeout message and sound (600ms)
-                setTimeout(() => {
-                    this.playSound('timeout');
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Waktu Habis!',
-                        text: `${currentTeam.name} kehilangan 50 poin! Jawaban benar: ${question.options[question.correct]}`,
-                        timer: 3000
-                    });
-                }, 600);
-                
-                // Game state updated
-                
-                // Scoreboard is always visible
-                
-                // Move to next question
-                setTimeout(() => {
-                    this.nextQuestion();
-                }, 3500);
+                // In CERDAS CERMAT mode, evaluate all answers when time is up
+                this.evaluateAllAnswers();
             }
             
             nextQuestion() {
                 console.log('nextQuestion called - Current index:', this.currentQuestionIndex, 'Total questions:', this.gameQuestions.length);
                 
                 // Clean up previous question animations and styles
-                const buttons = document.querySelectorAll('.option-btn');
-                buttons.forEach(button => {
-                    // Remove all animation classes
-                    button.classList.remove('bounce-in', 'pulse-glow', 'shake');
-                    
-                    // Reset all inline styles completely
-                    button.style.cssText = '';
-                    
-                    // Re-enable buttons
-                    button.disabled = false;
-                    button.style.pointerEvents = 'auto';
-                });
-                
-                // Remove any remaining effects
                 document.querySelectorAll('.sparkle').forEach(sparkle => sparkle.remove());
                 document.querySelectorAll('.confetti').forEach(confetti => confetti.remove());
                 
-                // Move to next question and team
+                // Move to next question (no team rotation in CERDAS CERMAT)
                 this.currentQuestionIndex++;
-                this.currentTeamIndex = (this.currentTeamIndex + 1) % this.teams.length;
                 
-                console.log('Moving to question index:', this.currentQuestionIndex, 'Team index:', this.currentTeamIndex);
+                console.log('Moving to question index:', this.currentQuestionIndex);
                 
                 if (this.currentQuestionIndex < this.gameQuestions.length) {
                     console.log('Showing next question');
@@ -1518,5 +1502,5 @@
             game = new GameShow();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c7e56252308de9',t:'MTc1NzQzMzYwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c7f4ebc673fd6d',t:'MTc1NzQzNDIzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
