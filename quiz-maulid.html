@@ -1769,24 +1769,34 @@
             });
             
             // Create question cells (5 rows x 5 categories)
+            let questionIndex = 0;
             for (let row = 0; row < 5; row++) {
                 categories.forEach((category, catIndex) => {
                     const cell = document.createElement('div');
                     cell.className = 'quiz-cell';
-                    const points = (row + 1) * 10;
-                    cell.innerHTML = `<span>${points}</span>`;
                     
                     // Find the question for this cell
                     const categoryQuestions = questionsByCategory[category] || [];
-                    if (row < categoryQuestions.length) {
+                    if (row < categoryQuestions.length && questionIndex < questions.length) {
                         const questionData = categoryQuestions[row];
                         const questionPoints = questionData.points || ((row + 1) * 10);
                         cell.innerHTML = `<span>${questionPoints}</span>`;
-                        cell.onclick = () => selectQuestion(questionData.originalIndex);
+                        
+                        // Check if this question has been answered
+                        if (answeredQuestions.has(questionData.originalIndex)) {
+                            cell.classList.add('answered');
+                            cell.innerHTML = '<span style="font-size: 2.5rem;">✓</span>';
+                        } else {
+                            cell.onclick = () => selectQuestion(questionData.originalIndex);
+                            cell.style.cursor = 'pointer';
+                        }
                         cell.dataset.questionIndex = questionData.originalIndex;
+                        questionIndex++;
                     } else {
+                        // If no question available for this cell, make it unavailable
                         cell.classList.add('answered');
-                        cell.innerHTML = '<span style="font-size: 1.5rem;">-</span>';
+                        cell.innerHTML = '<span style="font-size: 1.5rem; opacity: 0.5;">-</span>';
+                        cell.style.cursor = 'not-allowed';
                     }
                     
                     grid.appendChild(cell);
@@ -2226,5 +2236,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c69e80d4616b9e',t:'MTc1NzQyMDIxMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c6a664e0b36b9e',t:'MTc1NzQyMDUzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
