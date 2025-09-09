@@ -99,7 +99,7 @@
         <!-- Header -->
         <div class="text-center mb-8 bounce-in">
             <h1 class="game-font text-4xl md:text-5xl text-white mb-4 drop-shadow-lg">
-                🕌 GEBYAR MAULID NABI 🕌
+                🕌 GEBYAR PERINGATAN MAULID NABI 🕋
             </h1>
             <p class="text-2xl text-white font-bold drop-shadow-md">
                 <i class="fas fa-star-and-crescent text-yellow-300"></i> 
@@ -149,6 +149,9 @@
                 
                 <div class="mt-4 p-2 bg-gray-100 rounded">
                     <strong>Bank Soal: <span id="question-count">0</span> soal</strong>
+                    <div class="text-xs text-gray-600 mt-1">
+                        <span id="question-info">Pilih jumlah soal yang akan dimainkan di bawah</span>
+                    </div>
                     <div id="question-preview" class="max-h-20 overflow-y-auto text-xs mt-1"></div>
                 </div>
             </div>
@@ -170,11 +173,15 @@
 
                     <div class="text-center">
                         <h3 class="font-bold mb-2">Jumlah Soal</h3>
-                        <div class="flex justify-center gap-2">
-                            <button class="question-count-btn bg-orange-500 text-white font-bold py-2 px-4 rounded" data-count="10">10</button>
-                            <button class="question-count-btn bg-teal-500 text-white font-bold py-2 px-4 rounded" data-count="15">15</button>
-                            <button class="question-count-btn bg-indigo-500 text-white font-bold py-2 px-4 rounded" data-count="20">20</button>
-                            <button class="question-count-btn bg-pink-500 text-white font-bold py-2 px-4 rounded" data-count="25">25</button>
+                        <div class="flex justify-center gap-2 flex-wrap">
+                            <button class="question-count-btn bg-blue-500 text-white font-bold py-2 px-4 rounded" data-count="10">10</button>
+                            <button class="question-count-btn bg-green-500 text-white font-bold py-2 px-4 rounded" data-count="15">15</button>
+                            <button class="question-count-btn bg-purple-500 text-white font-bold py-2 px-4 rounded" data-count="20">20</button>
+                            <button class="question-count-btn bg-orange-500 text-white font-bold py-2 px-4 rounded" data-count="25">25</button>
+                            <button class="question-count-btn bg-red-500 text-white font-bold py-2 px-4 rounded" data-count="30">30</button>
+                        </div>
+                        <div class="text-sm text-gray-600 mt-2">
+                            Pilih berapa soal yang akan dimainkan
                         </div>
                     </div>
                 </div>
@@ -262,9 +269,9 @@
                                 <span>Surabaya</span>
                             </div>
                         </button>
-                        <button class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold text-xl p-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-xl min-h-[80px] flex items-center justify-start">
+                        <button class="bg-purple-500 hover:bg-purple-600 text-white font-bold text-xl p-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-xl min-h-[80px] flex items-center justify-start">
                             <div class="flex items-center gap-4">
-                                <div class="bg-white text-yellow-500 font-black text-xl w-10 h-10 rounded-lg flex items-center justify-center shadow-md">C</div>
+                                <div class="bg-white text-purple-500 font-black text-xl w-10 h-10 rounded-lg flex items-center justify-center shadow-md">C</div>
                                 <span>Bandung</span>
                             </div>
                         </button>
@@ -349,10 +356,24 @@
                     { question: "What is 10 + 15?", options: ["20", "25", "30", "35"], correct: 1, language: "english" }
                 ];
                 
+                // Sound effects
+                this.sounds = {
+                    correct: new Audio('https://archive.org/download/jeopardy_202509/rightanswer.mp3'),
+                    wrong: new Audio('https://archive.org/download/jeopardy_202509/jeopardy-incorrect-answer.mp3'),
+                    timeout: new Audio('https://archive.org/download/jeopardy_202509/times-up_AN8OlqZ.mp3')
+                };
+                
+                // Configure sound settings
+                Object.values(this.sounds).forEach(sound => {
+                    sound.volume = 0.7;
+                    sound.preload = 'auto';
+                });
+                
                 this.teams = [];
                 this.currentTeamIndex = 0;
                 this.currentQuestionIndex = 0;
-                this.totalQuestions = 10;
+                this.totalQuestions = 0; // Will be set when user selects
+                this.gameQuestions = []; // Questions selected for current game
                 this.gameActive = false;
                 this.questionTimer = null;
                 this.timeLeft = 30;
@@ -413,6 +434,7 @@
                         document.querySelectorAll('.question-count-btn').forEach(b => b.classList.remove('ring-4', 'ring-white'));
                         e.target.classList.add('ring-4', 'ring-white');
                         this.totalQuestions = parseInt(e.target.dataset.count);
+                        this.checkStartButton();
                     });
                 });
                 
@@ -462,8 +484,20 @@
                 const inputs = document.querySelectorAll('.team-name-input');
                 const hasQuestions = this.questions.length > 0;
                 const hasTeams = inputs.length > 0;
+                const hasQuestionCount = this.totalQuestions > 0;
                 
-                this.startGameBtn.disabled = !(hasQuestions && hasTeams);
+                // Update info about available questions
+                const infoElement = document.getElementById('question-info');
+                if (this.questions.length > 0 && this.totalQuestions > 0) {
+                    const gameQuestions = Math.min(this.totalQuestions, this.questions.length);
+                    infoElement.textContent = `Tersedia ${this.questions.length} soal. Game akan menggunakan ${gameQuestions} soal acak.`;
+                } else if (this.questions.length > 0) {
+                    infoElement.textContent = `Tersedia ${this.questions.length} soal. Pilih jumlah soal yang akan dimainkan.`;
+                } else {
+                    infoElement.textContent = 'Import atau tambah soal terlebih dahulu';
+                }
+                
+                this.startGameBtn.disabled = !(hasQuestions && hasTeams && hasQuestionCount);
             }
             
             importQuestions() {
@@ -520,6 +554,9 @@
                             this.questions = importedQuestions;
                             this.updateQuestionCount();
                             this.updateQuestionPreview();
+                            
+                            // Save imported questions to localStorage
+                            this.saveToStorage('gameshow_questions', this.questions);
                             
                             Swal.fire({
                                 icon: 'success',
@@ -639,6 +676,9 @@
                 this.updateQuestionCount();
                 this.updateQuestionPreview();
                 
+                // Save questions to localStorage
+                this.saveToStorage('gameshow_questions', this.questions);
+                
                 // Clear form
                 document.getElementById('manual-question').value = '';
                 document.getElementById('manual-a').value = '';
@@ -659,6 +699,16 @@
             
             updateQuestionCount() {
                 this.questionCountElement.textContent = this.questions.length;
+                
+                // Update info text
+                const infoElement = document.getElementById('question-info');
+                if (this.questions.length > 0) {
+                    infoElement.textContent = `Tersedia ${this.questions.length} soal. Pilih berapa soal yang akan dimainkan.`;
+                } else {
+                    infoElement.textContent = 'Pilih jumlah soal yang akan dimainkan di bawah';
+                }
+                
+                this.checkStartButton();
             }
             
             updateQuestionPreview() {
@@ -683,9 +733,16 @@
                     color: this.teamColors[index]
                 }));
                 
-                // Shuffle questions AND their options
-                this.questions = this.shuffleArray(this.questions);
-                this.questions.forEach(question => {
+                // SELECT RANDOM QUESTIONS based on user selection
+                let gameQuestions = [...this.questions]; // Copy all questions
+                gameQuestions = this.shuffleArray(gameQuestions); // Shuffle all questions
+                
+                // Take only selected number of questions (or less if not enough available)
+                const maxGameQuestions = Math.min(this.totalQuestions, gameQuestions.length);
+                this.gameQuestions = gameQuestions.slice(0, maxGameQuestions);
+                
+                // Shuffle options for each selected question
+                this.gameQuestions.forEach(question => {
                     this.shuffleQuestionOptions(question);
                 });
                 
@@ -701,7 +758,7 @@
                 Swal.fire({
                     icon: 'success',
                     title: 'Game Dimulai!',
-                    text: 'Selamat bermain dan bersenang-senang!',
+                    text: `${this.gameQuestions.length} soal acak telah dipilih! Selamat bermain!`,
                     timer: 2000
                 });
             }
@@ -754,19 +811,19 @@
             }
             
             showQuestion() {
-                if (this.currentQuestionIndex >= this.totalQuestions || this.currentQuestionIndex >= this.questions.length) {
+                if (this.currentQuestionIndex >= this.gameQuestions.length) {
                     this.endGame();
                     return;
                 }
                 
-                const question = this.questions[this.currentQuestionIndex];
+                const question = this.gameQuestions[this.currentQuestionIndex];
                 this.currentQuestionNumber.textContent = this.currentQuestionIndex + 1;
                 
                 // Update total questions display
-                document.getElementById('total-questions-display').textContent = this.totalQuestions;
+                document.getElementById('total-questions-display').textContent = this.gameQuestions.length;
                 
                 // Update progress bar
-                const progress = ((this.currentQuestionIndex) / this.totalQuestions) * 100;
+                const progress = ((this.currentQuestionIndex) / this.gameQuestions.length) * 100;
                 document.getElementById('progress-bar').style.width = progress + '%';
                 document.getElementById('progress-text').textContent = Math.round(progress) + '% Selesai';
                 
@@ -783,8 +840,8 @@
                 
                 // Create option buttons
                 this.questionOptions.innerHTML = '';
-                const colors = ['bg-red-500 hover:bg-red-600', 'bg-blue-500 hover:bg-blue-600', 'bg-yellow-500 hover:bg-yellow-600', 'bg-green-500 hover:bg-green-600'];
-                const colorNames = ['red', 'blue', 'yellow', 'green'];
+                const colors = ['bg-red-500 hover:bg-red-600', 'bg-blue-500 hover:bg-blue-600', 'bg-purple-500 hover:bg-purple-600', 'bg-green-500 hover:bg-green-600'];
+                const colorNames = ['red', 'blue', 'purple', 'green'];
                 const labels = ['A', 'B', 'C', 'D'];
                 
                 question.options.forEach((option, index) => {
@@ -869,7 +926,7 @@
                 clearInterval(this.questionTimer);
                 this.timerDisplay.classList.add('hidden');
                 
-                const question = this.questions[this.currentQuestionIndex];
+                const question = this.gameQuestions[this.currentQuestionIndex];
                 const currentTeam = this.teams[this.currentTeamIndex];
                 const buttons = document.querySelectorAll('.option-btn');
                 
@@ -927,8 +984,9 @@
                         this.updateTeamScores();
                     }, 200);
                     
-                    // Step 7: Success message (800ms)
+                    // Step 7: Success message and sound (800ms)
                     setTimeout(() => {
+                        this.playSound('correct');
                         Swal.fire({
                             icon: 'success',
                             title: 'Benar!',
@@ -998,8 +1056,9 @@
                         this.updateTeamScores();
                     }, 300);
                     
-                    // Step 8: Error message (1000ms)
+                    // Step 8: Error message and sound (1000ms)
                     setTimeout(() => {
+                        this.playSound('wrong');
                         Swal.fire({
                             icon: 'error',
                             title: 'Salah!',
@@ -1010,6 +1069,9 @@
                 }
                 
                 // Scoreboard is always visible now
+                
+                // Save game state after answer
+                this.saveGameState();
                 
                 // Move to next question with proper timing based on answer type
                 setTimeout(() => {
@@ -1023,7 +1085,7 @@
                 clearInterval(this.questionTimer);
                 this.timerDisplay.classList.add('hidden');
                 
-                const question = this.questions[this.currentQuestionIndex];
+                const question = this.gameQuestions[this.currentQuestionIndex];
                 const currentTeam = this.teams[this.currentTeamIndex];
                 const buttons = document.querySelectorAll('.option-btn');
                 
@@ -1069,8 +1131,9 @@
                     this.updateTeamScores();
                 }, 200);
                 
-                // Step 6: Timeout message (600ms)
+                // Step 6: Timeout message and sound (600ms)
                 setTimeout(() => {
+                    this.playSound('timeout');
                     Swal.fire({
                         icon: 'warning',
                         title: 'Waktu Habis!',
@@ -1078,6 +1141,9 @@
                         timer: 3000
                     });
                 }, 600);
+                
+                // Save game state after timeout
+                this.saveGameState();
                 
                 // Scoreboard is always visible
                 
@@ -1109,7 +1175,7 @@
                 this.currentQuestionIndex++;
                 this.currentTeamIndex = (this.currentTeamIndex + 1) % this.teams.length;
                 
-                if (this.currentQuestionIndex < this.totalQuestions && this.currentQuestionIndex < this.questions.length) {
+                if (this.currentQuestionIndex < this.gameQuestions.length) {
                     this.showQuestion();
                 } else {
                     this.endGame();
@@ -1162,6 +1228,19 @@
                         setTimeout(() => scoreElement.classList.remove('bounce-in'), 800);
                     }
                 });
+            }
+            
+            playSound(type) {
+                try {
+                    if (this.sounds[type]) {
+                        this.sounds[type].currentTime = 0; // Reset to beginning
+                        this.sounds[type].play().catch(error => {
+                            console.log('Sound play failed:', error);
+                        });
+                    }
+                } catch (error) {
+                    console.log('Sound error:', error);
+                }
             }
             
             addSparkleEffect(element) {
@@ -1222,6 +1301,7 @@
             
             endGame() {
                 this.gameActive = false;
+                this.clearGameState(); // Clear saved state when game ends
                 this.showScreen('results');
                 
                 // Sort teams by score
@@ -1373,6 +1453,7 @@
                     cancelButtonText: 'Batal'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        this.clearGameState(); // Clear saved state
                         this.showScreen('setup');
                         this.teams = [];
                         this.currentQuestionIndex = 0;
@@ -1417,5 +1498,5 @@
             game = new GameShow();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c5bb4f17d59c74',t:'MTc1NzQxMDkwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c7d2a342a45ce5',t:'MTc1NzQzMjgzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
