@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🕌 Lomba Cerdas Cermat Maulid Nabi 🕌</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes correctAnswer {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(1.1); }
+            75% { transform: scale(1.15); }
+            100% { transform: scale(1.1); }
+        }
+
+        @keyframes wrongAnswer {
+            0%, 100% { transform: translateX(0) scale(1); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px) scale(0.95); }
+            20%, 40%, 60%, 80% { transform: translateX(10px) scale(0.95); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        .title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: white;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .scoreboard {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .score-grid {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .score-item {
+            background: #3498db;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 80px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .score-item.active {
+            background: #f39c12;
+            color: white;
+            transform: scale(1.05);
+            animation: pulse 1s infinite;
+            box-shadow: 0 5px 15px rgba(243,156,18,0.4);
+        }
+
+        .score-name {
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .score-points {
+            font-size: 1.2rem;
+            font-weight: 900;
+        }
+
+        /* Setup Screen */
+        .setup-card {
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            animation: slideIn 0.8s ease-out 0.2s both;
+        }
+
+        .setup-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .setup-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        .setup-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .setup-description {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            font-weight: 600;
+        }
+
+        .setup-section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .team-selector {
+            background: #e74c3c;
+            color: white;
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .team-selector label {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .team-selector select {
+            padding: 8px 15px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 10px;
+            background: white;
+            font-weight: 700;
+            cursor: pointer;
+            color: #2c3e50;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .team-setup-card {
+            background: #1abc9c;
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(26, 188, 156, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .team-setup-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(26, 188, 156, 0.4);
+        }
+
+        .team-setup-card h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .team-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            text-align: center;
+            font-weight: 600;
+            background: rgba(255,255,255,0.95);
+            color: #2c3e50;
+        }
+
+        .import-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px dashed #dee2e6;
+        }
+
+        .import-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .import-btn, .template-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .import-btn {
+            background: #3498db;
+            color: white;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .import-btn:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .template-btn {
+            background: #2ecc71;
+            color: white;
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .template-btn:hover {
+            background: #27ae60;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .import-info {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+        .start-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+            display: block;
+            margin: 0 auto;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(231, 76, 60, 0.5);
+        }
+
+        /* Quiz Grid */
+        .quiz-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .quiz-header {
+            background: #2980b9;
+            color: white;
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 0.9rem;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(41, 128, 185, 0.3);
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quiz-cell {
+            background: #1abc9c;
+            color: white;
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.4rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            min-height: 70px;
+            box-shadow: 0 3px 10px rgba(26, 188, 156, 0.3);
+        }
+
+        .quiz-cell:hover {
+            background: #f39c12;
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(243, 156, 18, 0.4);
+        }
+
+        .quiz-cell.answered {
+            background: #95a5a6;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .quiz-cell.answered:hover {
+            transform: none;
+            background: #95a5a6;
+        }
+
+        /* Question Popup */
+        .question-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #34495e;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 50px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .question-badge {
+            background: white;
+            color: #2c3e50;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .timer-display {
+            background: #e74c3c;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.3rem;
+            animation: pulse 1s infinite;
+            box-shadow: 0 5px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .question-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 50px;
+            text-align: center;
+        }
+
+        .question-text {
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            margin-bottom: 60px;
+            line-height: 1.2;
+        }
+
+        .answers-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            width: 100%;
+            max-width: none;
+            margin: 0;
+        }
+
+        .answer-option {
+            border: none;
+            padding: 30px;
+            border-radius: 20px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            min-height: 140px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        .answer-option:nth-child(1) {
+            background: #e74c3c;
+        }
+
+        .answer-option:nth-child(2) {
+            background: #3498db;
+        }
+
+        .answer-option:nth-child(3) {
+            background: #f39c12;
+        }
+
+        .answer-option:nth-child(4) {
+            background: #2ecc71;
+        }
+
+        .answer-label {
+            background: rgba(255,255,255,0.3);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 900;
+            flex-shrink: 0;
+            border: 3px solid rgba(255,255,255,0.5);
+        }
+
+        .answer-text {
+            flex: 1;
+            line-height: 1.3;
+        }
+
+        .answer-option:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .answer-option:nth-child(1):hover {
+            background: #c0392b;
+        }
+
+        .answer-option:nth-child(2):hover {
+            background: #2980b9;
+        }
+
+        .answer-option:nth-child(3):hover {
+            background: #e67e22;
+        }
+
+        .answer-option:nth-child(4):hover {
+            background: #27ae60;
+        }
+
+        .answer-option.correct {
+            background: #2ecc71;
+            color: white;
+            animation: correctAnswer 1s ease-out;
+            box-shadow: 0 20px 40px rgba(46, 204, 113, 0.4);
+        }
+
+        .answer-option.wrong {
+            background: #e74c3c;
+            color: white;
+            animation: wrongAnswer 0.6s ease-out;
+            box-shadow: 0 20px 40px rgba(231, 76, 60, 0.4);
+        }
+
+        /* Result Screen */
+        .result-card {
+            background: white;
+            border-radius: 25px;
+            padding: 60px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+
+        .winner-icon {
+            font-size: 8rem;
+            margin-bottom: 30px;
+            animation: bounce 2s infinite;
+        }
+
+        .winner-title {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .winner-subtitle {
+            font-size: 1.5rem;
+            color: #7f8c8d;
+            font-weight: 600;
+            margin-bottom: 50px;
+        }
+
+        .podium {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
+        }
+
+        .podium-item {
+            padding: 40px 30px;
+            border-radius: 20px;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .podium-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .podium-item.first {
+            background: #f39c12;
+            transform: scale(1.1);
+            box-shadow: 0 20px 40px rgba(243, 156, 18, 0.4);
+        }
+
+        .podium-item.second {
+            background: #95a5a6;
+        }
+
+        .podium-item.third {
+            background: #d35400;
+        }
+
+        .podium-position {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .podium-team {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .podium-score {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .restart-btn {
+            background: #9b59b6;
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            border-radius: 50px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(155, 89, 182, 0.4);
+            margin-top: 40px;
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(155, 89, 182, 0.5);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .question-text {
+                font-size: 2rem;
+            }
+            
+            .answers-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .quiz-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .setup-card, .result-card {
+                padding: 30px 20px;
+            }
+
+            .import-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🕌 Lomba Cerdas Cermat 🕌</h1>
+            <p class="subtitle">Peringatan Maulid Nabi Muhammad SAW</p>
+            
+            <div class="scoreboard hidden" id="scoreboard">
+                <div class="score-grid" id="scoreGrid">
+                    <!-- Scores will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Setup Screen -->
+        <div id="setupScreen" class="setup-card">
+            <div class="setup-header">
+                <div class="setup-icon">🏆</div>
+                <h2 class="setup-title">Persiapan Lomba</h2>
+                <p class="setup-description">Atur tim dan import soal untuk memulai lomba</p>
+            </div>
+
+            <!-- Import Section -->
+            <div class="setup-section">
+                <div class="section-title">
+                    📁 Import Soal
+                </div>
+                <div class="import-section">
+                    <div class="import-buttons">
+                        <button class="template-btn" onclick="downloadTemplate()">
+                            📥 Download Template Excel
+                        </button>
+                        <label for="excelFile" class="import-btn">
+                            📤 Import Soal Excel
+                            <input type="file" id="excelFile" class="file-input" accept=".xlsx,.xls" onchange="importExcel(event)">
+                        </label>
+                    </div>
+                    <div class="import-info">
+                        Format: Kolom A=Pertanyaan, B=Jawaban A, C=Jawaban B, D=Jawaban C, E=Jawaban D, F=Jawaban Benar (A/B/C/D), G=Kategori, H=Poin
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Setup -->
+            <div class="setup-section">
+                <div class="section-title">
+                    👥 Pengaturan Tim
+                </div>
+                <div class="team-selector">
+                    <label>Jumlah Tim:</label>
+                    <select id="teamCount" onchange="updateTeamSetup()">
+                        <option value="3">3 Tim</option>
+                        <option value="4">4 Tim</option>
+                        <option value="5" selected>5 Tim</option>
+                        <option value="6">6 Tim</option>
+                        <option value="7">7 Tim</option>
+                        <option value="8">8 Tim</option>
+                    </select>
+                </div>
+
+                <div class="team-grid" id="teamGrid">
+                    <!-- Team inputs will be generated here -->
+                </div>
+            </div>
+
+            <button class="start-btn" onclick="startCompetition()">
+                🚀 Mulai Lomba
+            </button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="hidden">
+            <div class="quiz-grid" id="quizGrid">
+                <!-- Quiz grid will be populated here -->
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="resultScreen" class="result-card hidden">
+            <div class="winner-icon">🏆</div>
+            <h2 class="winner-title" id="winnerTitle">Selamat!</h2>
+            <p class="winner-subtitle">Lomba telah selesai</p>
+            
+            <div class="podium" id="podium">
+                <!-- Podium will be populated here -->
+            </div>
+
+            <div style="margin: 40px 0; font-size: 1.2rem; color: #7f8c8d; font-weight: 600;">
+                <p>Semoga ilmu yang telah dipelajari bermanfaat</p>
+                <p>dan menjadi amal jariyah bagi kita semua</p>
+                <p style="margin-top: 20px; font-weight: 800; color: #2c3e50;">بارك الله فيكم</p>
+            </div>
+
+            <button class="restart-btn" onclick="restartCompetition()">
+                🔄 Lomba Baru
+            </button>
+        </div>
+    </div>
+
+    <!-- Include SheetJS for Excel processing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <script>
+        // Game state
+        let currentQuestion = 0;
+        let timeLeft = 30;
+        let timer;
+        let gameActive = false;
+        let teams = [];
+        let currentTeam = 0;
+        let questionAnswered = false;
+        let answeredQuestions = new Set();
+        let selectedQuestion = null;
+        let importedQuestions = [];
+
+        // Islamic knowledge questions (default)
+        let questions = [
+            // Sejarah
+            {
+                question: "Siapa nama ayah Nabi Muhammad SAW?",
+                answers: ["Abdullah", "Abu Thalib", "Abdul Muthalib", "Abu Bakar"],
+                correct: 0,
+                category: "Sejarah",
+                points: 10
+            },
+            {
+                question: "Di kota mana Nabi Muhammad SAW dilahirkan?",
+                answers: ["Madinah", "Makkah", "Thaif", "Yaman"],
+                correct: 1,
+                category: "Sejarah",
+                points: 20
+            },
+            {
+                question: "Siapa nama ibu Nabi Muhammad SAW?",
+                answers: ["Khadijah", "Aisyah", "Aminah", "Fatimah"],
+                correct: 2,
+                category: "Sejarah",
+                points: 30
+            },
+            {
+                question: "Pada usia berapa Nabi Muhammad SAW diangkat menjadi Rasul?",
+                answers: ["35 tahun", "40 tahun", "45 tahun", "50 tahun"],
+                correct: 1,
+                category: "Sejarah",
+                points: 40
+            },
+            {
+                question: "Siapa sahabat pertama yang masuk Islam?",
+                answers: ["Umar bin Khattab", "Utsman bin Affan", "Ali bin Abi Thalib", "Abu Bakar Ash-Shiddiq"],
+                correct: 3,
+                category: "Sejarah",
+                points: 50
+            },
+
+            // Quran Hadis
+            {
+                question: "Berapa jumlah surat dalam Al-Qur'an?",
+                answers: ["112", "113", "114", "115"],
+                correct: 2,
+                category: "Quran Hadis",
+                points: 10
+            },
+            {
+                question: "Apa nama surat pertama dalam Al-Qur'an?",
+                answers: ["Al-Baqarah", "Al-Fatihah", "An-Nas", "Al-Falaq"],
+                correct: 1,
+                category: "Quran Hadis",
+                points: 20
+            },
+            {
+                question: "Surat Al-Fatihah terdiri dari berapa ayat?",
+                answers: ["5 ayat", "6 ayat", "7 ayat", "8 ayat"],
+                correct: 2,
+                category: "Quran Hadis",
+                points: 30
+            },
+            {
+                question: "Siapa yang paling banyak meriwayatkan hadits?",
+                answers: ["Abu Bakar", "Umar bin Khattab", "Abu Hurairah", "Ali bin Abi Thalib"],
+                correct: 2,
+                category: "Quran Hadis",
+                points: 40
+            },
+            {
+                question: "Apa arti kata 'hadits'?",
+                answers: ["Cerita", "Berita", "Kisah", "Semua benar"],
+                correct: 3,
+                category: "Quran Hadis",
+                points: 50
+            },
+
+            // Akidah Akhlak
+            {
+                question: "Berapa jumlah rukun iman?",
+                answers: ["5", "6", "7", "8"],
+                correct: 1,
+                category: "Akidah Akhlak",
+                points: 10
+            },
+            {
+                question: "Rukun iman yang pertama adalah?",
+                answers: ["Iman kepada Allah", "Iman kepada Malaikat", "Iman kepada Kitab", "Iman kepada Rasul"],
+                correct: 0,
+                category: "Akidah Akhlak",
+                points: 20
+            },
+            {
+                question: "Berapa nama Allah yang termasuk Asmaul Husna?",
+                answers: ["90", "95", "99", "100"],
+                correct: 2,
+                category: "Akidah Akhlak",
+                points: 30
+            },
+            {
+                question: "Apa sifat terpuji yang harus dimiliki seorang Muslim?",
+                answers: ["Sombong", "Jujur", "Marah", "Iri"],
+                correct: 1,
+                category: "Akidah Akhlak",
+                points: 40
+            },
+            {
+                question: "Bagaimana cara berbakti kepada orang tua?",
+                answers: ["Membantah", "Menuruti semua keinginan", "Berbuat baik dan patuh", "Mengabaikan"],
+                correct: 2,
+                category: "Akidah Akhlak",
+                points: 50
+            },
+
+            // Fikih
+            {
+                question: "Berapa kali shalat wajib dalam sehari?",
+                answers: ["3 kali", "4 kali", "5 kali", "6 kali"],
+                correct: 2,
+                category: "Fikih",
+                points: 10
+            },
+            {
+                question: "Apa shalat yang dikerjakan setelah Maghrib?",
+                answers: ["Ashar", "Maghrib", "Isya", "Subuh"],
+                correct: 2,
+                category: "Fikih",
+                points: 20
+            },
+            {
+                question: "Berapa rakaat shalat Subuh?",
+                answers: ["2 rakaat", "3 rakaat", "4 rakaat", "5 rakaat"],
+                correct: 0,
+                category: "Fikih",
+                points: 30
+            },
+            {
+                question: "Apa yang membatalkan wudhu?",
+                answers: ["Makan", "Minum", "Buang air kecil", "Berbicara"],
+                correct: 2,
+                category: "Fikih",
+                points: 40
+            },
+            {
+                question: "Apa rukun Islam yang pertama?",
+                answers: ["Shalat", "Syahadat", "Zakat", "Puasa"],
+                correct: 1,
+                category: "Fikih",
+                points: 50
+            },
+
+            // Bahasa Arab
+            {
+                question: "Apa arti kata 'Bismillah'?",
+                answers: ["Dengan nama Allah", "Alhamdulillah", "Subhanallah", "Allahu Akbar"],
+                correct: 0,
+                category: "Bahasa Arab",
+                points: 10
+            },
+            {
+                question: "Apa arti kata 'Assalamu'alaikum'?",
+                answers: ["Selamat pagi", "Selamat siang", "Semoga keselamatan atasmu", "Terima kasih"],
+                correct: 2,
+                category: "Bahasa Arab",
+                points: 20
+            },
+            {
+                question: "Apa arti kata 'Barakallahu fiik'?",
+                answers: ["Semoga Allah memberkahimu", "Terima kasih", "Maaf", "Selamat"],
+                correct: 0,
+                category: "Bahasa Arab",
+                points: 30
+            },
+            {
+                question: "Apa arti kata 'Jazakallahu khairan'?",
+                answers: ["Selamat pagi", "Semoga Allah membalasmu dengan kebaikan", "Maaf", "Sampai jumpa"],
+                correct: 1,
+                category: "Bahasa Arab",
+                points: 40
+            },
+            {
+                question: "Apa arti kata 'Astaghfirullah'?",
+                answers: ["Alhamdulillah", "Aku memohon ampun kepada Allah", "Subhanallah", "Allahu Akbar"],
+                correct: 1,
+                category: "Bahasa Arab",
+                points: 50
+            }
+        ];
+
+        // Default team names
+        const defaultTeamNames = [
+            'Tim Sahabat', 'Tim Tabi\'in', 'Tim Salafus Shalih', 'Tim Muhajirin', 
+            'Tim Anshar', 'Tim Khulafaur Rasyidin', 'Tim Ahlul Bayt', 'Tim Ulama'
+        ];
+
+        // Select 5 random questions per category for the game
+        function selectQuestionsForGame() {
+            // Group questions by category
+            const questionsByCategory = {};
+            const allQuestions = importedQuestions.length > 0 ? importedQuestions : questions;
+            
+            allQuestions.forEach(q => {
+                if (!questionsByCategory[q.category]) {
+                    questionsByCategory[q.category] = [];
+                }
+                questionsByCategory[q.category].push(q);
+            });
+
+            // Get all categories and limit to 5
+            const categories = Object.keys(questionsByCategory).slice(0, 5);
+            const selectedQuestions = [];
+
+            // Select 5 random questions from each category
+            categories.forEach(category => {
+                const categoryQuestions = [...questionsByCategory[category]];
+                shuffleArray(categoryQuestions);
+                
+                // Take up to 5 questions from this category
+                const questionsToAdd = categoryQuestions.slice(0, 5);
+                selectedQuestions.push(...questionsToAdd);
+            });
+
+            // If we don't have enough questions, fill with random questions from all categories
+            while (selectedQuestions.length < 25 && selectedQuestions.length < allQuestions.length) {
+                const remainingQuestions = allQuestions.filter(q => !selectedQuestions.includes(q));
+                if (remainingQuestions.length === 0) break;
+                
+                const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
+                selectedQuestions.push(remainingQuestions[randomIndex]);
+            }
+
+            return selectedQuestions.slice(0, 25); // Ensure exactly 25 questions
+        }
+
+        // Download Excel template
+        function downloadTemplate() {
+            const templateData = [
+                ['Pertanyaan', 'Jawaban A', 'Jawaban B', 'Jawaban C', 'Jawaban D', 'Jawaban Benar', 'Kategori', 'Poin'],
+                ['Siapa nama ayah Nabi Muhammad SAW?', 'Abdullah', 'Abu Thalib', 'Abdul Muthalib', 'Abu Bakar', 'A', 'Sejarah', '10'],
+                ['Di kota mana Nabi Muhammad SAW dilahirkan?', 'Madinah', 'Makkah', 'Thaif', 'Yaman', 'B', 'Sejarah', '20'],
+                ['Berapa jumlah surat dalam Al-Qur\'an?', '112', '113', '114', '115', 'C', 'Quran Hadis', '30'],
+                ['Berapa jumlah rukun iman?', '5', '6', '7', '8', 'B', 'Akidah Akhlak', '40'],
+                ['Berapa kali shalat wajib dalam sehari?', '3 kali', '4 kali', '5 kali', '6 kali', 'C', 'Fikih', '50']
+            ];
+
+            const ws = XLSX.utils.aoa_to_sheet(templateData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Template Soal');
+            
+            // Set column widths
+            ws['!cols'] = [
+                {wch: 50}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 15}, {wch: 15}, {wch: 10}
+            ];
+
+            XLSX.writeFile(wb, 'Template_Soal_Lomba_Cerdas_Cermat.xlsx');
+        }
+
+        // Import Excel file
+        function importExcel(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    const sheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+
+                    // Skip header row
+                    const questionsData = jsonData.slice(1);
+                    importedQuestions = [];
+
+                    questionsData.forEach((row, index) => {
+                        if (row.length >= 7 && row[0]) { // Ensure we have all required columns
+                            const correctAnswerLetter = row[5]?.toString().toUpperCase();
+                            let correctIndex = 0;
+                            
+                            switch(correctAnswerLetter) {
+                                case 'A': correctIndex = 0; break;
+                                case 'B': correctIndex = 1; break;
+                                case 'C': correctIndex = 2; break;
+                                case 'D': correctIndex = 3; break;
+                                default: correctIndex = 0;
+                            }
+
+                            importedQuestions.push({
+                                question: row[0],
+                                answers: [row[1], row[2], row[3], row[4]],
+                                correct: correctIndex,
+                                category: row[6] || 'Umum',
+                                points: parseInt(row[7]) || 10 // Default 10 points if not specified
+                            });
+                        }
+                    });
+
+                    if (importedQuestions.length > 0) {
+                        // Count questions by category
+                        const categoryCount = {};
+                        importedQuestions.forEach(q => {
+                            categoryCount[q.category] = (categoryCount[q.category] || 0) + 1;
+                        });
+                        
+                        let countInfo = Object.entries(categoryCount)
+                            .map(([cat, count]) => `${cat}: ${count} soal`)
+                            .join('\n');
+                        
+                        alert(`✅ Berhasil import ${importedQuestions.length} soal dari Excel!\n\nRincian per kategori:\n${countInfo}\n\nSistem akan memilih 5 soal acak per kategori untuk lomba.`);
+                    } else {
+                        alert('❌ Tidak ada soal valid yang ditemukan. Periksa format Excel Anda.');
+                    }
+
+                } catch (error) {
+                    alert('❌ Error membaca file Excel. Pastikan format file benar.');
+                    console.error('Excel import error:', error);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Update team setup
+        function updateTeamSetup() {
+            const teamCount = parseInt(document.getElementById('teamCount').value);
+            const teamGrid = document.getElementById('teamGrid');
+            teamGrid.innerHTML = '';
+
+            const medals = ['🥇', '🥈', '🥉', '🏅', '⭐', '🌟', '✨', '💫'];
+
+            for (let i = 0; i < teamCount; i++) {
+                const teamCard = document.createElement('div');
+                teamCard.className = 'team-setup-card';
+                teamCard.innerHTML = `
+                    <h3>${medals[i]} Tim ${i + 1}</h3>
+                    <input type="text" class="team-input" id="team${i + 1}Name" 
+                           placeholder="Nama Tim ${i + 1}" value="${defaultTeamNames[i]}">
+                `;
+                teamGrid.appendChild(teamCard);
+            }
+        }
+
+        // Initialize teams
+        function initializeTeams() {
+            const teamCount = parseInt(document.getElementById('teamCount').value);
+            teams = [];
+            
+            for (let i = 0; i < teamCount; i++) {
+                const teamName = document.getElementById(`team${i + 1}Name`).value || `Tim ${i + 1}`;
+                teams.push({ name: teamName, score: 0, correct: 0 });
+            }
+        }
+
+        // Start competition
+        function startCompetition() {
+            if (questions.length < 5) {
+                alert('❌ Minimal 5 soal diperlukan untuk memulai lomba!');
+                return;
+            }
+
+            // Select 5 random questions per category
+            const selectedQuestions = selectQuestionsForGame();
+            if (selectedQuestions.length < 25) {
+                alert('❌ Tidak cukup soal untuk membuat 25 pertanyaan (5 per kategori)!');
+                return;
+            }
+
+            // Use selected questions for the game
+            questions = selectedQuestions;
+
+            initializeTeams();
+            document.getElementById('setupScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+            document.getElementById('scoreboard').classList.remove('hidden');
+            
+            currentQuestion = 0;
+            currentTeam = 0;
+            gameActive = true;
+            answeredQuestions.clear();
+            
+            questions.forEach(q => shuffleAnswers(q));
+            
+            updateScoreboard();
+            createQuizGrid();
+        }
+
+        // Create quiz grid
+        function createQuizGrid() {
+            const grid = document.getElementById('quizGrid');
+            grid.innerHTML = '';
+            
+            // Get unique categories from selected questions
+            const categories = [...new Set(questions.map(q => q.category))].slice(0, 5);
+            const categoryHeaders = categories.map(cat => {
+                const icons = {
+                    'Sejarah': '🕌',
+                    'Quran Hadis': '📖',
+                    'Akidah Akhlak': '🤲',
+                    'Fikih': '🕐',
+                    'Bahasa Arab': '📚',
+                    'Umum': '📝'
+                };
+                return `${icons[cat] || '📝'} ${cat}`;
+            });
+            
+            // Create headers
+            categoryHeaders.forEach(category => {
+                const header = document.createElement('div');
+                header.className = 'quiz-header';
+                header.textContent = category;
+                grid.appendChild(header);
+            });
+            
+            // Organize questions by category for grid display
+            const questionsByCategory = {};
+            questions.forEach((q, index) => {
+                if (!questionsByCategory[q.category]) {
+                    questionsByCategory[q.category] = [];
+                }
+                questionsByCategory[q.category].push({...q, originalIndex: index});
+            });
+            
+            // Create question cells (5 rows x 5 categories)
+            for (let row = 0; row < 5; row++) {
+                categories.forEach((category, catIndex) => {
+                    const cell = document.createElement('div');
+                    cell.className = 'quiz-cell';
+                    const points = (row + 1) * 10;
+                    cell.innerHTML = `<span>${points}</span>`;
+                    
+                    // Find the question for this cell
+                    const categoryQuestions = questionsByCategory[category] || [];
+                    if (row < categoryQuestions.length) {
+                        const questionData = categoryQuestions[row];
+                        const questionPoints = questionData.points || ((row + 1) * 10);
+                        cell.innerHTML = `<span>${questionPoints}</span>`;
+                        cell.onclick = () => selectQuestion(questionData.originalIndex);
+                        cell.dataset.questionIndex = questionData.originalIndex;
+                    } else {
+                        cell.classList.add('answered');
+                        cell.innerHTML = '<span style="font-size: 1.5rem;">-</span>';
+                    }
+                    
+                    grid.appendChild(cell);
+                });
+            }
+        }
+
+        // Select question
+        function selectQuestion(questionIndex) {
+            if (answeredQuestions.has(questionIndex) || questionIndex >= questions.length) return;
+            
+            selectedQuestion = questionIndex;
+            currentQuestion = questionIndex;
+            
+            showQuestionPopup();
+        }
+
+        // Show question popup
+        function showQuestionPopup() {
+            const popup = document.createElement('div');
+            popup.className = 'question-popup';
+            popup.id = 'questionPopup';
+            
+            const question = questions[currentQuestion];
+            
+            popup.innerHTML = `
+                <div class="question-header">
+                    <div class="question-badge">Soal ${currentQuestion + 1}</div>
+                    <div class="question-badge">${question.category}</div>
+                    <div class="timer-display" id="timerDisplay">⏰ 30</div>
+                </div>
+                
+                <div class="question-content">
+                    <div class="question-text">${question.question}</div>
+                    
+                    <div class="answers-container" id="answersContainer">
+                        <!-- Answers will be populated here -->
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(popup);
+            
+            // Populate answers
+            const answersContainer = document.getElementById('answersContainer');
+            question.answers.forEach((answer, index) => {
+                const button = document.createElement('button');
+                button.className = 'answer-option';
+                button.innerHTML = `
+                    <div class="answer-label">${String.fromCharCode(65 + index)}</div>
+                    <div class="answer-text">${answer}</div>
+                `;
+                button.onclick = () => selectAnswer(index);
+                answersContainer.appendChild(button);
+            });
+
+            // Start timer
+            timeLeft = 30;
+            gameActive = true;
+            questionAnswered = false;
+            startTimer();
+        }
+
+        // Select answer
+        function selectAnswer(selectedIndex) {
+            if (!gameActive || questionAnswered) return;
+
+            questionAnswered = true;
+            clearInterval(timer);
+            
+            const question = questions[currentQuestion];
+            const buttons = document.querySelectorAll('.answer-option');
+            
+            buttons.forEach(btn => btn.style.pointerEvents = 'none');
+            
+            const points = question.points || ((currentQuestion % 5) + 1) * 10;
+            
+            if (selectedIndex === question.correct) {
+                buttons[selectedIndex].classList.add('correct');
+                teams[currentTeam].score += points;
+                teams[currentTeam].correct++;
+                
+                setTimeout(() => closeQuestionPopup(), 2000);
+            } else {
+                buttons[selectedIndex].classList.add('wrong');
+                setTimeout(() => {
+                    buttons[question.correct].classList.add('correct');
+                }, 500);
+                
+                setTimeout(() => closeQuestionPopup(), 3000);
+            }
+
+            updateScoreboard();
+        }
+
+        // Close question popup
+        function closeQuestionPopup() {
+            const popup = document.getElementById('questionPopup');
+            if (popup) popup.remove();
+            
+            // Mark question as answered
+            if (selectedQuestion !== null) {
+                answeredQuestions.add(selectedQuestion);
+                const cell = document.querySelector(`[data-question-index="${selectedQuestion}"]`);
+                if (cell) {
+                    cell.classList.add('answered');
+                    cell.innerHTML = '<span style="font-size: 2.5rem;">✓</span>';
+                }
+            }
+            
+            // Move to next team
+            currentTeam = (currentTeam + 1) % teams.length;
+            updateScoreboard();
+            
+            // Check if all questions answered
+            if (answeredQuestions.size >= Math.min(25, questions.length)) {
+                endCompetition();
+            }
+        }
+
+        // Start timer
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                const timerDisplay = document.getElementById('timerDisplay');
+                if (timerDisplay) {
+                    timerDisplay.textContent = `⏰ ${timeLeft}`;
+                }
+                
+                if (timeLeft <= 0) {
+                    if (!questionAnswered) {
+                        questionAnswered = true;
+                        const question = questions[currentQuestion];
+                        const buttons = document.querySelectorAll('.answer-option');
+                        buttons.forEach(btn => btn.style.pointerEvents = 'none');
+                        buttons[question.correct].classList.add('correct');
+                        
+                        setTimeout(() => closeQuestionPopup(), 2500);
+                    }
+                    clearInterval(timer);
+                }
+            }, 1000);
+        }
+
+        // Update scoreboard
+        function updateScoreboard() {
+            const scoreGrid = document.getElementById('scoreGrid');
+            scoreGrid.innerHTML = '';
+            
+            teams.forEach((team, index) => {
+                const scoreItem = document.createElement('div');
+                scoreItem.className = `score-item ${index === currentTeam ? 'active' : ''}`;
+                scoreItem.innerHTML = `
+                    <div class="score-name">${team.name}</div>
+                    <div class="score-points">${team.score}</div>
+                `;
+                scoreGrid.appendChild(scoreItem);
+            });
+        }
+
+        // End competition
+        function endCompetition() {
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('scoreboard').classList.add('hidden');
+            document.getElementById('resultScreen').classList.remove('hidden');
+            
+            const sortedTeams = [...teams].sort((a, b) => b.score - a.score);
+            
+            document.getElementById('winnerTitle').textContent = `🏆 ${sortedTeams[0].name} Juara! 🏆`;
+            
+            const podium = document.getElementById('podium');
+            podium.innerHTML = '';
+            
+            const positions = ['first', 'second', 'third'];
+            const positionNames = ['🥇 Juara 1', '🥈 Juara 2', '🥉 Juara 3'];
+            
+            sortedTeams.slice(0, 3).forEach((team, index) => {
+                const podiumItem = document.createElement('div');
+                podiumItem.className = `podium-item ${positions[index]}`;
+                podiumItem.innerHTML = `
+                    <div class="podium-position">${positionNames[index]}</div>
+                    <div class="podium-team">${team.name}</div>
+                    <div class="podium-score">${team.score} Poin</div>
+                    <div>Benar: ${team.correct}/${Math.min(25, questions.length)}</div>
+                `;
+                podium.appendChild(podiumItem);
+            });
+        }
+
+        // Restart competition
+        function restartCompetition() {
+            document.getElementById('resultScreen').classList.add('hidden');
+            document.getElementById('setupScreen').classList.remove('hidden');
+            
+            currentQuestion = 0;
+            currentTeam = 0;
+            teams = [];
+            answeredQuestions.clear();
+            selectedQuestion = null;
+            
+            // Reset file input
+            document.getElementById('excelFile').value = '';
+        }
+
+        // Utility functions
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function shuffleAnswers(question) {
+            const correctAnswer = question.answers[question.correct];
+            shuffleArray(question.answers);
+            question.correct = question.answers.indexOf(correctAnswer);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTeamSetup();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c5ef1ac22bfd6d',t:'MTc1NzQxMzAyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
