@@ -683,6 +683,148 @@
             color: #ff4757;
         }
 
+        /* Game Screen Styles */
+        .game-header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideInDown 1s ease-out;
+        }
+
+        .game-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3rem;
+            background: linear-gradient(45deg, #007cf0, #00d4aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .game-subtitle {
+            font-size: 1.4rem;
+            color: white;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .categories-grid {
+            display: grid;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .category-section {
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 30px;
+            border: 3px solid rgba(255,255,255,0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .category-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .category-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2rem;
+            color: white;
+            text-shadow: 0 3px 6px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #00c9ff, #007cf0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .questions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .question-box {
+            background: linear-gradient(135deg, #007cf0, #00c9ff);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 25px 15px;
+            font-size: 1.4rem;
+            font-weight: 900;
+            font-family: 'Fredoka One', cursive;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0, 124, 240, 0.4);
+            border: 4px solid rgba(255,255,255,0.3);
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+
+        .question-box:hover::before {
+            animation: shine 0.6s ease-in-out;
+            opacity: 1;
+        }
+
+        .question-box:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(0, 124, 240, 0.6);
+        }
+
+        .question-box.answered {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            box-shadow: 0 10px 30px rgba(46, 204, 113, 0.4);
+            cursor: not-allowed;
+        }
+
+        .question-box.answered::after {
+            content: '✅';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 1.2rem;
+        }
+
+        .question-points {
+            font-size: 1.8rem;
+            font-weight: 900;
+        }
+
+        .question-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .game-controls {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: slideInUp 1s ease-out 0.5s both;
+        }
+
         /* Hidden class */
         .hidden {
             display: none !important;
@@ -924,7 +1066,23 @@
 
         <!-- Game Screen (Hidden initially) -->
         <div id="gameScreen" class="hidden">
-            <!-- Questions will be displayed in full-screen popup -->
+            <div class="game-header">
+                <h2 class="game-title">🎯 PILIH SOAL QUIZ SHOW 🎯</h2>
+                <p class="game-subtitle">Klik kotak soal untuk memulai pertanyaan</p>
+            </div>
+            
+            <div class="categories-grid" id="categoriesGrid">
+                <!-- Categories and questions will be populated here -->
+            </div>
+            
+            <div class="game-controls">
+                <button class="game-show-btn secondary" onclick="showScoreboard()">
+                    📊 Lihat Skor
+                </button>
+                <button class="game-show-btn" onclick="endQuizShow()">
+                    🏁 Selesai Quiz
+                </button>
+            </div>
         </div>
 
         <!-- Result Screen -->
@@ -1306,9 +1464,10 @@
             initializeTeams();
             prepareGameQuestions();
             
-            // Hide setup screen and show scoreboard
+            // Hide setup screen and show game screen
             document.getElementById('setupScreen').classList.add('hidden');
             document.getElementById('scoreboard').classList.remove('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
             
             currentQuestion = 0;
             currentTeam = 0;
@@ -1316,27 +1475,88 @@
             answeredQuestions.clear();
             
             updateScoreboard();
+            createQuestionGrid();
             
-            // Show welcome message and start first question
+            // Show welcome message
             showGameMessage('🎉 QUIZ SHOW DIMULAI! 🎉', 'correct');
-            setTimeout(() => {
-                nextQuestion();
-            }, 2000);
         }
 
-        // Next question
+        // Create question grid
+        function createQuestionGrid() {
+            const categoriesGrid = document.getElementById('categoriesGrid');
+            categoriesGrid.innerHTML = '';
+            
+            // Group questions by category
+            const questionsByCategory = {};
+            gameQuestions.forEach((question, index) => {
+                if (!questionsByCategory[question.category]) {
+                    questionsByCategory[question.category] = [];
+                }
+                questionsByCategory[question.category].push({...question, originalIndex: index});
+            });
+            
+            // Create category sections
+            Object.entries(questionsByCategory).forEach(([category, questions]) => {
+                const categorySection = document.createElement('div');
+                categorySection.className = 'category-section';
+                
+                categorySection.innerHTML = `
+                    <div class="category-header">
+                        <h3 class="category-title">${category}</h3>
+                    </div>
+                    <div class="questions-grid" id="category-${category.replace(/\s+/g, '-')}">
+                    </div>
+                `;
+                
+                categoriesGrid.appendChild(categorySection);
+                
+                const questionsGrid = categorySection.querySelector('.questions-grid');
+                
+                // Sort questions by points
+                questions.sort((a, b) => a.points - b.points);
+                
+                questions.forEach((question) => {
+                    const questionBox = document.createElement('button');
+                    questionBox.className = 'question-box';
+                    questionBox.id = `question-${question.originalIndex}`;
+                    questionBox.innerHTML = `
+                        <div class="question-points">${question.points}</div>
+                        <div class="question-label">Poin</div>
+                    `;
+                    
+                    questionBox.onclick = () => selectQuestionFromGrid(question.originalIndex);
+                    questionsGrid.appendChild(questionBox);
+                });
+            });
+        }
+
+        // Select question from grid
+        function selectQuestionFromGrid(questionIndex) {
+            if (answeredQuestions.has(questionIndex)) {
+                showGameMessage('❌ Soal ini sudah dijawab!', 'wrong');
+                return;
+            }
+            
+            selectedQuestion = questionIndex;
+            showQuestionScreen(questionIndex);
+        }
+
+        // Next question (now unused, keeping for compatibility)
         function nextQuestion() {
-            if (currentQuestion >= gameQuestions.length) {
+            // Check if all questions are answered
+            if (answeredQuestions.size >= gameQuestions.length) {
                 endQuizShow();
                 return;
             }
-
-            showQuestionScreen();
+            
+            // Return to grid selection
+            const questionScreen = document.getElementById('questionScreen');
+            if (questionScreen) questionScreen.remove();
         }
 
         // Show question screen
-        function showQuestionScreen() {
-            const question = gameQuestions[currentQuestion];
+        function showQuestionScreen(questionIndex = selectedQuestion) {
+            const question = gameQuestions[questionIndex];
             
             const questionScreen = document.createElement('div');
             questionScreen.className = 'question-screen';
@@ -1345,7 +1565,7 @@
             questionScreen.innerHTML = `
                 <div class="question-header">
                     <div class="question-info">
-                        <div class="question-badge">Soal ${currentQuestion + 1}/${gameQuestions.length}</div>
+                        <div class="question-badge">Soal ${questionIndex + 1}/${gameQuestions.length}</div>
                         <div class="question-badge">${question.category}</div>
                         <div class="question-badge">${question.points} Poin</div>
                     </div>
@@ -1390,7 +1610,7 @@
             questionAnswered = true;
             clearInterval(timer);
             
-            const question = gameQuestions[currentQuestion];
+            const question = gameQuestions[selectedQuestion];
             const buttons = document.querySelectorAll('.answer-btn');
             
             // Disable all buttons
@@ -1425,20 +1645,27 @@
             const questionScreen = document.getElementById('questionScreen');
             if (questionScreen) questionScreen.remove();
             
+            // Mark question as answered
+            answeredQuestions.add(selectedQuestion);
+            
+            // Update question box to show as answered
+            const questionBox = document.getElementById(`question-${selectedQuestion}`);
+            if (questionBox) {
+                questionBox.classList.add('answered');
+                questionBox.onclick = null;
+            }
+            
             // Move to next team
             currentTeam = (currentTeam + 1) % teams.length;
             
-            // If all teams have answered, move to next question
-            if (currentTeam === 0) {
-                currentQuestion++;
-            }
-            
             updateScoreboard();
             
-            // Continue to next question or end game
-            setTimeout(() => {
-                nextQuestion();
-            }, 1000);
+            // Check if all questions are answered
+            if (answeredQuestions.size >= gameQuestions.length) {
+                setTimeout(() => {
+                    endQuizShow();
+                }, 1000);
+            }
         }
 
         // Start timer
@@ -1457,7 +1684,7 @@
                 if (timeLeft <= 0) {
                     if (!questionAnswered) {
                         questionAnswered = true;
-                        const question = gameQuestions[currentQuestion];
+                        const question = gameQuestions[selectedQuestion];
                         const buttons = document.querySelectorAll('.answer-btn');
                         buttons.forEach(btn => btn.style.pointerEvents = 'none');
                         buttons[question.correct].classList.add('correct');
@@ -1495,11 +1722,26 @@
             });
         }
 
+        // Show scoreboard
+        function showScoreboard() {
+            const scoreboard = document.getElementById('scoreboard');
+            const gameScreen = document.getElementById('gameScreen');
+            
+            if (scoreboard.classList.contains('hidden')) {
+                scoreboard.classList.remove('hidden');
+                gameScreen.classList.add('hidden');
+            } else {
+                scoreboard.classList.add('hidden');
+                gameScreen.classList.remove('hidden');
+            }
+        }
+
         // End Quiz Show
         function endQuizShow() {
             gameActive = false;
             
             document.getElementById('scoreboard').classList.add('hidden');
+            document.getElementById('gameScreen').classList.add('hidden');
             document.getElementById('resultScreen').classList.remove('hidden');
             
             const sortedTeams = [...teams].sort((a, b) => b.score - a.score);
@@ -1627,5 +1869,5 @@
             }, 500);
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c6ba38608a3231',t:'MTc1NzQyMTM0Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c6c8eed699fce4',t:'MTc1NzQyMTk0OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
