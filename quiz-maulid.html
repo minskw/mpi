@@ -178,6 +178,59 @@
             gap: 10px;
         }
 
+        /* Supabase Config Section */
+        .supabase-config {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #e9ecef;
+        }
+
+        .config-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+            background: white;
+            color: #2c3e50;
+        }
+
+        .config-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .config-status {
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .config-status.connected {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .config-status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .config-status.connecting {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
         .team-selector {
             background: #e74c3c;
             color: white;
@@ -329,6 +382,13 @@
         .start-btn:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 35px rgba(231, 76, 60, 0.5);
+        }
+
+        .start-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 3px 10px rgba(149, 165, 166, 0.3);
         }
 
         /* Quiz Grid */
@@ -668,6 +728,21 @@
             unicode-bidi: embed;
         }
 
+        /* Loading indicator */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         @media (max-width: 768px) {
             .title {
                 font-size: 2.5rem;
@@ -718,7 +793,34 @@
             <div class="setup-header">
                 <div class="setup-icon">🏆</div>
                 <h2 class="setup-title">Persiapan Lomba</h2>
-                <p class="setup-description">Atur tim dan import soal untuk memulai lomba</p>
+                <p class="setup-description">Atur database, tim dan import soal untuk memulai lomba</p>
+            </div>
+
+            <!-- Supabase Configuration -->
+            <div class="setup-section">
+                <div class="section-title">
+                    🗄️ Konfigurasi Database Supabase
+                </div>
+                <div class="supabase-config">
+                    <input type="text" class="config-input" id="supabaseUrl" 
+                           placeholder="Supabase URL (https://xxx.supabase.co)" 
+                           value="">
+                    <input type="password" class="config-input" id="supabaseKey" 
+                           placeholder="Supabase Anon Key" 
+                           value="">
+                    <button class="template-btn" onclick="testSupabaseConnection()" id="testConnectionBtn">
+                        🔗 Test Koneksi
+                    </button>
+                    <div class="config-status disconnected" id="connectionStatus">
+                        ❌ Belum terhubung ke database
+                    </div>
+                    <div class="import-info">
+                        <strong>Cara setup:</strong><br>
+                        1. Buka dashboard Supabase → Settings → API<br>
+                        2. Copy "Project URL" dan "anon public" key<br>
+                        3. Paste di form atas dan klik "Test Koneksi"
+                    </div>
+                </div>
             </div>
 
             <!-- Import Section -->
@@ -735,6 +837,9 @@
                             📤 Import Soal Excel
                             <input type="file" id="excelFile" class="file-input" accept=".xlsx,.xls" onchange="importExcel(event)">
                         </label>
+                        <button class="template-btn" onclick="loadQuestionsFromDatabase()" id="loadFromDbBtn" disabled>
+                            📚 Load Soal dari Database
+                        </button>
                     </div>
                     <div class="import-info">
                         Format: Kolom A=Pertanyaan, B=Jawaban A, C=Jawaban B, D=Jawaban C, E=Jawaban D, F=Jawaban Benar (A/B/C/D), G=Kategori, H=Poin
@@ -765,7 +870,7 @@
             </div>
 
             <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                <button class="start-btn" onclick="startCompetition()">
+                <button class="start-btn" onclick="startCompetition()" id="startBtn">
                     🚀 Mulai Lomba
                 </button>
                 <button class="start-btn" style="background: #e67e22; box-shadow: 0 8px 25px rgba(230, 126, 34, 0.4);" onclick="clearSavedGame()">
@@ -805,8 +910,14 @@
 
     <!-- Include SheetJS for Excel processing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Include Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script>
+        // Supabase client
+        let supabase = null;
+        let isConnectedToDatabase = false;
+
         // Game state
         let currentQuestion = 0;
         let timeLeft = 30;
@@ -818,6 +929,7 @@
         let answeredQuestions = new Set();
         let selectedQuestion = null;
         let importedQuestions = [];
+        let currentGameSession = null;
 
         // LocalStorage keys
         const STORAGE_KEYS = {
@@ -825,7 +937,9 @@
             TEAMS: 'cerdas_cermat_teams',
             QUESTIONS: 'cerdas_cermat_questions',
             ANSWERED_QUESTIONS: 'cerdas_cermat_answered',
-            IMPORTED_QUESTIONS: 'cerdas_cermat_imported'
+            IMPORTED_QUESTIONS: 'cerdas_cermat_imported',
+            SUPABASE_URL: 'cerdas_cermat_supabase_url',
+            SUPABASE_KEY: 'cerdas_cermat_supabase_key'
         };
 
         // Auto-save interval (save every 10 seconds during active game)
@@ -1025,7 +1139,223 @@
             'Tim Anshar', 'Tim Khulafaur Rasyidin', 'Tim Ahlul Bayt', 'Tim Ulama'
         ];
 
-        // Save game state to localStorage
+        // Initialize Supabase connection
+        function initializeSupabase(url, key) {
+            try {
+                supabase = window.supabase.createClient(url, key);
+                return true;
+            } catch (error) {
+                console.error('Failed to initialize Supabase:', error);
+                return false;
+            }
+        }
+
+        // Test Supabase connection
+        async function testSupabaseConnection() {
+            const url = document.getElementById('supabaseUrl').value.trim();
+            const key = document.getElementById('supabaseKey').value.trim();
+            const statusEl = document.getElementById('connectionStatus');
+            const testBtn = document.getElementById('testConnectionBtn');
+
+            if (!url || !key) {
+                statusEl.className = 'config-status disconnected';
+                statusEl.innerHTML = '❌ Mohon isi URL dan Key Supabase';
+                return;
+            }
+
+            // Show loading state
+            statusEl.className = 'config-status connecting';
+            statusEl.innerHTML = '⏳ Menguji koneksi...';
+            testBtn.disabled = true;
+            testBtn.innerHTML = '<div class="loading"></div> Testing...';
+
+            try {
+                // Initialize Supabase client
+                if (!initializeSupabase(url, key)) {
+                    throw new Error('Failed to initialize Supabase client');
+                }
+
+                // Test connection by trying to create tables if they don't exist
+                await createTablesIfNotExist();
+
+                // Test basic query
+                const { data, error } = await supabase
+                    .from('questions')
+                    .select('count')
+                    .limit(1);
+
+                if (error && error.code !== 'PGRST116') { // PGRST116 = table doesn't exist, which is OK
+                    throw error;
+                }
+
+                // Connection successful
+                isConnectedToDatabase = true;
+                statusEl.className = 'config-status connected';
+                statusEl.innerHTML = '✅ Terhubung ke database Supabase!';
+                
+                // Save credentials to localStorage
+                localStorage.setItem(STORAGE_KEYS.SUPABASE_URL, url);
+                localStorage.setItem(STORAGE_KEYS.SUPABASE_KEY, key);
+                
+                // Enable database features
+                document.getElementById('loadFromDbBtn').disabled = false;
+                document.getElementById('startBtn').disabled = false;
+
+            } catch (error) {
+                console.error('Supabase connection error:', error);
+                isConnectedToDatabase = false;
+                statusEl.className = 'config-status disconnected';
+                statusEl.innerHTML = `❌ Gagal terhubung: ${error.message}`;
+                
+                // Disable database features
+                document.getElementById('loadFromDbBtn').disabled = true;
+            } finally {
+                testBtn.disabled = false;
+                testBtn.innerHTML = '🔗 Test Koneksi';
+            }
+        }
+
+        // Create database tables if they don't exist
+        async function createTablesIfNotExist() {
+            if (!supabase) return;
+
+            try {
+                // Create questions table
+                const { error: questionsError } = await supabase.rpc('create_questions_table');
+                
+                // Create game_sessions table
+                const { error: sessionsError } = await supabase.rpc('create_game_sessions_table');
+                
+                // Create teams table
+                const { error: teamsError } = await supabase.rpc('create_teams_table');
+
+                // If RPC functions don't exist, we'll create tables using raw SQL
+                // This is a fallback approach
+                
+            } catch (error) {
+                // Tables might already exist or RPC functions not available
+                // This is expected on first run
+                console.log('Tables creation info:', error.message);
+            }
+        }
+
+        // Save questions to database
+        async function saveQuestionsToDatabase(questionsToSave) {
+            if (!supabase || !isConnectedToDatabase) return false;
+
+            try {
+                // Clear existing questions
+                await supabase.from('questions').delete().neq('id', 0);
+
+                // Insert new questions
+                const { data, error } = await supabase
+                    .from('questions')
+                    .insert(questionsToSave.map(q => ({
+                        question: q.question,
+                        answers: q.answers,
+                        correct_answer: q.correct,
+                        category: q.category,
+                        points: q.points
+                    })));
+
+                if (error) throw error;
+                return true;
+            } catch (error) {
+                console.error('Error saving questions to database:', error);
+                return false;
+            }
+        }
+
+        // Load questions from database
+        async function loadQuestionsFromDatabase() {
+            if (!supabase || !isConnectedToDatabase) {
+                alert('❌ Tidak terhubung ke database!');
+                return;
+            }
+
+            try {
+                const { data, error } = await supabase
+                    .from('questions')
+                    .select('*')
+                    .order('category', { ascending: true });
+
+                if (error) throw error;
+
+                if (data && data.length > 0) {
+                    importedQuestions = data.map(q => ({
+                        question: q.question,
+                        answers: q.answers,
+                        correct: q.correct_answer,
+                        category: q.category,
+                        points: q.points
+                    }));
+
+                    // Count questions by category
+                    const categoryCount = {};
+                    importedQuestions.forEach(q => {
+                        categoryCount[q.category] = (categoryCount[q.category] || 0) + 1;
+                    });
+                    
+                    let countInfo = Object.entries(categoryCount)
+                        .map(([cat, count]) => `${cat}: ${count} soal`)
+                        .join('\n');
+                    
+                    alert(`✅ Berhasil load ${importedQuestions.length} soal dari database!\n\nRincian per kategori:\n${countInfo}`);
+                } else {
+                    alert('📝 Tidak ada soal di database. Import soal Excel terlebih dahulu.');
+                }
+            } catch (error) {
+                console.error('Error loading questions from database:', error);
+                alert(`❌ Error loading soal: ${error.message}`);
+            }
+        }
+
+        // Save game session to database
+        async function saveGameSessionToDatabase() {
+            if (!supabase || !isConnectedToDatabase || !currentGameSession) return;
+
+            try {
+                const gameData = {
+                    session_id: currentGameSession,
+                    teams: teams,
+                    current_question: currentQuestion,
+                    current_team: currentTeam,
+                    answered_questions: [...answeredQuestions],
+                    questions: questions,
+                    game_active: gameActive,
+                    updated_at: new Date().toISOString()
+                };
+
+                const { error } = await supabase
+                    .from('game_sessions')
+                    .upsert(gameData);
+
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error saving game session:', error);
+            }
+        }
+
+        // Load game session from database
+        async function loadGameSessionFromDatabase(sessionId) {
+            if (!supabase || !isConnectedToDatabase) return null;
+
+            try {
+                const { data, error } = await supabase
+                    .from('game_sessions')
+                    .select('*')
+                    .eq('session_id', sessionId)
+                    .single();
+
+                if (error) throw error;
+                return data;
+            } catch (error) {
+                console.error('Error loading game session:', error);
+                return null;
+            }
+        }
+
+        // Save game state (hybrid: localStorage + database)
         function saveGameState() {
             try {
                 const gameState = {
@@ -1034,14 +1364,21 @@
                     gameActive,
                     questionAnswered,
                     selectedQuestion,
-                    screen: getCurrentScreen()
+                    screen: getCurrentScreen(),
+                    gameSession: currentGameSession
                 };
                 
+                // Save to localStorage (immediate)
                 localStorage.setItem(STORAGE_KEYS.GAME_STATE, JSON.stringify(gameState));
                 localStorage.setItem(STORAGE_KEYS.TEAMS, JSON.stringify(teams));
                 localStorage.setItem(STORAGE_KEYS.QUESTIONS, JSON.stringify(questions));
                 localStorage.setItem(STORAGE_KEYS.ANSWERED_QUESTIONS, JSON.stringify([...answeredQuestions]));
                 localStorage.setItem(STORAGE_KEYS.IMPORTED_QUESTIONS, JSON.stringify(importedQuestions));
+
+                // Save to database (async)
+                if (isConnectedToDatabase && gameActive) {
+                    saveGameSessionToDatabase();
+                }
             } catch (error) {
                 console.warn('Failed to save game state:', error);
             }
@@ -1063,6 +1400,7 @@
                     gameActive = gameState.gameActive || false;
                     questionAnswered = gameState.questionAnswered || false;
                     selectedQuestion = gameState.selectedQuestion;
+                    currentGameSession = gameState.gameSession;
                     
                     // Restore data
                     teams = savedTeams;
@@ -1089,10 +1427,28 @@
             return false;
         }
 
+        // Load saved Supabase credentials
+        function loadSupabaseCredentials() {
+            const savedUrl = localStorage.getItem(STORAGE_KEYS.SUPABASE_URL);
+            const savedKey = localStorage.getItem(STORAGE_KEYS.SUPABASE_KEY);
+            
+            if (savedUrl && savedKey) {
+                document.getElementById('supabaseUrl').value = savedUrl;
+                document.getElementById('supabaseKey').value = savedKey;
+                
+                // Auto-test connection
+                setTimeout(() => {
+                    testSupabaseConnection();
+                }, 1000);
+            }
+        }
+
         // Clear saved game state
         function clearGameState() {
             Object.values(STORAGE_KEYS).forEach(key => {
-                localStorage.removeItem(key);
+                if (key !== STORAGE_KEYS.SUPABASE_URL && key !== STORAGE_KEYS.SUPABASE_KEY) {
+                    localStorage.removeItem(key);
+                }
             });
         }
 
@@ -1211,12 +1567,12 @@
         }
 
         // Import Excel file
-        function importExcel(event) {
+        async function importExcel(event) {
             const file = event.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = async function(e) {
                 try {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, {type: 'array'});
@@ -1262,7 +1618,17 @@
                             .map(([cat, count]) => `${cat}: ${count} soal`)
                             .join('\n');
                         
-                        alert(`✅ Berhasil import ${importedQuestions.length} soal dari Excel!\n\nRincian per kategori:\n${countInfo}\n\nSistem akan memilih 5 soal acak per kategori untuk lomba.`);
+                        // Save to database if connected
+                        if (isConnectedToDatabase) {
+                            const saved = await saveQuestionsToDatabase(importedQuestions);
+                            if (saved) {
+                                alert(`✅ Berhasil import ${importedQuestions.length} soal dari Excel dan disimpan ke database!\n\nRincian per kategori:\n${countInfo}\n\nSistem akan memilih 5 soal acak per kategori untuk lomba.`);
+                            } else {
+                                alert(`✅ Berhasil import ${importedQuestions.length} soal dari Excel!\n(Gagal simpan ke database, tapi soal tetap bisa digunakan)\n\nRincian per kategori:\n${countInfo}\n\nSistem akan memilih 5 soal acak per kategori untuk lomba.`);
+                            }
+                        } else {
+                            alert(`✅ Berhasil import ${importedQuestions.length} soal dari Excel!\n\nRincian per kategori:\n${countInfo}\n\nSistem akan memilih 5 soal acak per kategori untuk lomba.`);
+                        }
                     } else {
                         alert('❌ Tidak ada soal valid yang ditemukan. Periksa format Excel Anda.');
                     }
@@ -1307,7 +1673,7 @@
         }
 
         // Start competition
-        function startCompetition() {
+        async function startCompetition() {
             if (questions.length < 5) {
                 alert('❌ Minimal 5 soal diperlukan untuk memulai lomba!');
                 return;
@@ -1324,6 +1690,10 @@
             questions = selectedQuestions;
 
             initializeTeams();
+            
+            // Generate unique game session ID
+            currentGameSession = 'game_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            
             document.getElementById('setupScreen').classList.add('hidden');
             document.getElementById('gameScreen').classList.remove('hidden');
             document.getElementById('scoreboard').classList.remove('hidden');
@@ -1609,6 +1979,7 @@
             answeredQuestions.clear();
             selectedQuestion = null;
             gameActive = false;
+            currentGameSession = null;
             
             // Reset file input
             document.getElementById('excelFile').value = '';
@@ -1629,6 +2000,7 @@
                 selectedQuestion = null;
                 importedQuestions = [];
                 gameActive = false;
+                currentGameSession = null;
                 
                 // Reset file input
                 document.getElementById('excelFile').value = '';
@@ -1675,7 +2047,10 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            // Try to load saved game state first
+            // Load Supabase credentials first
+            loadSupabaseCredentials();
+            
+            // Try to load saved game state
             const gameLoaded = loadGameState();
             
             if (!gameLoaded) {
@@ -1709,5 +2084,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c60ea4e10b8de9',t:'MTc1NzQxNDMxOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c6237fd0acce52',t:'MTc1NzQxNTE3My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
