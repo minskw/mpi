@@ -99,7 +99,7 @@
         <!-- Header -->
         <div class="text-center mb-8 bounce-in">
             <h1 class="game-font text-4xl md:text-5xl text-white mb-4 drop-shadow-lg">
-                🕌 GEBYAR PERINGATAN MAULID NABI 🕋
+                🕌 GEBYAR MAULID NABI 🕌
             </h1>
             <p class="text-2xl text-white font-bold drop-shadow-md">
                 <i class="fas fa-star-and-crescent text-yellow-300"></i> 
@@ -555,8 +555,8 @@
                             this.updateQuestionCount();
                             this.updateQuestionPreview();
                             
-                            // Save imported questions to localStorage
-                            this.saveToStorage('gameshow_questions', this.questions);
+                            console.log('Questions imported:', this.questions.length);
+                            console.log('Sample question:', this.questions[0]);
                             
                             Swal.fire({
                                 icon: 'success',
@@ -676,8 +676,7 @@
                 this.updateQuestionCount();
                 this.updateQuestionPreview();
                 
-                // Save questions to localStorage
-                this.saveToStorage('gameshow_questions', this.questions);
+                // Questions saved locally
                 
                 // Clear form
                 document.getElementById('manual-question').value = '';
@@ -724,6 +723,8 @@
             }
             
             startGame() {
+                console.log('Starting game with questions:', this.questions.length);
+                
                 // Get team names
                 const nameInputs = document.querySelectorAll('.team-name-input');
                 this.teams = Array.from(nameInputs).map((input, index) => ({
@@ -733,13 +734,20 @@
                     color: this.teamColors[index]
                 }));
                 
+                console.log('Teams created:', this.teams.length);
+                
                 // SELECT RANDOM QUESTIONS based on user selection
                 let gameQuestions = [...this.questions]; // Copy all questions
+                console.log('Available questions before shuffle:', gameQuestions.length);
+                
                 gameQuestions = this.shuffleArray(gameQuestions); // Shuffle all questions
                 
                 // Take only selected number of questions (or less if not enough available)
                 const maxGameQuestions = Math.min(this.totalQuestions, gameQuestions.length);
                 this.gameQuestions = gameQuestions.slice(0, maxGameQuestions);
+                
+                console.log('Game questions selected:', this.gameQuestions.length);
+                console.log('First game question:', this.gameQuestions[0]);
                 
                 // Shuffle options for each selected question
                 this.gameQuestions.forEach(question => {
@@ -749,6 +757,8 @@
                 this.currentTeamIndex = 0;
                 this.currentQuestionIndex = 0;
                 this.gameActive = true;
+                
+                console.log('Game initialized - Starting question index:', this.currentQuestionIndex);
                 
                 this.showScreen('game');
                 this.createTeamScoreboards();
@@ -811,12 +821,17 @@
             }
             
             showQuestion() {
+                console.log('showQuestion called - Index:', this.currentQuestionIndex, 'Total:', this.gameQuestions.length);
+                
                 if (this.currentQuestionIndex >= this.gameQuestions.length) {
+                    console.log('No more questions - ending game');
                     this.endGame();
                     return;
                 }
                 
                 const question = this.gameQuestions[this.currentQuestionIndex];
+                console.log('Showing question:', question.question);
+                
                 this.currentQuestionNumber.textContent = this.currentQuestionIndex + 1;
                 
                 // Update total questions display
@@ -1070,13 +1085,12 @@
                 
                 // Scoreboard is always visible now
                 
-                // Save game state after answer
-                this.saveGameState();
+                // Game state updated
                 
                 // Move to next question with proper timing based on answer type
                 setTimeout(() => {
                     this.nextQuestion();
-                }, selectedIndex === question.correct ? 2800 : 2800);
+                }, selectedIndex === question.correct ? 3000 : 3500);
             }
             
             timeUp() {
@@ -1142,18 +1156,19 @@
                     });
                 }, 600);
                 
-                // Save game state after timeout
-                this.saveGameState();
+                // Game state updated
                 
                 // Scoreboard is always visible
                 
                 // Move to next question
                 setTimeout(() => {
                     this.nextQuestion();
-                }, 2800);
+                }, 3500);
             }
             
             nextQuestion() {
+                console.log('nextQuestion called - Current index:', this.currentQuestionIndex, 'Total questions:', this.gameQuestions.length);
+                
                 // Clean up previous question animations and styles
                 const buttons = document.querySelectorAll('.option-btn');
                 buttons.forEach(button => {
@@ -1165,6 +1180,7 @@
                     
                     // Re-enable buttons
                     button.disabled = false;
+                    button.style.pointerEvents = 'auto';
                 });
                 
                 // Remove any remaining effects
@@ -1175,9 +1191,13 @@
                 this.currentQuestionIndex++;
                 this.currentTeamIndex = (this.currentTeamIndex + 1) % this.teams.length;
                 
+                console.log('Moving to question index:', this.currentQuestionIndex, 'Team index:', this.currentTeamIndex);
+                
                 if (this.currentQuestionIndex < this.gameQuestions.length) {
+                    console.log('Showing next question');
                     this.showQuestion();
                 } else {
+                    console.log('Game ended - no more questions');
                     this.endGame();
                 }
             }
@@ -1301,7 +1321,7 @@
             
             endGame() {
                 this.gameActive = false;
-                this.clearGameState(); // Clear saved state when game ends
+                // Game ended
                 this.showScreen('results');
                 
                 // Sort teams by score
@@ -1453,7 +1473,7 @@
                     cancelButtonText: 'Batal'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        this.clearGameState(); // Clear saved state
+                        // Starting new game
                         this.showScreen('setup');
                         this.teams = [];
                         this.currentQuestionIndex = 0;
@@ -1498,5 +1518,5 @@
             game = new GameShow();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c7d2a342a45ce5',t:'MTc1NzQzMjgzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c7e56252308de9',t:'MTc1NzQzMzYwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
