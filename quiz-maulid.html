@@ -1089,6 +1089,9 @@
             const currentTeamScore = teams[currentTeam].score;
             const maxBet = Math.max(currentTeamScore, 1000);
             
+            // Find question index
+            const questionIndex = gameQuestions[category].indexOf(question);
+            
             modal.innerHTML = `
                 <div class="question-content">
                     <div style="text-align: center; margin-bottom: 40px;">
@@ -1109,7 +1112,7 @@
                                style="width: 200px; padding: 15px; font-size: 1.5rem; text-align: center; border: 3px solid #ffd700; border-radius: 10px; background: white; color: #0d47a1; font-weight: 900;">
                     </div>
                     
-                    <button class="jeopardy-btn" onclick="confirmDailyDoubleBet('${category}', ${question.points}, '${tileId}')">
+                    <button class="jeopardy-btn" onclick="confirmDailyDoubleBet('${category}', ${questionIndex}, '${tileId}')">
                         💰 KONFIRMASI TARUHAN
                     </button>
                 </div>
@@ -1132,7 +1135,9 @@
             const modal = document.getElementById('dailyDoubleModal');
             if (modal) modal.remove();
             
-            // Find the question
+            // Find the question and set bet amount
+            const categories = Object.keys(gameQuestions);
+            const categoryIndex = categories.indexOf(category);
             const question = gameQuestions[category][questionIndex];
             question.dailyDoubleBet = betAmount;
             
@@ -1141,14 +1146,19 @@
 
         // Show question modal
         function showQuestionModal(question, category, tileId) {
+            // Store current question data globally
+            currentQuestionData = question;
+            
             const modal = document.createElement('div');
             modal.className = 'question-modal';
             modal.id = 'questionModal';
             
+            const displayPoints = question.dailyDoubleBet || question.points;
+            
             modal.innerHTML = `
                 <div class="question-content">
                     <div class="question-header">
-                        <div class="question-info">${category} - $${question.points}</div>
+                        <div class="question-info">${category} - $${displayPoints}${question.dailyDoubleBet ? ' (Daily Double)' : ''}</div>
                         <div class="timer-display" id="timerDisplay">30</div>
                     </div>
                     <div class="question-text">${question.question}</div>
@@ -1181,6 +1191,9 @@
             }, 1000);
         }
 
+        // Global variable to store current question data
+        let currentQuestionData = null;
+
         // Select answer
         function selectAnswer(selectedIndex, tileId, points, correctIndex) {
             clearInterval(timer);
@@ -1189,13 +1202,13 @@
             answers.forEach(answer => answer.style.pointerEvents = 'none');
             
             // Determine points (Daily Double or regular)
-            const actualPoints = question.dailyDoubleBet || points;
+            const actualPoints = currentQuestionData?.dailyDoubleBet || points;
             
             if (selectedIndex === correctIndex) {
                 answers[selectedIndex].classList.add('correct');
                 teams[currentTeam].score += actualPoints;
                 
-                if (question.dailyDoubleBet) {
+                if (currentQuestionData?.dailyDoubleBet) {
                     showMessage('🎯 DAILY DOUBLE BENAR! 🎯\n💰 +$' + actualPoints + ' poin!', 'correct');
                 } else {
                     showMessage('🎉 BENAR! 🎉\n💰 +$' + actualPoints + ' poin!', 'correct');
@@ -1216,7 +1229,7 @@
                 // PENGURANGAN POIN untuk jawaban salah (aturan Jeopardy asli)
                 teams[currentTeam].score -= actualPoints;
                 
-                if (question.dailyDoubleBet) {
+                if (currentQuestionData?.dailyDoubleBet) {
                     showMessage('💥 DAILY DOUBLE SALAH!\n💸 -$' + actualPoints + ' poin!', 'wrong');
                 } else {
                     showMessage('❌ SALAH!\n💸 -$' + actualPoints + ' poin!', 'wrong');
@@ -1471,22 +1484,50 @@
 
         // Show message
         function showMessage(message, type) {
+            // Remove existing message if any
+            const existingMessage = document.querySelector('.message-overlay');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
             const messageEl = document.createElement('div');
             messageEl.className = `message-overlay ${type}`;
-            messageEl.textContent = message;
+            
+            // Handle multi-line messages
+            if (message.includes('\n')) {
+                const lines = message.split('\n');
+                messageEl.innerHTML = lines.map(line => `<div>${line}</div>`).join('');
+            } else {
+                messageEl.textContent = message;
+            }
+            
             document.body.appendChild(messageEl);
             
             setTimeout(() => {
                 if (messageEl.parentNode) {
                     messageEl.remove();
                 }
-            }, 2000);
+            }, 2500);
         }
+
+        // Make functions globally accessible
+        window.selectAnswer = selectAnswer;
+        window.confirmDailyDoubleBet = confirmDailyDoubleBet;
+        window.showFinalClue = showFinalClue;
+        window.calculateFinalScores = calculateFinalScores;
+        window.downloadTemplate = downloadTemplate;
+        window.importExcel = importExcel;
+        window.updateTeamSetup = updateTeamSetup;
+        window.startJeopardy = startJeopardy;
+        window.startActualGame = startActualGame;
+        window.backToSetup = backToSetup;
+        window.endJeopardy = endJeopardy;
+        window.restartJeopardy = restartJeopardy;
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             updateTeamSetup();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c71bd646983231',t:'MTc1NzQyNTM0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c7278533dbb5e2',t:'MTc1NzQyNTgyMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
