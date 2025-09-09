@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🕌 Lomba Cerdas Cermat Maulid Nabi 🕌</title>
+    <title>🎮 QUIZ SHOW MAULID NABI 🎮</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Nunito:wght@400;600;700;800;900&display=swap');
         
         * {
             margin: 0;
@@ -16,441 +15,319 @@
 
         body {
             font-family: 'Nunito', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(45deg, #2c5aa0 0%, #1e3c72 25%, #2193b0 50%, #6dd5ed 75%, #00c9ff 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes confetti {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        .header {
+        /* TV Show Header */
+        .tv-header {
             text-align: center;
             margin-bottom: 30px;
+            animation: slideInDown 1s ease-out;
         }
 
-        .title {
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: white;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        .show-logo {
+            font-family: 'Fredoka One', cursive;
+            font-size: 4rem;
+            background: linear-gradient(45deg, #00d4aa, #007cf0, #0099f7, #00c9ff, #7928ca);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite, bounce 2s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255,255,255,0.5);
             margin-bottom: 10px;
         }
 
-        .subtitle {
-            font-size: 1.4rem;
+        .show-subtitle {
+            font-size: 1.8rem;
             color: white;
-            font-weight: 600;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-weight: 800;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            background: rgba(255,255,255,0.2);
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+            border: 3px solid rgba(255,255,255,0.3);
         }
 
+        /* Live Scoreboard - Game Show Style */
         .scoreboard {
-            background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(248,249,250,0.95));
-            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.6));
+            border-radius: 25px;
             padding: 25px;
             margin-bottom: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255,255,255,0.8);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            backdrop-filter: blur(20px);
+            border: 4px solid rgba(255,255,255,0.2);
+            animation: slideInUp 1s ease-out;
+        }
+
+        .scoreboard-header {
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #007cf0, #00d4aa);
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .current-player {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #2c3e50;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: 1.3rem;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+            animation: pulse 1.5s ease-in-out infinite;
+            border: 3px solid #fff;
         }
 
         .score-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            justify-content: center;
-        }
-
-        .score-item {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 18px 25px;
-            border-radius: 25px;
-            text-align: center;
-            min-width: 160px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-            border: 3px solid rgba(255,255,255,0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .score-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
-        }
-
-        .score-item.active {
-            background: linear-gradient(135deg, #2ecc71, #27ae60);
-            color: white;
-            transform: scale(1.15);
-            box-shadow: 0 15px 40px rgba(46, 204, 113, 0.6);
-            border: 4px solid #fff;
-            animation: pulse 2s infinite;
-        }
-
-        .score-item.active::after {
-            content: '👑';
-            position: absolute;
-            top: -8px;
-            right: -3px;
-            font-size: 1.8rem;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-        }
-
-        .score-name {
-            font-size: 0.75rem;
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
-
-        .score-points {
-            font-size: 1.2rem;
-            font-weight: 900;
-        }
-
-        /* Setup Screen */
-        .setup-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 50px;
-            box-shadow: 0 25px 80px rgba(0,0,0,0.2);
-            border: 3px solid rgba(255,255,255,0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .setup-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .setup-icon {
-            font-size: 4rem;
-            margin-bottom: 15px;
-        }
-
-        .setup-title {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-
-        .setup-description {
-            font-size: 1.1rem;
-            color: #7f8c8d;
-            font-weight: 600;
-        }
-
-        .setup-section {
-            margin-bottom: 25px;
-        }
-
-        .section-title {
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: #2c3e50;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Supabase Config Section */
-        .supabase-config {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 2px solid #e9ecef;
-        }
-
-        .config-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #dee2e6;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-            font-weight: 600;
-            background: white;
-            color: #2c3e50;
-        }
-
-        .config-input:focus {
-            outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-        }
-
-        .config-status {
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-weight: 700;
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .config-status.connected {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .config-status.disconnected {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .config-status.connecting {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
-        }
-
-        .team-selector {
-            background: #e74c3c;
-            color: white;
-            border-radius: 15px;
-            padding: 15px 20px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .team-selector label {
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-
-        .team-selector select {
-            padding: 8px 15px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 10px;
-            background: white;
-            font-weight: 700;
-            cursor: pointer;
-            color: #2c3e50;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-        }
-
-        .team-grid {
-            display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 20px;
         }
 
-        .team-setup-card {
-            background: linear-gradient(135deg, #1abc9c, #3498db);
+        .score-card {
+            background: linear-gradient(135deg, #2193b0, #1e3c72);
             color: white;
-            padding: 20px;
+            padding: 25px;
             border-radius: 20px;
             text-align: center;
-            box-shadow: 0 8px 25px rgba(26, 188, 156, 0.4);
-            transition: all 0.3s ease;
-            border: 3px solid rgba(255,255,255,0.2);
-        }
-
-        .team-setup-card:hover {
-            box-shadow: 0 15px 35px rgba(26, 188, 156, 0.6);
-        }
-
-        .team-setup-card h3 {
-            font-size: 1.2rem;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-
-        .team-input {
-            width: 100%;
-            padding: 8px 12px;
-            border: none;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            text-align: center;
-            font-weight: 600;
-            background: rgba(255,255,255,0.95);
-            color: #2c3e50;
-        }
-
-        .import-section {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 2px dashed #dee2e6;
-        }
-
-        .import-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .import-btn, .template-btn {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 35px rgba(33, 147, 176, 0.4);
+            border: 4px solid rgba(255,255,255,0.2);
             position: relative;
             overflow: hidden;
+        }
+
+        .score-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+
+        .score-card:hover::before {
+            animation: shine 0.6s ease-in-out;
+            opacity: 1;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .score-card.active {
+            background: linear-gradient(135deg, #00c9ff, #007cf0);
+            transform: scale(1.1);
+            box-shadow: 0 20px 50px rgba(0, 201, 255, 0.6);
+            border: 4px solid #ffd700;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .score-card.active::after {
+            content: '👑';
+            position: absolute;
+            top: -10px;
+            right: -5px;
+            font-size: 2.5rem;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        .team-name {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .import-btn {
-            background: linear-gradient(135deg, #3498db, #9b59b6);
-            color: white;
-            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
-            border: 3px solid rgba(255,255,255,0.2);
+        .team-score {
+            font-size: 2.5rem;
+            font-weight: 900;
+            font-family: 'Fredoka One', cursive;
         }
 
-        .import-btn:hover {
-            background: linear-gradient(135deg, #2980b9, #8e44ad);
-            box-shadow: 0 12px 30px rgba(52, 152, 219, 0.6);
-        }
-
-        .template-btn {
-            background: linear-gradient(135deg, #2ecc71, #f39c12);
-            color: white;
-            box-shadow: 0 8px 25px rgba(46, 204, 113, 0.4);
-            border: 3px solid rgba(255,255,255,0.2);
-        }
-
-        .template-btn:hover {
-            background: linear-gradient(135deg, #27ae60, #e67e22);
-            box-shadow: 0 12px 30px rgba(46, 204, 113, 0.6);
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        .import-info {
-            text-align: center;
-            margin-top: 15px;
+        .team-correct {
             font-size: 0.9rem;
-            color: #6c757d;
-            font-weight: 600;
+            opacity: 0.9;
+            margin-top: 5px;
         }
 
-        .start-btn {
-            background: #e74c3c;
+        /* Setup Screen - Game Show Style */
+        .setup-screen {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+            border: 4px solid rgba(255,255,255,0.3);
+            animation: zoomIn 0.8s ease-out;
+        }
+
+        .setup-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .setup-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .setup-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3rem;
+            background: linear-gradient(45deg, #2193b0, #007cf0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .setup-description {
+            font-size: 1.3rem;
+            color: #7f8c8d;
+            font-weight: 700;
+        }
+
+        .game-show-btn {
+            background: linear-gradient(45deg, #007cf0, #00c9ff);
             color: white;
             border: none;
-            padding: 15px 40px;
+            padding: 20px 40px;
             border-radius: 50px;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 800;
+            font-family: 'Fredoka One', cursive;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
-            display: block;
-            margin: 0 auto;
-        }
-
-        .start-btn:hover {
-            box-shadow: 0 15px 35px rgba(231, 76, 60, 0.5);
-        }
-
-        .start-btn:disabled {
-            background: #95a5a6;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: 0 3px 10px rgba(149, 165, 166, 0.3);
-        }
-
-        /* Quiz Grid */
-        .quiz-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            background: white;
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .quiz-header {
-            background: #2980b9;
-            color: white;
-            padding: 12px 8px;
-            text-align: center;
-            font-weight: 800;
-            font-size: 0.9rem;
-            border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(41, 128, 185, 0.3);
-            min-height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .quiz-cell {
-            background: linear-gradient(135deg, #1abc9c, #3498db);
-            color: white;
-            padding: 20px 15px;
-            text-align: center;
-            font-weight: 800;
-            font-size: 1.8rem;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            min-height: 100px;
-            box-shadow: 0 8px 25px rgba(26, 188, 156, 0.4);
-            border: 3px solid rgba(255,255,255,0.2);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 35px rgba(0, 124, 240, 0.4);
+            border: 4px solid rgba(255,255,255,0.3);
+            text-transform: uppercase;
+            letter-spacing: 2px;
             position: relative;
             overflow: hidden;
-            user-select: none;
         }
 
-        .quiz-cell:hover {
-            background: linear-gradient(135deg, #f39c12, #e74c3c);
-            box-shadow: 0 15px 35px rgba(243, 156, 18, 0.6);
+        .game-show-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
         }
 
-        .quiz-cell.answered {
-            background: #95a5a6;
-            cursor: not-allowed;
-            opacity: 0.6;
+        .game-show-btn:hover::before {
+            left: 100%;
         }
 
-        .quiz-cell.answered:hover {
-            transform: none;
-            background: #95a5a6;
+        .game-show-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(0, 124, 240, 0.6);
         }
 
-        /* Question Popup */
-        .question-popup {
+        .game-show-btn.secondary {
+            background: linear-gradient(45deg, #00d4aa, #2193b0);
+            box-shadow: 0 15px 35px rgba(0, 212, 170, 0.4);
+        }
+
+        .game-show-btn.secondary:hover {
+            box-shadow: 0 25px 50px rgba(0, 212, 170, 0.6);
+        }
+
+        /* Question Display - TV Style */
+        .question-screen {
             position: fixed;
             top: 0;
             left: 0;
@@ -460,6 +337,7 @@
             z-index: 1000;
             display: flex;
             flex-direction: column;
+            animation: slideInUp 0.8s ease-out;
         }
 
         .question-header {
@@ -467,38 +345,48 @@
             justify-content: space-between;
             align-items: center;
             padding: 30px 50px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.8);
             backdrop-filter: blur(10px);
         }
 
+        .question-info {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
         .question-badge {
-            background: white;
-            color: #2c3e50;
+            background: linear-gradient(45deg, #2193b0, #1e3c72);
+            color: white;
             padding: 15px 30px;
             border-radius: 50px;
             font-weight: 800;
             font-size: 1.2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-family: 'Fredoka One', cursive;
+            box-shadow: 0 10px 30px rgba(33, 147, 176, 0.4);
+            border: 3px solid rgba(255,255,255,0.3);
         }
 
-        .timer-display {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-            color: white;
-            padding: 20px 40px;
-            border-radius: 50px;
+        .timer-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #007cf0, #00c9ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
             font-weight: 900;
-            font-size: 1.5rem;
-            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.6);
+            color: white;
+            font-family: 'Fredoka One', cursive;
+            box-shadow: 0 15px 35px rgba(0, 124, 240, 0.6);
             border: 4px solid rgba(255,255,255,0.3);
+            animation: pulse 1s ease-in-out infinite;
         }
 
-        .timer-display.warning {
-            background: linear-gradient(135deg, #ff6b6b, #ff4757);
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        .timer-circle.warning {
+            background: linear-gradient(45deg, #ff4757, #ff3742);
+            animation: shake 0.5s ease-in-out infinite;
         }
 
         .question-content {
@@ -511,294 +399,466 @@
         }
 
         .question-text {
-            font-size: 3rem;
-            font-weight: 800;
+            font-size: 3.5rem;
+            font-weight: 900;
             color: white;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            text-shadow: 0 6px 12px rgba(0,0,0,0.4);
             margin-bottom: 60px;
             line-height: 1.2;
+            font-family: 'Fredoka One', cursive;
+            animation: slideInDown 1s ease-out 0.3s both;
         }
 
-        .answers-container {
+        .answers-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            width: 100%;
-            max-width: none;
-            margin: 0;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .answer-option {
+        .answer-btn {
             border: none;
-            padding: 30px;
-            border-radius: 20px;
-            font-size: 1.6rem;
-            font-weight: 700;
+            padding: 40px 30px;
+            border-radius: 25px;
+            font-size: 1.8rem;
+            font-weight: 800;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-align: left;
             color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            min-height: 140px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            min-height: 160px;
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 25px;
             position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.8s ease-out;
         }
 
-        .answer-option:nth-child(1) {
-            background: #e74c3c;
+        .answer-btn:nth-child(1) {
+            background: linear-gradient(135deg, #007cf0, #0099f7);
+            animation-delay: 0.1s;
         }
 
-        .answer-option:nth-child(2) {
-            background: #3498db;
+        .answer-btn:nth-child(2) {
+            background: linear-gradient(135deg, #00d4aa, #2193b0);
+            animation-delay: 0.2s;
         }
 
-        .answer-option:nth-child(3) {
-            background: #9b59b6;
+        .answer-btn:nth-child(3) {
+            background: linear-gradient(135deg, #00c9ff, #6dd5ed);
+            animation-delay: 0.3s;
         }
 
-        .answer-option:nth-child(4) {
-            background: #2ecc71;
+        .answer-btn:nth-child(4) {
+            background: linear-gradient(135deg, #1e3c72, #2c5aa0);
+            animation-delay: 0.4s;
         }
 
-        .answer-label {
+        .answer-letter {
             background: rgba(255,255,255,0.3);
             color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 15px;
+            width: 60px;
+            height: 60px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             font-weight: 900;
+            font-family: 'Fredoka One', cursive;
             flex-shrink: 0;
-            border: 3px solid rgba(255,255,255,0.5);
+            border: 4px solid rgba(255,255,255,0.5);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         .answer-text {
             flex: 1;
-            line-height: 1.3;
+            line-height: 1.4;
+            font-family: 'Nunito', sans-serif;
         }
 
-        .answer-option:hover {
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        .answer-btn:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
         }
 
-        .answer-option:nth-child(1):hover {
-            background: #c0392b;
+        .answer-btn.correct {
+            background: linear-gradient(135deg, #2ecc71, #27ae60) !important;
+            border: 6px solid #fff !important;
+            animation: pulse 0.6s ease-in-out 3;
         }
 
-        .answer-option:nth-child(2):hover {
-            background: #2980b9;
-        }
-
-        .answer-option:nth-child(3):hover {
-            background: #8e44ad;
-        }
-
-        .answer-option:nth-child(4):hover {
-            background: #27ae60;
-        }
-
-        .answer-option.correct {
-            background: #2ecc71 !important;
-            color: white;
-            border: 4px solid #fff !important;
-        }
-
-        .answer-option.correct::before {
+        .answer-btn.correct::after {
             content: '✅';
             position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 2rem;
+            top: 15px;
+            right: 15px;
+            font-size: 3rem;
+            animation: bounce 0.6s ease-in-out;
         }
 
-        .answer-option.wrong {
-            background: #e74c3c !important;
-            color: white;
-            border: 4px solid #fff !important;
+        .answer-btn.wrong {
+            background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+            border: 6px solid #fff !important;
+            animation: shake 0.6s ease-in-out 2;
         }
 
-        .answer-option.wrong::before {
+        .answer-btn.wrong::after {
             content: '❌';
             position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 2rem;
+            top: 15px;
+            right: 15px;
+            font-size: 3rem;
+            animation: shake 0.6s ease-in-out;
         }
 
-        /* Result Screen */
-        .result-card {
-            background: white;
-            border-radius: 25px;
+        /* Result Screen - Award Show Style */
+        .result-screen {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+            border-radius: 30px;
             padding: 60px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.2);
             text-align: center;
+            backdrop-filter: blur(20px);
+            border: 4px solid rgba(255,255,255,0.3);
+            animation: zoomIn 1s ease-out;
+        }
+
+        .winner-celebration {
+            margin-bottom: 40px;
         }
 
         .winner-icon {
             font-size: 8rem;
             margin-bottom: 30px;
+            animation: bounce 2s ease-in-out infinite;
         }
 
         .winner-title {
-            font-size: 4rem;
-            font-weight: 900;
-            color: #2c3e50;
+            font-family: 'Fredoka One', cursive;
+            font-size: 4.5rem;
+            background: linear-gradient(45deg, #ffd700, #00d4aa, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 20px;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            animation: pulse 2s ease-in-out infinite;
         }
 
         .winner-subtitle {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: #7f8c8d;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 50px;
         }
 
-        .podium {
+        .podium-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
             margin: 50px 0;
         }
 
-        .podium-item {
+        .podium-card {
             padding: 40px 30px;
-            border-radius: 20px;
+            border-radius: 25px;
             color: white;
-            font-weight: 700;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
+            font-weight: 800;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 1s ease-out;
         }
 
-        .podium-item:hover {
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        .podium-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s ease-in-out infinite;
         }
 
-        .podium-item.first {
-            background: #f39c12;
+        .podium-card.first {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #2c3e50;
             transform: scale(1.1);
-            box-shadow: 0 20px 40px rgba(243, 156, 18, 0.4);
+            box-shadow: 0 25px 60px rgba(255, 215, 0, 0.4);
+            animation-delay: 0.1s;
         }
 
-        .podium-item.second {
-            background: #95a5a6;
+        .podium-card.second {
+            background: linear-gradient(135deg, #c0c0c0, #a8a8a8);
+            animation-delay: 0.2s;
         }
 
-        .podium-item.third {
-            background: #d35400;
+        .podium-card.third {
+            background: linear-gradient(135deg, #cd7f32, #b8860b);
+            animation-delay: 0.3s;
         }
 
         .podium-position {
-            font-size: 1.4rem;
-            font-weight: 800;
+            font-size: 1.6rem;
+            font-weight: 900;
             margin-bottom: 15px;
+            font-family: 'Fredoka One', cursive;
         }
 
         .podium-team {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 900;
             margin-bottom: 20px;
+            font-family: 'Fredoka One', cursive;
         }
 
         .podium-score {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 900;
             margin-bottom: 15px;
+            font-family: 'Fredoka One', cursive;
         }
 
-        .restart-btn {
-            background: #9b59b6;
-            color: white;
-            border: none;
-            padding: 20px 50px;
-            border-radius: 50px;
-            font-size: 1.4rem;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(155, 89, 182, 0.4);
-            margin-top: 40px;
+        .podium-stats {
+            font-size: 1.1rem;
+            opacity: 0.9;
         }
 
-        .restart-btn:hover {
-            box-shadow: 0 20px 40px rgba(155, 89, 182, 0.5);
+        /* Confetti Animation */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ffd700;
+            animation: confetti 3s linear infinite;
+            z-index: 9999;
         }
 
+        .confetti:nth-child(odd) {
+            background: #ff6b6b;
+            animation-delay: -0.5s;
+        }
+
+        .confetti:nth-child(3n) {
+            background: #4ecdc4;
+            animation-delay: -1s;
+        }
+
+        .confetti:nth-child(4n) {
+            background: #a8e6cf;
+            animation-delay: -1.5s;
+        }
+
+        /* Success/Error Messages */
+        .game-message {
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            font-weight: 900;
+            z-index: 10001;
+            pointer-events: none;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            font-family: 'Fredoka One', cursive;
+            animation: zoomIn 0.5s ease-out;
+        }
+
+        .game-message.correct {
+            color: #2ecc71;
+        }
+
+        .game-message.wrong {
+            color: #e74c3c;
+        }
+
+        .game-message.timeout {
+            color: #ff4757;
+        }
+
+        /* Hidden class */
         .hidden {
-            display: none;
+            display: none !important;
         }
 
-        /* Arabic text styling */
-        .arabic-text {
-            font-family: 'Amiri', serif;
-            font-size: 1.4em;
-            font-weight: 700;
-            direction: ltr !important;
-            unicode-bidi: bidi-override;
-            text-align: center;
-        }
-
-        /* Loading indicator */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .title {
+            .show-logo {
                 font-size: 2.5rem;
             }
             
             .question-text {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             
-            .answers-container {
+            .answers-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
             }
             
-            .quiz-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .answer-btn {
+                padding: 25px 20px;
+                font-size: 1.4rem;
+                min-height: 120px;
             }
             
-            .setup-card, .result-card {
+            .setup-screen, .result-screen {
                 padding: 30px 20px;
             }
 
-            .import-buttons {
-                flex-direction: column;
-                align-items: center;
+            .score-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
             }
 
-            .team-grid {
+            .podium-container {
                 grid-template-columns: 1fr;
             }
+        }
+
+        /* Team Setup Styles */
+        .team-setup-section {
+            margin: 30px 0;
+        }
+
+        .section-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .team-count-selector {
+            background: linear-gradient(45deg, #2193b0, #1e3c72);
+            color: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            box-shadow: 0 10px 30px rgba(33, 147, 176, 0.3);
+        }
+
+        .team-count-selector label {
+            font-size: 1.3rem;
+            font-weight: 800;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .team-count-selector select {
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 15px;
+            background: white;
+            font-weight: 800;
+            cursor: pointer;
+            color: #2c3e50;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .team-card {
+            background: linear-gradient(135deg, #00d4aa, #2193b0);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 212, 170, 0.4);
+            transition: all 0.3s ease;
+            border: 4px solid rgba(255,255,255,0.2);
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 45px rgba(0, 212, 170, 0.6);
+        }
+
+        .team-card h3 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        .team-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1rem;
+            text-align: center;
+            font-weight: 700;
+            background: rgba(255,255,255,0.95);
+            color: #2c3e50;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .team-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.5);
+        }
+
+        /* Import Section */
+        .import-section {
+            background: rgba(255,255,255,0.8);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 3px dashed #ddd;
+            text-align: center;
+        }
+
+        .import-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .import-info {
+            font-size: 0.95rem;
+            color: #7f8c8d;
+            font-weight: 600;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1 class="title">🕌 Lomba Cerdas Cermat 🕌</h1>
-            <p class="subtitle">Peringatan Maulid Nabi Muhammad SAW</p>
+        <!-- TV Show Header -->
+        <div class="tv-header">
+            <h1 class="show-logo">🎮 QUIZ SHOW MAULID NABI 🎮</h1>
+            <p class="show-subtitle">🕌 Peringatan Maulid Nabi Muhammad SAW 🕌</p>
             
-            <!-- Live Scoreboard - Shows during game -->
+            <!-- Live Scoreboard -->
             <div class="scoreboard hidden" id="scoreboard">
-                <div style="text-align: center; margin-bottom: 20px; font-weight: 900; color: #2c3e50; font-size: 1.3rem; background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px 25px; border-radius: 50px; box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);">
-                    🏆 PAPAN SKOR LIVE - GILIRAN: <span id="currentTurnIndicator" style="font-weight: 900; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Tim 1</span>
+                <div class="scoreboard-header">
+                    🏆 PAPAN SKOR LIVE 🏆
+                    <div style="margin-top: 10px;">
+                        <span style="font-size: 1.2rem;">GILIRAN:</span>
+                        <div class="current-player" id="currentPlayerIndicator">Tim 1</div>
+                    </div>
                 </div>
                 <div class="score-grid" id="scoreGrid">
                     <!-- Live scores will be populated here -->
@@ -807,70 +867,36 @@
         </div>
 
         <!-- Setup Screen -->
-        <div id="setupScreen" class="setup-card">
+        <div id="setupScreen" class="setup-screen">
             <div class="setup-header">
-                <div class="setup-icon">🏆</div>
-                <h2 class="setup-title">Persiapan Lomba</h2>
-                <p class="setup-description">Atur database, tim dan import soal untuk memulai lomba</p>
-            </div>
-
-            <!-- Hidden Supabase Configuration (Auto-configured) -->
-            <div class="setup-section" style="display: none;">
-                <div class="section-title">
-                    🗄️ Konfigurasi Database Supabase
-                </div>
-                <div class="supabase-config">
-                    <input type="text" class="config-input" id="supabaseUrl" 
-                           placeholder="Supabase URL (https://xxx.supabase.co)" 
-                           value="https://zfpyrguqsgjwbalnueez.supabase.co">
-                    <input type="password" class="config-input" id="supabaseKey" 
-                           placeholder="Supabase Anon Key" 
-                           value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmcHlyZ3Vxc2dqd2JhbG51ZWV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MTQ4MzIsImV4cCI6MjA3Mjk5MDgzMn0.EVgc5ma5rvRljSG440XzedQHBi4zLFyK-KA0rgvF-e4">
-                    <button class="template-btn" onclick="testSupabaseConnection()" id="testConnectionBtn">
-                        🔗 Test Koneksi
-                    </button>
-                    <div class="config-status connected" id="connectionStatus">
-                        ✅ Terhubung ke database cloud!
-                    </div>
-                    <div class="import-info">
-                        <strong>Database sudah dikonfigurasi otomatis!</strong><br>
-                        Sistem otomatis terhubung ke database cloud.<br>
-                        Anda bisa langsung import soal dan mulai lomba.
-                    </div>
-                </div>
+                <div class="setup-icon">🎯</div>
+                <h2 class="setup-title">PERSIAPAN QUIZ SHOW</h2>
+                <p class="setup-description">Siapkan tim dan mulai petualangan quiz yang seru!</p>
             </div>
 
             <!-- Import Section -->
-            <div class="setup-section">
-                <div class="section-title">
-                    📁 Import Soal
+            <div class="import-section">
+                <div class="section-title">📚 Import Soal Quiz</div>
+                <div class="import-buttons">
+                    <button class="game-show-btn secondary" onclick="downloadTemplate()">
+                        📥 Download Template Excel
+                    </button>
+                    <label for="excelFile" class="game-show-btn">
+                        📤 Import Soal Excel
+                        <input type="file" id="excelFile" class="file-input" accept=".xlsx,.xls" onchange="importExcel(event)">
+                    </label>
                 </div>
-                <div class="import-section">
-                    <div class="import-buttons">
-                        <button class="template-btn" onclick="downloadTemplate()">
-                            📥 Download Template Excel
-                        </button>
-                        <label for="excelFile" class="import-btn">
-                            📤 Import Soal Excel
-                            <input type="file" id="excelFile" class="file-input" accept=".xlsx,.xls" onchange="importExcel(event)">
-                        </label>
-                        <button class="template-btn" onclick="loadQuestionsFromDatabase()" id="loadFromDbBtn" disabled>
-                            📚 Load Soal dari Database
-                        </button>
-                    </div>
-                    <div class="import-info">
-                        Format: Kolom A=Pertanyaan, B=Jawaban A, C=Jawaban B, D=Jawaban C, E=Jawaban D, F=Jawaban Benar (A/B/C/D), G=Kategori, H=Poin
-                    </div>
+                <div class="import-info">
+                    <strong>Format Excel:</strong> Kolom A=Pertanyaan, B=Jawaban A, C=Jawaban B, D=Jawaban C, E=Jawaban D, F=Jawaban Benar (A/B/C/D), G=Kategori, H=Poin
                 </div>
             </div>
 
             <!-- Team Setup -->
-            <div class="setup-section">
-                <div class="section-title">
-                    👥 Pengaturan Tim
-                </div>
-                <div class="team-selector">
-                    <label>Jumlah Tim:</label>
+            <div class="team-setup-section">
+                <div class="section-title">👥 Setup Tim Peserta</div>
+                
+                <div class="team-count-selector">
+                    <label>🎪 Jumlah Tim:</label>
                     <select id="teamCount" onchange="updateTeamSetup()">
                         <option value="3">3 Tim</option>
                         <option value="4">4 Tim</option>
@@ -881,61 +907,55 @@
                     </select>
                 </div>
 
-                <div class="team-grid" id="teamGrid">
+                <div class="teams-grid" id="teamsGrid">
                     <!-- Team inputs will be generated here -->
                 </div>
             </div>
 
-            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                <button class="start-btn" onclick="startCompetition()" id="startBtn">
-                    🚀 Mulai Lomba
+            <div style="display: flex; gap: 25px; justify-content: center; flex-wrap: wrap; margin-top: 40px;">
+                <button class="game-show-btn" onclick="startQuizShow()" id="startBtn">
+                    🚀 MULAI QUIZ SHOW!
                 </button>
-                <button class="start-btn" style="background: #e67e22; box-shadow: 0 8px 25px rgba(230, 126, 34, 0.4);" onclick="clearSavedGame()">
-                    🗑️ Hapus Data Tersimpan
+                <button class="game-show-btn secondary" onclick="clearSavedGame()">
+                    🗑️ Reset Data
                 </button>
             </div>
         </div>
 
-        <!-- Game Screen -->
+        <!-- Game Screen (Hidden initially) -->
         <div id="gameScreen" class="hidden">
-            <div class="quiz-grid" id="quizGrid">
-                <!-- Quiz grid will be populated here -->
-            </div>
+            <!-- Questions will be displayed in full-screen popup -->
         </div>
 
         <!-- Result Screen -->
-        <div id="resultScreen" class="result-card hidden">
-            <div class="winner-icon">🏆</div>
-            <h2 class="winner-title" id="winnerTitle">Selamat!</h2>
-            <p class="winner-subtitle">Lomba telah selesai</p>
+        <div id="resultScreen" class="result-screen hidden">
+            <div class="winner-celebration">
+                <div class="winner-icon">🏆</div>
+                <h2 class="winner-title" id="winnerTitle">SELAMAT JUARA!</h2>
+                <p class="winner-subtitle">Quiz Show telah selesai dengan meriah!</p>
+            </div>
             
-            <div class="podium" id="podium">
+            <div class="podium-container" id="podiumContainer">
                 <!-- Podium will be populated here -->
             </div>
 
-            <div style="margin: 40px 0; font-size: 1.2rem; color: #7f8c8d; font-weight: 600;">
-                <p>Semoga ilmu yang telah dipelajari bermanfaat</p>
-                <p>dan menjadi amal jariyah bagi kita semua</p>
-                <p style="margin-top: 20px; font-weight: 800; color: #2c3e50;" class="arabic-text">بارك الله فيكم</p>
+            <div style="margin: 50px 0; font-size: 1.4rem; color: #7f8c8d; font-weight: 700; line-height: 1.6;">
+                <p>🌟 Semoga ilmu yang telah dipelajari bermanfaat</p>
+                <p>dan menjadi amal jariyah bagi kita semua 🌟</p>
+                <p style="margin-top: 25px; font-weight: 900; color: #2c3e50; font-size: 1.6rem;" class="arabic-text">بارك الله فيكم</p>
             </div>
 
-            <button class="restart-btn" onclick="restartCompetition()">
-                🔄 Lomba Baru
+            <button class="game-show-btn" onclick="restartQuizShow()">
+                🔄 QUIZ SHOW BARU
             </button>
         </div>
     </div>
 
     <!-- Include SheetJS for Excel processing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <!-- Include Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script>
-        // Supabase client
-        let supabase = null;
-        let isConnectedToDatabase = false;
-
-        // Game state
+        // Game state variables
         let currentQuestion = 0;
         let timeLeft = 30;
         let timer;
@@ -946,59 +966,52 @@
         let answeredQuestions = new Set();
         let selectedQuestion = null;
         let importedQuestions = [];
-        let currentGameSession = null;
+        let gameQuestions = [];
 
-        // LocalStorage keys
-        const STORAGE_KEYS = {
-            GAME_STATE: 'cerdas_cermat_game_state',
-            TEAMS: 'cerdas_cermat_teams',
-            QUESTIONS: 'cerdas_cermat_questions',
-            ANSWERED_QUESTIONS: 'cerdas_cermat_answered',
-            IMPORTED_QUESTIONS: 'cerdas_cermat_imported',
-            SUPABASE_URL: 'cerdas_cermat_supabase_url',
-            SUPABASE_KEY: 'cerdas_cermat_supabase_key'
-        };
+        // Default team names with fun emojis
+        const defaultTeamNames = [
+            '🌟 Tim Sahabat', '⭐ Tim Tabi\'in', '✨ Tim Salafus Shalih', 
+            '🎯 Tim Muhajirin', '🏆 Tim Anshar', '👑 Tim Khulafaur Rasyidin', 
+            '💫 Tim Ahlul Bayt', '🌙 Tim Ulama'
+        ];
 
-        // Auto-save interval (save every 10 seconds during active game)
-        let autoSaveInterval;
-
-        // Islamic knowledge questions (default)
-        let questions = [
+        // Default Islamic knowledge questions
+        let defaultQuestions = [
             // Sejarah
             {
                 question: "Siapa nama ayah Nabi Muhammad SAW?",
                 answers: ["Abdullah", "Abu Thalib", "Abdul Muthalib", "Abu Bakar"],
                 correct: 0,
                 category: "Sejarah",
-                points: 10
+                points: 100
             },
             {
                 question: "Di kota mana Nabi Muhammad SAW dilahirkan?",
                 answers: ["Madinah", "Makkah", "Thaif", "Yaman"],
                 correct: 1,
                 category: "Sejarah",
-                points: 20
+                points: 200
             },
             {
                 question: "Siapa nama ibu Nabi Muhammad SAW?",
                 answers: ["Khadijah", "Aisyah", "Aminah", "Fatimah"],
                 correct: 2,
                 category: "Sejarah",
-                points: 30
+                points: 300
             },
             {
                 question: "Pada usia berapa Nabi Muhammad SAW diangkat menjadi Rasul?",
                 answers: ["35 tahun", "40 tahun", "45 tahun", "50 tahun"],
                 correct: 1,
                 category: "Sejarah",
-                points: 40
+                points: 400
             },
             {
                 question: "Siapa sahabat pertama yang masuk Islam?",
                 answers: ["Umar bin Khattab", "Utsman bin Affan", "Ali bin Abi Thalib", "Abu Bakar Ash-Shiddiq"],
                 correct: 3,
                 category: "Sejarah",
-                points: 50
+                points: 500
             },
 
             // Quran Hadis
@@ -1007,35 +1020,35 @@
                 answers: ["112", "113", "114", "115"],
                 correct: 2,
                 category: "Quran Hadis",
-                points: 10
+                points: 100
             },
             {
                 question: "Apa nama surat pertama dalam Al-Qur'an?",
                 answers: ["Al-Baqarah", "Al-Fatihah", "An-Nas", "Al-Falaq"],
                 correct: 1,
                 category: "Quran Hadis",
-                points: 20
+                points: 200
             },
             {
                 question: "Surat Al-Fatihah terdiri dari berapa ayat?",
                 answers: ["5 ayat", "6 ayat", "7 ayat", "8 ayat"],
                 correct: 2,
                 category: "Quran Hadis",
-                points: 30
+                points: 300
             },
             {
                 question: "Siapa yang paling banyak meriwayatkan hadits?",
                 answers: ["Abu Bakar", "Umar bin Khattab", "Abu Hurairah", "Ali bin Abi Thalib"],
                 correct: 2,
                 category: "Quran Hadis",
-                points: 40
+                points: 400
             },
             {
                 question: "Apa arti kata 'hadits'?",
                 answers: ["Cerita", "Berita", "Kisah", "Semua benar"],
                 correct: 3,
                 category: "Quran Hadis",
-                points: 50
+                points: 500
             },
 
             // Akidah Akhlak
@@ -1044,35 +1057,35 @@
                 answers: ["5", "6", "7", "8"],
                 correct: 1,
                 category: "Akidah Akhlak",
-                points: 10
+                points: 100
             },
             {
                 question: "Rukun iman yang pertama adalah?",
                 answers: ["Iman kepada Allah", "Iman kepada Malaikat", "Iman kepada Kitab", "Iman kepada Rasul"],
                 correct: 0,
                 category: "Akidah Akhlak",
-                points: 20
+                points: 200
             },
             {
                 question: "Berapa nama Allah yang termasuk Asmaul Husna?",
                 answers: ["90", "95", "99", "100"],
                 correct: 2,
                 category: "Akidah Akhlak",
-                points: 30
+                points: 300
             },
             {
                 question: "Apa sifat terpuji yang harus dimiliki seorang Muslim?",
                 answers: ["Sombong", "Jujur", "Marah", "Iri"],
                 correct: 1,
                 category: "Akidah Akhlak",
-                points: 40
+                points: 400
             },
             {
                 question: "Bagaimana cara berbakti kepada orang tua?",
                 answers: ["Membantah", "Menuruti semua keinginan", "Berbuat baik dan patuh", "Mengabaikan"],
                 correct: 2,
                 category: "Akidah Akhlak",
-                points: 50
+                points: 500
             },
 
             // Fikih
@@ -1081,35 +1094,35 @@
                 answers: ["3 kali", "4 kali", "5 kali", "6 kali"],
                 correct: 2,
                 category: "Fikih",
-                points: 10
+                points: 100
             },
             {
                 question: "Apa shalat yang dikerjakan setelah Maghrib?",
                 answers: ["Ashar", "Maghrib", "Isya", "Subuh"],
                 correct: 2,
                 category: "Fikih",
-                points: 20
+                points: 200
             },
             {
                 question: "Berapa rakaat shalat Subuh?",
                 answers: ["2 rakaat", "3 rakaat", "4 rakaat", "5 rakaat"],
                 correct: 0,
                 category: "Fikih",
-                points: 30
+                points: 300
             },
             {
                 question: "Apa yang membatalkan wudhu?",
                 answers: ["Makan", "Minum", "Buang air kecil", "Berbicara"],
                 correct: 2,
                 category: "Fikih",
-                points: 40
+                points: 400
             },
             {
                 question: "Apa rukun Islam yang pertama?",
                 answers: ["Shalat", "Syahadat", "Zakat", "Puasa"],
                 correct: 1,
                 category: "Fikih",
-                points: 50
+                points: 500
             },
 
             // Bahasa Arab
@@ -1118,480 +1131,68 @@
                 answers: ["Dengan nama Allah", "Alhamdulillah", "Subhanallah", "Allahu Akbar"],
                 correct: 0,
                 category: "Bahasa Arab",
-                points: 10
+                points: 100
             },
             {
                 question: "Apa arti kata 'Assalamu'alaikum'?",
                 answers: ["Selamat pagi", "Selamat siang", "Semoga keselamatan atasmu", "Terima kasih"],
                 correct: 2,
                 category: "Bahasa Arab",
-                points: 20
+                points: 200
             },
             {
                 question: "Apa arti kata 'Barakallahu fiik'?",
                 answers: ["Semoga Allah memberkahimu", "Terima kasih", "Maaf", "Selamat"],
                 correct: 0,
                 category: "Bahasa Arab",
-                points: 30
+                points: 300
             },
             {
                 question: "Apa arti kata 'Jazakallahu khairan'?",
                 answers: ["Selamat pagi", "Semoga Allah membalasmu dengan kebaikan", "Maaf", "Sampai jumpa"],
                 correct: 1,
                 category: "Bahasa Arab",
-                points: 40
+                points: 400
             },
             {
                 question: "Apa arti kata 'Astaghfirullah'?",
                 answers: ["Alhamdulillah", "Aku memohon ampun kepada Allah", "Subhanallah", "Allahu Akbar"],
                 correct: 1,
                 category: "Bahasa Arab",
-                points: 50
+                points: 500
             }
         ];
-
-        // Default team names
-        const defaultTeamNames = [
-            'Tim Sahabat', 'Tim Tabi\'in', 'Tim Salafus Shalih', 'Tim Muhajirin', 
-            'Tim Anshar', 'Tim Khulafaur Rasyidin', 'Tim Ahlul Bayt', 'Tim Ulama'
-        ];
-
-        // Initialize Supabase connection
-        function initializeSupabase(url, key) {
-            try {
-                supabase = window.supabase.createClient(url, key);
-                return true;
-            } catch (error) {
-                console.error('Failed to initialize Supabase:', error);
-                return false;
-            }
-        }
-
-        // Test Supabase connection
-        async function testSupabaseConnection() {
-            const url = document.getElementById('supabaseUrl').value.trim();
-            const key = document.getElementById('supabaseKey').value.trim();
-            const statusEl = document.getElementById('connectionStatus');
-            const testBtn = document.getElementById('testConnectionBtn');
-
-            if (!url || !key) {
-                statusEl.className = 'config-status disconnected';
-                statusEl.innerHTML = '❌ Mohon isi URL dan Key Supabase';
-                return;
-            }
-
-            // Show loading state
-            statusEl.className = 'config-status connecting';
-            statusEl.innerHTML = '⏳ Menguji koneksi...';
-            testBtn.disabled = true;
-            testBtn.innerHTML = '<div class="loading"></div> Testing...';
-
-            try {
-                // Initialize Supabase client
-                if (!initializeSupabase(url, key)) {
-                    throw new Error('Failed to initialize Supabase client');
-                }
-
-                // Test connection by trying to create tables if they don't exist
-                await createTablesIfNotExist();
-
-                // Test basic query
-                const { data, error } = await supabase
-                    .from('questions')
-                    .select('count')
-                    .limit(1);
-
-                if (error && error.code !== 'PGRST116') { // PGRST116 = table doesn't exist, which is OK
-                    throw error;
-                }
-
-                // Connection successful
-                isConnectedToDatabase = true;
-                statusEl.className = 'config-status connected';
-                statusEl.innerHTML = '✅ Terhubung ke database Supabase!';
-                
-                // Save credentials to localStorage
-                localStorage.setItem(STORAGE_KEYS.SUPABASE_URL, url);
-                localStorage.setItem(STORAGE_KEYS.SUPABASE_KEY, key);
-                
-                // Enable database features
-                document.getElementById('loadFromDbBtn').disabled = false;
-                document.getElementById('startBtn').disabled = false;
-
-            } catch (error) {
-                console.error('Supabase connection error:', error);
-                isConnectedToDatabase = false;
-                statusEl.className = 'config-status disconnected';
-                statusEl.innerHTML = `❌ Gagal terhubung: ${error.message}`;
-                
-                // Disable database features
-                document.getElementById('loadFromDbBtn').disabled = true;
-            } finally {
-                testBtn.disabled = false;
-                testBtn.innerHTML = '🔗 Test Koneksi';
-            }
-        }
-
-        // Create database tables if they don't exist
-        async function createTablesIfNotExist() {
-            if (!supabase) return;
-
-            try {
-                // Create questions table
-                const { error: questionsError } = await supabase.rpc('create_questions_table');
-                
-                // Create game_sessions table
-                const { error: sessionsError } = await supabase.rpc('create_game_sessions_table');
-                
-                // Create teams table
-                const { error: teamsError } = await supabase.rpc('create_teams_table');
-
-                // If RPC functions don't exist, we'll create tables using raw SQL
-                // This is a fallback approach
-                
-            } catch (error) {
-                // Tables might already exist or RPC functions not available
-                // This is expected on first run
-                console.log('Tables creation info:', error.message);
-            }
-        }
-
-        // Save questions to database
-        async function saveQuestionsToDatabase(questionsToSave) {
-            if (!supabase || !isConnectedToDatabase) return false;
-
-            try {
-                // Clear existing questions
-                await supabase.from('questions').delete().neq('id', 0);
-
-                // Insert new questions
-                const { data, error } = await supabase
-                    .from('questions')
-                    .insert(questionsToSave.map(q => ({
-                        question: q.question,
-                        answers: q.answers,
-                        correct_answer: q.correct,
-                        category: q.category,
-                        points: q.points
-                    })));
-
-                if (error) throw error;
-                return true;
-            } catch (error) {
-                console.error('Error saving questions to database:', error);
-                return false;
-            }
-        }
-
-        // Load questions from database
-        async function loadQuestionsFromDatabase() {
-            if (!supabase || !isConnectedToDatabase) {
-                alert('❌ Tidak terhubung ke database!');
-                return;
-            }
-
-            try {
-                const { data, error } = await supabase
-                    .from('questions')
-                    .select('*')
-                    .order('category', { ascending: true });
-
-                if (error) throw error;
-
-                if (data && data.length > 0) {
-                    importedQuestions = data.map(q => ({
-                        question: q.question,
-                        answers: q.answers,
-                        correct: q.correct_answer,
-                        category: q.category,
-                        points: q.points
-                    }));
-
-                    // Count questions by category
-                    const categoryCount = {};
-                    importedQuestions.forEach(q => {
-                        categoryCount[q.category] = (categoryCount[q.category] || 0) + 1;
-                    });
-                    
-                    let countInfo = Object.entries(categoryCount)
-                        .map(([cat, count]) => `${cat}: ${count} soal`)
-                        .join('\n');
-                    
-                    alert(`✅ Berhasil load ${importedQuestions.length} soal dari database!\n\nRincian per kategori:\n${countInfo}`);
-                } else {
-                    alert('📝 Tidak ada soal di database. Import soal Excel terlebih dahulu.');
-                }
-            } catch (error) {
-                console.error('Error loading questions from database:', error);
-                alert(`❌ Error loading soal: ${error.message}`);
-            }
-        }
-
-        // Save game session to database
-        async function saveGameSessionToDatabase() {
-            if (!supabase || !isConnectedToDatabase || !currentGameSession) return;
-
-            try {
-                const gameData = {
-                    session_id: currentGameSession,
-                    teams: teams,
-                    current_question: currentQuestion,
-                    current_team: currentTeam,
-                    answered_questions: [...answeredQuestions],
-                    questions: questions,
-                    game_active: gameActive,
-                    updated_at: new Date().toISOString()
-                };
-
-                const { error } = await supabase
-                    .from('game_sessions')
-                    .upsert(gameData);
-
-                if (error) throw error;
-            } catch (error) {
-                console.error('Error saving game session:', error);
-            }
-        }
-
-        // Load game session from database
-        async function loadGameSessionFromDatabase(sessionId) {
-            if (!supabase || !isConnectedToDatabase) return null;
-
-            try {
-                const { data, error } = await supabase
-                    .from('game_sessions')
-                    .select('*')
-                    .eq('session_id', sessionId)
-                    .single();
-
-                if (error) throw error;
-                return data;
-            } catch (error) {
-                console.error('Error loading game session:', error);
-                return null;
-            }
-        }
-
-        // Save game state (hybrid: localStorage + database)
-        function saveGameState() {
-            try {
-                const gameState = {
-                    currentQuestion,
-                    currentTeam,
-                    gameActive,
-                    questionAnswered,
-                    selectedQuestion,
-                    screen: getCurrentScreen(),
-                    gameSession: currentGameSession
-                };
-                
-                // Save to localStorage (immediate)
-                localStorage.setItem(STORAGE_KEYS.GAME_STATE, JSON.stringify(gameState));
-                localStorage.setItem(STORAGE_KEYS.TEAMS, JSON.stringify(teams));
-                localStorage.setItem(STORAGE_KEYS.QUESTIONS, JSON.stringify(questions));
-                localStorage.setItem(STORAGE_KEYS.ANSWERED_QUESTIONS, JSON.stringify([...answeredQuestions]));
-                localStorage.setItem(STORAGE_KEYS.IMPORTED_QUESTIONS, JSON.stringify(importedQuestions));
-
-                // Save to database (async)
-                if (isConnectedToDatabase && gameActive) {
-                    saveGameSessionToDatabase();
-                }
-            } catch (error) {
-                console.warn('Failed to save game state:', error);
-            }
-        }
-
-        // Load game state from localStorage
-        function loadGameState() {
-            try {
-                const gameState = JSON.parse(localStorage.getItem(STORAGE_KEYS.GAME_STATE));
-                const savedTeams = JSON.parse(localStorage.getItem(STORAGE_KEYS.TEAMS));
-                const savedQuestions = JSON.parse(localStorage.getItem(STORAGE_KEYS.QUESTIONS));
-                const savedAnswered = JSON.parse(localStorage.getItem(STORAGE_KEYS.ANSWERED_QUESTIONS));
-                const savedImported = JSON.parse(localStorage.getItem(STORAGE_KEYS.IMPORTED_QUESTIONS));
-
-                if (gameState && savedTeams && savedQuestions) {
-                    // Restore game state
-                    currentQuestion = gameState.currentQuestion || 0;
-                    currentTeam = gameState.currentTeam || 0;
-                    gameActive = gameState.gameActive || false;
-                    questionAnswered = gameState.questionAnswered || false;
-                    selectedQuestion = gameState.selectedQuestion;
-                    currentGameSession = gameState.gameSession;
-                    
-                    // Restore data
-                    teams = savedTeams;
-                    questions = savedQuestions;
-                    answeredQuestions = new Set(savedAnswered || []);
-                    importedQuestions = savedImported || [];
-                    
-                    // Show appropriate screen
-                    showScreen(gameState.screen || 'setup');
-                    
-                    if (gameState.screen === 'game') {
-                        updateScoreboard();
-                        createQuizGrid();
-                        document.getElementById('scoreboard').classList.remove('hidden');
-                    } else if (gameState.screen === 'result') {
-                        endCompetition();
-                    }
-                    
-                    return true;
-                }
-            } catch (error) {
-                console.warn('Failed to load game state:', error);
-            }
-            return false;
-        }
-
-        // Load saved Supabase credentials
-        function loadSupabaseCredentials() {
-            // Set default credentials
-            const defaultUrl = 'https://zfpyrguqsgjwbalnueez.supabase.co';
-            const defaultKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmcHlyZ3Vxc2dqd2JhbG51ZWV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MTQ4MzIsImV4cCI6MjA3Mjk5MDgzMn0.EVgc5ma5rvRljSG440XzedQHBi4zLFyK-KA0rgvF-e4';
-            
-            const savedUrl = localStorage.getItem(STORAGE_KEYS.SUPABASE_URL) || defaultUrl;
-            const savedKey = localStorage.getItem(STORAGE_KEYS.SUPABASE_KEY) || defaultKey;
-            
-            document.getElementById('supabaseUrl').value = savedUrl;
-            document.getElementById('supabaseKey').value = savedKey;
-            
-            // Auto-test connection
-            setTimeout(() => {
-                testSupabaseConnection();
-            }, 1000);
-        }
-
-        // Clear saved game state
-        function clearGameState() {
-            Object.values(STORAGE_KEYS).forEach(key => {
-                if (key !== STORAGE_KEYS.SUPABASE_URL && key !== STORAGE_KEYS.SUPABASE_KEY) {
-                    localStorage.removeItem(key);
-                }
-            });
-        }
-
-        // Start auto-save interval
-        function startAutoSave() {
-            // Clear existing interval if any
-            if (autoSaveInterval) {
-                clearInterval(autoSaveInterval);
-            }
-            
-            // Save every 10 seconds during active game
-            autoSaveInterval = setInterval(() => {
-                if (gameActive || getCurrentScreen() === 'game') {
-                    saveGameState();
-                }
-            }, 10000);
-        }
-
-        // Stop auto-save interval
-        function stopAutoSave() {
-            if (autoSaveInterval) {
-                clearInterval(autoSaveInterval);
-                autoSaveInterval = null;
-            }
-        }
-
-        // Get current screen
-        function getCurrentScreen() {
-            if (!document.getElementById('setupScreen').classList.contains('hidden')) return 'setup';
-            if (!document.getElementById('gameScreen').classList.contains('hidden')) return 'game';
-            if (!document.getElementById('resultScreen').classList.contains('hidden')) return 'result';
-            return 'setup';
-        }
-
-        // Show specific screen
-        function showScreen(screenName) {
-            document.getElementById('setupScreen').classList.add('hidden');
-            document.getElementById('gameScreen').classList.add('hidden');
-            document.getElementById('resultScreen').classList.add('hidden');
-            document.getElementById('scoreboard').classList.add('hidden');
-            
-            switch(screenName) {
-                case 'setup':
-                    document.getElementById('setupScreen').classList.remove('hidden');
-                    break;
-                case 'game':
-                    document.getElementById('gameScreen').classList.remove('hidden');
-                    document.getElementById('scoreboard').classList.remove('hidden');
-                    break;
-                case 'result':
-                    document.getElementById('resultScreen').classList.remove('hidden');
-                    break;
-            }
-        }
-
-        // Select 5 random questions per category for the game
-        function selectQuestionsForGame() {
-            // Group questions by category
-            const questionsByCategory = {};
-            const allQuestions = importedQuestions.length > 0 ? importedQuestions : questions;
-            
-            allQuestions.forEach(q => {
-                if (!questionsByCategory[q.category]) {
-                    questionsByCategory[q.category] = [];
-                }
-                questionsByCategory[q.category].push(q);
-            });
-
-            // Get all categories and limit to 5
-            const categories = Object.keys(questionsByCategory).slice(0, 5);
-            const selectedQuestions = [];
-
-            // Select 5 random questions from each category
-            categories.forEach(category => {
-                const categoryQuestions = [...questionsByCategory[category]];
-                shuffleArray(categoryQuestions);
-                
-                // Take up to 5 questions from this category
-                const questionsToAdd = categoryQuestions.slice(0, 5);
-                selectedQuestions.push(...questionsToAdd);
-            });
-
-            // If we don't have enough questions, fill with random questions from all categories
-            while (selectedQuestions.length < 25 && selectedQuestions.length < allQuestions.length) {
-                const remainingQuestions = allQuestions.filter(q => !selectedQuestions.includes(q));
-                if (remainingQuestions.length === 0) break;
-                
-                const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
-                selectedQuestions.push(remainingQuestions[randomIndex]);
-            }
-
-            return selectedQuestions.slice(0, 25); // Ensure exactly 25 questions
-        }
 
         // Download Excel template
         function downloadTemplate() {
             const templateData = [
                 ['Pertanyaan', 'Jawaban A', 'Jawaban B', 'Jawaban C', 'Jawaban D', 'Jawaban Benar', 'Kategori', 'Poin'],
-                ['Siapa nama ayah Nabi Muhammad SAW?', 'Abdullah', 'Abu Thalib', 'Abdul Muthalib', 'Abu Bakar', 'A', 'Sejarah', '10'],
-                ['Di kota mana Nabi Muhammad SAW dilahirkan?', 'Madinah', 'Makkah', 'Thaif', 'Yaman', 'B', 'Sejarah', '20'],
-                ['Berapa jumlah surat dalam Al-Qur\'an?', '112', '113', '114', '115', 'C', 'Quran Hadis', '30'],
-                ['Berapa jumlah rukun iman?', '5', '6', '7', '8', 'B', 'Akidah Akhlak', '40'],
-                ['Berapa kali shalat wajib dalam sehari?', '3 kali', '4 kali', '5 kali', '6 kali', 'C', 'Fikih', '50']
+                ['Siapa nama ayah Nabi Muhammad SAW?', 'Abdullah', 'Abu Thalib', 'Abdul Muthalib', 'Abu Bakar', 'A', 'Sejarah', '100'],
+                ['Di kota mana Nabi Muhammad SAW dilahirkan?', 'Madinah', 'Makkah', 'Thaif', 'Yaman', 'B', 'Sejarah', '200'],
+                ['Berapa jumlah surat dalam Al-Qur\'an?', '112', '113', '114', '115', 'C', 'Quran Hadis', '300'],
+                ['Berapa jumlah rukun iman?', '5', '6', '7', '8', 'B', 'Akidah Akhlak', '400'],
+                ['Berapa kali shalat wajib dalam sehari?', '3 kali', '4 kali', '5 kali', '6 kali', 'C', 'Fikih', '500']
             ];
 
             const ws = XLSX.utils.aoa_to_sheet(templateData);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Template Soal');
+            XLSX.utils.book_append_sheet(wb, ws, 'Template Soal Quiz');
             
             // Set column widths
             ws['!cols'] = [
                 {wch: 50}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 20}, {wch: 15}, {wch: 15}, {wch: 10}
             ];
 
-            XLSX.writeFile(wb, 'Template_Soal_Lomba_Cerdas_Cermat.xlsx');
+            XLSX.writeFile(wb, 'Template_Soal_Quiz_Show_Maulid.xlsx');
         }
 
         // Import Excel file
-        async function importExcel(event) {
+        function importExcel(event) {
             const file = event.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
-            reader.onload = async function(e) {
+            reader.onload = function(e) {
                 try {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, {type: 'array'});
@@ -1604,7 +1205,7 @@
                     importedQuestions = [];
 
                     questionsData.forEach((row, index) => {
-                        if (row.length >= 7 && row[0]) { // Ensure we have all required columns
+                        if (row.length >= 7 && row[0]) {
                             const correctAnswerLetter = row[5]?.toString().toUpperCase();
                             let correctIndex = 0;
                             
@@ -1621,7 +1222,7 @@
                                 answers: [row[1], row[2], row[3], row[4]],
                                 correct: correctIndex,
                                 category: row[6] || 'Umum',
-                                points: parseInt(row[7]) || 10 // Default 10 points if not specified
+                                points: parseInt(row[7]) || 100
                             });
                         }
                     });
@@ -1637,23 +1238,13 @@
                             .map(([cat, count]) => `${cat}: ${count} soal`)
                             .join('\n');
                         
-                        // Save to database if connected
-                        if (isConnectedToDatabase) {
-                            const saved = await saveQuestionsToDatabase(importedQuestions);
-                            if (saved) {
-                                alert(`✅ Berhasil import ${importedQuestions.length} soal dari Excel dan disimpan ke database!\n\nRincian per kategori:\n${countInfo}\n\nSistem akan memilih 5 soal acak per kategori untuk lomba.`);
-                            } else {
-                                alert(`✅ Berhasil import ${importedQuestions.length} soal dari Excel!\n(Gagal simpan ke database, tapi soal tetap bisa digunakan)\n\nRincian per kategori:\n${countInfo}\n\nSistem akan memilih 5 soal acak per kategori untuk lomba.`);
-                            }
-                        } else {
-                            alert(`✅ Berhasil import ${importedQuestions.length} soal dari Excel!\n\nRincian per kategori:\n${countInfo}\n\nSistem akan memilih 5 soal acak per kategori untuk lomba.`);
-                        }
+                        showGameMessage(`✅ Berhasil import ${importedQuestions.length} soal!\n\nRincian per kategori:\n${countInfo}`, 'correct');
                     } else {
-                        alert('❌ Tidak ada soal valid yang ditemukan. Periksa format Excel Anda.');
+                        showGameMessage('❌ Tidak ada soal valid yang ditemukan. Periksa format Excel Anda.', 'wrong');
                     }
 
                 } catch (error) {
-                    alert('❌ Error membaca file Excel. Pastikan format file benar.');
+                    showGameMessage('❌ Error membaca file Excel. Pastikan format file benar.', 'wrong');
                     console.error('Excel import error:', error);
                 }
             };
@@ -1663,20 +1254,21 @@
         // Update team setup
         function updateTeamSetup() {
             const teamCount = parseInt(document.getElementById('teamCount').value);
-            const teamGrid = document.getElementById('teamGrid');
-            teamGrid.innerHTML = '';
+            const teamsGrid = document.getElementById('teamsGrid');
+            teamsGrid.innerHTML = '';
 
-            const medals = ['🥇', '🥈', '🥉', '🏅', '⭐', '🌟', '✨', '💫'];
+            const teamEmojis = ['🥇', '🥈', '🥉', '🏅', '⭐', '🌟', '✨', '💫'];
 
             for (let i = 0; i < teamCount; i++) {
                 const teamCard = document.createElement('div');
-                teamCard.className = 'team-setup-card';
+                teamCard.className = 'team-card';
+                teamCard.style.animationDelay = `${i * 0.1}s`;
                 teamCard.innerHTML = `
-                    <h3>${medals[i]} Tim ${i + 1}</h3>
+                    <h3>${teamEmojis[i]} Tim ${i + 1}</h3>
                     <input type="text" class="team-input" id="team${i + 1}Name" 
                            placeholder="Nama Tim ${i + 1}" value="${defaultTeamNames[i]}">
                 `;
-                teamGrid.appendChild(teamCard);
+                teamsGrid.appendChild(teamCard);
             }
         }
 
@@ -1691,30 +1283,31 @@
             }
         }
 
-        // Start competition
-        async function startCompetition() {
-            if (questions.length < 5) {
-                alert('❌ Minimal 5 soal diperlukan untuk memulai lomba!');
+        // Prepare questions for the game
+        function prepareGameQuestions() {
+            const questionsToUse = importedQuestions.length > 0 ? importedQuestions : defaultQuestions;
+            
+            // Shuffle questions and take up to 20 for the game
+            gameQuestions = [...questionsToUse];
+            shuffleArray(gameQuestions);
+            gameQuestions = gameQuestions.slice(0, Math.min(20, gameQuestions.length));
+            
+            // Shuffle answers for each question
+            gameQuestions.forEach(q => shuffleAnswers(q));
+        }
+
+        // Start Quiz Show
+        function startQuizShow() {
+            if (importedQuestions.length === 0 && defaultQuestions.length < 5) {
+                showGameMessage('❌ Minimal 5 soal diperlukan untuk memulai quiz show!', 'wrong');
                 return;
             }
-
-            // Select 5 random questions per category
-            const selectedQuestions = selectQuestionsForGame();
-            if (selectedQuestions.length < 25) {
-                alert('❌ Tidak cukup soal untuk membuat 25 pertanyaan (5 per kategori)!');
-                return;
-            }
-
-            // Use selected questions for the game
-            questions = selectedQuestions;
 
             initializeTeams();
+            prepareGameQuestions();
             
-            // Generate unique game session ID
-            currentGameSession = 'game_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-            
+            // Hide setup screen and show scoreboard
             document.getElementById('setupScreen').classList.add('hidden');
-            document.getElementById('gameScreen').classList.remove('hidden');
             document.getElementById('scoreboard').classList.remove('hidden');
             
             currentQuestion = 0;
@@ -1722,135 +1315,65 @@
             gameActive = true;
             answeredQuestions.clear();
             
-            questions.forEach(q => shuffleAnswers(q));
-            
             updateScoreboard();
-            createQuizGrid();
-            saveGameState(); // Auto-save when starting
             
-            // Start auto-save interval
-            startAutoSave();
+            // Show welcome message and start first question
+            showGameMessage('🎉 QUIZ SHOW DIMULAI! 🎉', 'correct');
+            setTimeout(() => {
+                nextQuestion();
+            }, 2000);
         }
 
-        // Create quiz grid
-        function createQuizGrid() {
-            const grid = document.getElementById('quizGrid');
-            grid.innerHTML = '';
-            
-            // Get unique categories from selected questions
-            const categories = [...new Set(questions.map(q => q.category))].slice(0, 5);
-            const categoryHeaders = categories.map(cat => {
-                const icons = {
-                    'Sejarah': '🕌',
-                    'Quran Hadis': '📖',
-                    'Akidah Akhlak': '🤲',
-                    'Fikih': '🕐',
-                    'Bahasa Arab': '📚',
-                    'Umum': '📝'
-                };
-                return `${icons[cat] || '📝'} ${cat}`;
-            });
-            
-            // Create headers
-            categoryHeaders.forEach(category => {
-                const header = document.createElement('div');
-                header.className = 'quiz-header';
-                header.textContent = category;
-                grid.appendChild(header);
-            });
-            
-            // Organize questions by category for grid display
-            const questionsByCategory = {};
-            questions.forEach((q, index) => {
-                if (!questionsByCategory[q.category]) {
-                    questionsByCategory[q.category] = [];
-                }
-                questionsByCategory[q.category].push({...q, originalIndex: index});
-            });
-            
-            // Create question cells (5 rows x 5 categories)
-            let questionIndex = 0;
-            for (let row = 0; row < 5; row++) {
-                categories.forEach((category, catIndex) => {
-                    const cell = document.createElement('div');
-                    cell.className = 'quiz-cell';
-                    
-                    // Find the question for this cell
-                    const categoryQuestions = questionsByCategory[category] || [];
-                    if (row < categoryQuestions.length && questionIndex < questions.length) {
-                        const questionData = categoryQuestions[row];
-                        const questionPoints = questionData.points || ((row + 1) * 10);
-                        cell.innerHTML = `<span>${questionPoints}</span>`;
-                        
-                        // Check if this question has been answered
-                        if (answeredQuestions.has(questionData.originalIndex)) {
-                            cell.classList.add('answered');
-                            cell.innerHTML = '<span style="font-size: 2.5rem;">✓</span>';
-                        } else {
-                            cell.onclick = () => selectQuestion(questionData.originalIndex);
-                            cell.style.cursor = 'pointer';
-                        }
-                        cell.dataset.questionIndex = questionData.originalIndex;
-                        questionIndex++;
-                    } else {
-                        // If no question available for this cell, make it unavailable
-                        cell.classList.add('answered');
-                        cell.innerHTML = '<span style="font-size: 1.5rem; opacity: 0.5;">-</span>';
-                        cell.style.cursor = 'not-allowed';
-                    }
-                    
-                    grid.appendChild(cell);
-                });
+        // Next question
+        function nextQuestion() {
+            if (currentQuestion >= gameQuestions.length) {
+                endQuizShow();
+                return;
             }
+
+            showQuestionScreen();
         }
 
-        // Select question
-        function selectQuestion(questionIndex) {
-            if (answeredQuestions.has(questionIndex) || questionIndex >= questions.length) return;
+        // Show question screen
+        function showQuestionScreen() {
+            const question = gameQuestions[currentQuestion];
             
-            selectedQuestion = questionIndex;
-            currentQuestion = questionIndex;
+            const questionScreen = document.createElement('div');
+            questionScreen.className = 'question-screen';
+            questionScreen.id = 'questionScreen';
             
-            showQuestionPopup();
-        }
-
-        // Show question popup
-        function showQuestionPopup() {
-            const popup = document.createElement('div');
-            popup.className = 'question-popup';
-            popup.id = 'questionPopup';
-            
-            const question = questions[currentQuestion];
-            
-            popup.innerHTML = `
+            questionScreen.innerHTML = `
                 <div class="question-header">
-                    <div class="question-badge">Soal ${currentQuestion + 1}</div>
-                    <div class="question-badge">${question.category}</div>
-                    <div class="timer-display" id="timerDisplay">⏰ 30</div>
+                    <div class="question-info">
+                        <div class="question-badge">Soal ${currentQuestion + 1}/${gameQuestions.length}</div>
+                        <div class="question-badge">${question.category}</div>
+                        <div class="question-badge">${question.points} Poin</div>
+                    </div>
+                    <div class="timer-circle" id="timerCircle">30</div>
                 </div>
                 
                 <div class="question-content">
                     <div class="question-text">${question.question}</div>
                     
-                    <div class="answers-container" id="answersContainer">
+                    <div class="answers-grid" id="answersGrid">
                         <!-- Answers will be populated here -->
                     </div>
                 </div>
             `;
             
-            document.body.appendChild(popup);
+            document.body.appendChild(questionScreen);
             
             // Populate answers
-            const answersContainer = document.getElementById('answersContainer');
+            const answersGrid = document.getElementById('answersGrid');
             question.answers.forEach((answer, index) => {
                 const button = document.createElement('button');
-                button.className = 'answer-option';
+                button.className = 'answer-btn';
                 button.innerHTML = `
-                    <div class="answer-label">${String.fromCharCode(65 + index)}</div>
+                    <div class="answer-letter">${String.fromCharCode(65 + index)}</div>
                     <div class="answer-text">${answer}</div>
                 `;
                 button.onclick = () => selectAnswer(index);
-                answersContainer.appendChild(button);
+                answersGrid.appendChild(button);
             });
 
             // Start timer
@@ -1867,250 +1390,169 @@
             questionAnswered = true;
             clearInterval(timer);
             
-            const question = questions[currentQuestion];
-            const buttons = document.querySelectorAll('.answer-option');
+            const question = gameQuestions[currentQuestion];
+            const buttons = document.querySelectorAll('.answer-btn');
             
+            // Disable all buttons
             buttons.forEach(btn => btn.style.pointerEvents = 'none');
-            
-            const points = question.points || ((currentQuestion % 5) + 1) * 10;
             
             if (selectedIndex === question.correct) {
                 buttons[selectedIndex].classList.add('correct');
-                teams[currentTeam].score += points;
+                teams[currentTeam].score += question.points;
                 teams[currentTeam].correct++;
                 
-                // Show simple success message
-                const successMsg = document.createElement('div');
-                successMsg.style.cssText = `
-                    position: fixed;
-                    top: 25%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    font-size: 3rem;
-                    font-weight: 900;
-                    color: #2ecc71;
-                    z-index: 10001;
-                    pointer-events: none;
-                    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-                `;
-                successMsg.innerHTML = '✅ BENAR!';
-                document.body.appendChild(successMsg);
+                showGameMessage('🎉 BENAR! 🎉', 'correct');
+                createConfetti();
                 
-                setTimeout(() => {
-                    if (successMsg.parentNode) {
-                        successMsg.remove();
-                    }
-                }, 1500);
-                
-                setTimeout(() => closeQuestionPopup(), 1800);
+                setTimeout(() => closeQuestionScreen(), 2000);
             } else {
                 buttons[selectedIndex].classList.add('wrong');
                 
-                // Show simple wrong answer message
-                const wrongMsg = document.createElement('div');
-                wrongMsg.style.cssText = `
-                    position: fixed;
-                    top: 25%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    font-size: 3rem;
-                    font-weight: 900;
-                    color: #e74c3c;
-                    z-index: 10001;
-                    pointer-events: none;
-                    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-                `;
-                wrongMsg.innerHTML = '❌ SALAH!';
-                document.body.appendChild(wrongMsg);
-                
-                setTimeout(() => {
-                    if (wrongMsg.parentNode) {
-                        wrongMsg.remove();
-                    }
-                }, 1500);
+                showGameMessage('❌ SALAH!', 'wrong');
                 
                 setTimeout(() => {
                     buttons[question.correct].classList.add('correct');
-                }, 600);
+                }, 800);
                 
-                setTimeout(() => closeQuestionPopup(), 2500);
+                setTimeout(() => closeQuestionScreen(), 3000);
             }
 
             updateScoreboard();
-            saveGameState(); // Auto-save after answer
         }
 
-        // Close question popup
-        function closeQuestionPopup() {
-            const popup = document.getElementById('questionPopup');
-            if (popup) popup.remove();
-            
-            // Mark question as answered
-            if (selectedQuestion !== null) {
-                answeredQuestions.add(selectedQuestion);
-                const cell = document.querySelector(`[data-question-index="${selectedQuestion}"]`);
-                if (cell) {
-                    cell.classList.add('answered');
-                    cell.innerHTML = '<span style="font-size: 2.5rem;">✓</span>';
-                }
-            }
+        // Close question screen
+        function closeQuestionScreen() {
+            const questionScreen = document.getElementById('questionScreen');
+            if (questionScreen) questionScreen.remove();
             
             // Move to next team
             currentTeam = (currentTeam + 1) % teams.length;
-            updateScoreboard();
-            saveGameState(); // Auto-save after closing question
             
-            // Check if all questions answered
-            if (answeredQuestions.size >= Math.min(25, questions.length)) {
-                endCompetition();
+            // If all teams have answered, move to next question
+            if (currentTeam === 0) {
+                currentQuestion++;
             }
+            
+            updateScoreboard();
+            
+            // Continue to next question or end game
+            setTimeout(() => {
+                nextQuestion();
+            }, 1000);
         }
 
         // Start timer
         function startTimer() {
             timer = setInterval(() => {
                 timeLeft--;
-                const timerDisplay = document.getElementById('timerDisplay');
-                if (timerDisplay) {
-                    timerDisplay.textContent = `⏰ ${timeLeft}`;
+                const timerCircle = document.getElementById('timerCircle');
+                if (timerCircle) {
+                    timerCircle.textContent = timeLeft;
                     
-                    // Add warning effect when time is running out
                     if (timeLeft <= 10) {
-                        timerDisplay.classList.add('warning');
+                        timerCircle.classList.add('warning');
                     }
                 }
                 
                 if (timeLeft <= 0) {
                     if (!questionAnswered) {
                         questionAnswered = true;
-                        const question = questions[currentQuestion];
-                        const buttons = document.querySelectorAll('.answer-option');
+                        const question = gameQuestions[currentQuestion];
+                        const buttons = document.querySelectorAll('.answer-btn');
                         buttons.forEach(btn => btn.style.pointerEvents = 'none');
                         buttons[question.correct].classList.add('correct');
                         
-                        // Add time's up effect
-                        showTimeUpEffect();
+                        showGameMessage('⏰ WAKTU HABIS!', 'timeout');
                         
-                        setTimeout(() => closeQuestionPopup(), 2500);
+                        setTimeout(() => closeQuestionScreen(), 2500);
                     }
                     clearInterval(timer);
                 }
             }, 1000);
         }
 
-        // Show time's up effect
-        function showTimeUpEffect() {
-            const effect = document.createElement('div');
-            effect.style.cssText = `
-                position: fixed;
-                top: 30%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                font-size: 3rem;
-                font-weight: 900;
-                color: #ff4757;
-                z-index: 10001;
-                pointer-events: none;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            `;
-            effect.innerHTML = '⏰ WAKTU HABIS!';
-            document.body.appendChild(effect);
-            
-            setTimeout(() => {
-                if (effect.parentNode) {
-                    effect.remove();
-                }
-            }, 1500);
-        }
-
-
-
         // Update scoreboard
         function updateScoreboard() {
             const scoreGrid = document.getElementById('scoreGrid');
-            const turnIndicator = document.getElementById('currentTurnIndicator');
+            const playerIndicator = document.getElementById('currentPlayerIndicator');
             
             scoreGrid.innerHTML = '';
             
-            // Update turn indicator
-            if (turnIndicator && teams.length > 0) {
-                turnIndicator.textContent = teams[currentTeam]?.name || `Tim ${currentTeam + 1}`;
+            // Update current player indicator
+            if (playerIndicator && teams.length > 0) {
+                playerIndicator.textContent = teams[currentTeam]?.name || `Tim ${currentTeam + 1}`;
             }
             
             teams.forEach((team, index) => {
-                const scoreItem = document.createElement('div');
-                scoreItem.className = `score-item ${index === currentTeam ? 'active' : ''}`;
-                scoreItem.innerHTML = `
-                    <div class="score-name">${team.name}</div>
-                    <div class="score-points">${team.score}</div>
+                const scoreCard = document.createElement('div');
+                scoreCard.className = `score-card ${index === currentTeam ? 'active' : ''}`;
+                scoreCard.innerHTML = `
+                    <div class="team-name">${team.name}</div>
+                    <div class="team-score">${team.score}</div>
+                    <div class="team-correct">Benar: ${team.correct}</div>
                 `;
-                scoreGrid.appendChild(scoreItem);
+                scoreGrid.appendChild(scoreCard);
             });
         }
 
-        // End competition
-        function endCompetition() {
-            // Stop auto-save and save final state
-            stopAutoSave();
+        // End Quiz Show
+        function endQuizShow() {
             gameActive = false;
-            saveGameState();
             
-            document.getElementById('gameScreen').classList.add('hidden');
             document.getElementById('scoreboard').classList.add('hidden');
             document.getElementById('resultScreen').classList.remove('hidden');
             
             const sortedTeams = [...teams].sort((a, b) => b.score - a.score);
             
-            document.getElementById('winnerTitle').textContent = `🏆 ${sortedTeams[0].name} Juara! 🏆`;
+            document.getElementById('winnerTitle').textContent = `🏆 ${sortedTeams[0].name} JUARA! 🏆`;
             
-            const podium = document.getElementById('podium');
-            podium.innerHTML = '';
+            const podiumContainer = document.getElementById('podiumContainer');
+            podiumContainer.innerHTML = '';
             
             const positions = ['first', 'second', 'third'];
-            const positionNames = ['🥇 Juara 1', '🥈 Juara 2', '🥉 Juara 3'];
+            const positionNames = ['🥇 JUARA 1', '🥈 JUARA 2', '🥉 JUARA 3'];
             
             sortedTeams.slice(0, 3).forEach((team, index) => {
-                const podiumItem = document.createElement('div');
-                podiumItem.className = `podium-item ${positions[index]}`;
-                podiumItem.innerHTML = `
+                const podiumCard = document.createElement('div');
+                podiumCard.className = `podium-card ${positions[index]}`;
+                podiumCard.innerHTML = `
                     <div class="podium-position">${positionNames[index]}</div>
                     <div class="podium-team">${team.name}</div>
-                    <div class="podium-score">${team.score} Poin</div>
-                    <div>Benar: ${team.correct}/${Math.min(25, questions.length)}</div>
+                    <div class="podium-score">${team.score}</div>
+                    <div class="podium-stats">Benar: ${team.correct}/${gameQuestions.length}</div>
                 `;
-                podium.appendChild(podiumItem);
+                podiumContainer.appendChild(podiumCard);
             });
+
+            // Create celebration confetti
+            createConfetti();
         }
 
-        // Restart competition
-        function restartCompetition() {
-            // Stop auto-save and clear saved game state
-            stopAutoSave();
-            clearGameState();
-            
+        // Restart Quiz Show
+        function restartQuizShow() {
             document.getElementById('resultScreen').classList.add('hidden');
             document.getElementById('setupScreen').classList.remove('hidden');
             
+            // Reset game state
             currentQuestion = 0;
             currentTeam = 0;
             teams = [];
             answeredQuestions.clear();
             selectedQuestion = null;
             gameActive = false;
-            currentGameSession = null;
+            gameQuestions = [];
             
             // Reset file input
             document.getElementById('excelFile').value = '';
+            
+            // Update team setup
+            updateTeamSetup();
         }
 
         // Clear saved game
         function clearSavedGame() {
-            if (confirm('⚠️ Yakin ingin menghapus semua data lomba yang tersimpan?\n\nData yang akan dihapus:\n• Progress lomba\n• Skor tim\n• Soal yang sudah dijawab\n• Soal yang diimport\n\nTindakan ini tidak dapat dibatalkan!')) {
-                // Stop auto-save and clear all data
-                stopAutoSave();
-                clearGameState();
-                
-                // Reset to initial state
+            if (confirm('⚠️ Yakin ingin menghapus semua data quiz yang tersimpan?')) {
+                // Reset all data
                 currentQuestion = 0;
                 currentTeam = 0;
                 teams = [];
@@ -2118,33 +1560,46 @@
                 selectedQuestion = null;
                 importedQuestions = [];
                 gameActive = false;
-                currentGameSession = null;
+                gameQuestions = [];
                 
                 // Reset file input
                 document.getElementById('excelFile').value = '';
                 
-                // Show notification
-                const notification = document.createElement('div');
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: #e74c3c;
-                    color: white;
-                    padding: 15px 25px;
-                    border-radius: 10px;
-                    font-weight: 700;
-                    z-index: 9999;
-                    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
-                `;
-                notification.innerHTML = '🗑️ Data tersimpan berhasil dihapus!';
-                document.body.appendChild(notification);
-                
+                showGameMessage('🗑️ Data berhasil dihapus!', 'correct');
+            }
+        }
+
+        // Show game message
+        function showGameMessage(message, type) {
+            const messageEl = document.createElement('div');
+            messageEl.className = `game-message ${type}`;
+            messageEl.innerHTML = message;
+            document.body.appendChild(messageEl);
+            
+            setTimeout(() => {
+                if (messageEl.parentNode) {
+                    messageEl.remove();
+                }
+            }, 3000);
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
                 setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.remove();
-                    }
-                }, 3000);
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.animationDelay = Math.random() * 3 + 's';
+                    confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        if (confetti.parentNode) {
+                            confetti.remove();
+                        }
+                    }, 5000);
+                }, i * 50);
             }
         }
 
@@ -2162,79 +1617,15 @@
             question.correct = question.answers.indexOf(correctAnswer);
         }
 
-        // Initialize
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            // Auto-initialize Supabase with embedded credentials
-            const defaultUrl = 'https://zfpyrguqsgjwbalnueez.supabase.co';
-            const defaultKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmcHlyZ3Vxc2dqd2JhbG51ZWV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MTQ4MzIsImV4cCI6MjA3Mjk5MDgzMn0.EVgc5ma5rvRljSG440XzedQHBi4zLFyK-KA0rgvF-e4';
+            updateTeamSetup();
             
-            // Initialize Supabase automatically
-            if (initializeSupabase(defaultUrl, defaultKey)) {
-                isConnectedToDatabase = true;
-                document.getElementById('connectionStatus').className = 'config-status connected';
-                document.getElementById('connectionStatus').innerHTML = '✅ Terhubung ke database cloud!';
-                document.getElementById('loadFromDbBtn').disabled = false;
-                document.getElementById('startBtn').disabled = false;
-                
-                // Show connection success notification
-                const notification = document.createElement('div');
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: #2ecc71;
-                    color: white;
-                    padding: 15px 25px;
-                    border-radius: 10px;
-                    font-weight: 700;
-                    z-index: 9999;
-                    box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
-                `;
-                notification.innerHTML = '🗄️ Database cloud siap digunakan!';
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.remove();
-                    }
-                }, 3000);
-            }
-            
-            // Load Supabase credentials to form (for backup)
-            loadSupabaseCredentials();
-            
-            // Try to load saved game state
-            const gameLoaded = loadGameState();
-            
-            if (!gameLoaded) {
-                // If no saved game, show setup screen
-                updateTeamSetup();
-            } else {
-                // If game was loaded, show notification
-                const notification = document.createElement('div');
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    left: 20px;
-                    background: #f39c12;
-                    color: white;
-                    padding: 15px 25px;
-                    border-radius: 10px;
-                    font-weight: 700;
-                    z-index: 9999;
-                    box-shadow: 0 5px 15px rgba(243, 156, 18, 0.3);
-                `;
-                notification.innerHTML = '🎮 Lomba dilanjutkan dari posisi terakhir!';
-                document.body.appendChild(notification);
-                
-                // Remove notification after 3 seconds
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.remove();
-                    }
-                }, 3000);
-            }
+            // Show welcome animation
+            setTimeout(() => {
+                showGameMessage('🎮 Selamat datang di Quiz Show Maulid Nabi! 🎮', 'correct');
+            }, 500);
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c6a664e0b36b9e',t:'MTc1NzQyMDUzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c6ba38608a3231',t:'MTc1NzQyMTM0Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
