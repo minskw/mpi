@@ -216,14 +216,12 @@
             <div class="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 relative z-10">
                 <h1 class="text-2xl font-bold text-white mb-1 drop-shadow-lg">
                     <i class="fas fa-mosque text-yellow-300 mr-2 text-2xl"></i>
-                    CERDAS CERMAT
+                    Game Show Cerdas Cermat Maulid Nabi Muhammad
                 </h1>
-                <h3 class="text-2xl text-white mb-1 drop-shadow-lg">                  
-                    PERINGATAN MAULID NABI 1447 H
-                    <i class="fas fa-mosque text-yellow-300 mr-2 text-2xl"></i>
-                </h3>
+                <p class="text-white text-lg arabic-text drop-shadow-md">صلى الله عليه وسلم</p>
             </div>
         </div>
+
 
 
         <!-- Settings Page -->
@@ -256,6 +254,55 @@
                     <button id="generateTeams" class="mt-4 bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                         <i class="fas fa-users mr-2"></i>Generate Input Tim
                     </button>
+                </div>
+
+                <!-- Game Mode Settings -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Mode Permainan</h3>
+                    <div class="bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-6 border border-blue-200">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div>
+                                    <input type="radio" id="manualMode" name="gameMode" value="manual" checked class="mr-3">
+                                    <label for="manualMode" class="text-lg font-semibold text-blue-700">
+                                        <i class="fas fa-hand-paper mr-2"></i>Mode Manual
+                                    </label>
+                                    <p class="text-sm text-gray-600 ml-6 mt-1">
+                                        • Host pilih tim secara manual<br>
+                                        • Timer manual start/stop<br>
+                                        • Skor sesuai nilai soal<br>
+                                        • <strong>Cocok untuk babak rebutan/buzzer</strong>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div>
+                                    <input type="radio" id="autoMode" name="gameMode" value="auto" class="mr-3">
+                                    <label for="autoMode" class="text-lg font-semibold text-green-700">
+                                        <i class="fas fa-robot mr-2"></i>Mode Otomatis
+                                    </label>
+                                    <p class="text-sm text-gray-600 ml-6 mt-1">
+                                        • Giliran tim otomatis berurutan<br>
+                                        • Timer otomatis start setiap soal<br>
+                                        • Skor tetap: Benar +100, Salah -50<br>
+                                        • <strong>Cocok untuk babak biasa/reguler</strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                            <div class="flex items-start">
+                                <i class="fas fa-lightbulb text-yellow-500 mr-2 mt-1"></i>
+                                <div>
+                                    <p class="text-sm text-yellow-800 font-medium">Tips Penggunaan:</p>
+                                    <p class="text-sm text-yellow-700">
+                                        <strong>Babak Biasa:</strong> Gunakan Mode Otomatis untuk pertanyaan bergiliran<br>
+                                        <strong>Babak Rebutan:</strong> Gunakan Mode Manual untuk kontrol penuh host
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Question Import -->
@@ -345,7 +392,7 @@
             <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-6 max-w-4xl mx-auto">
                 <!-- Question Header -->
                 <div class="bg-gradient-to-r from-emerald-50 to-teal-50 px-8 py-4 border-b border-emerald-100">
-                    <div class="flex items-center justify-between">
+                    <div class="flex items-center justify-between mb-3">
                         <span id="categoryDisplay" class="bg-purple-500 text-white px-4 py-2 rounded-full text-sm font-medium">
                             Kategori: Maulid Nabi
                         </span>
@@ -355,6 +402,32 @@
                         <span id="scoreDisplay" class="bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-medium">
                             Point: 100
                         </span>
+                    </div>
+                    
+                    <!-- Mode Status Display -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div id="modeDisplay" class="flex items-center gap-2">
+                                <span class="text-sm font-medium text-gray-700">Mode:</span>
+                                <span id="currentModeDisplay" class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                                    <i class="fas fa-hand-paper mr-1"></i>Manual
+                                </span>
+                            </div>
+                            <div id="autoModeStatus" class="hidden text-sm">
+                                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full">
+                                    <i class="fas fa-robot mr-1"></i>Giliran: <span id="currentTeamName">-</span>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-2">
+                            <button id="pauseAutoBtn" class="hidden bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-2 rounded-lg font-medium transition-colors text-sm">
+                                <i class="fas fa-pause mr-1"></i>Pause
+                            </button>
+                            <button id="nextAutoBtn" class="hidden bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-2 rounded-lg font-medium transition-colors text-sm">
+                                <i class="fas fa-forward mr-1"></i>Skip
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
@@ -404,6 +477,10 @@
     <script>
         // Global variables
         let teams = [];
+        let gameMode = 'manual'; // 'manual' or 'auto'
+        let currentTeamTurn = 0;
+        let autoTimer = null;
+        let isAutoPaused = false;
         let questions = [
             {
                 id: 1,
@@ -537,6 +614,13 @@
         const timerBorder = document.getElementById('timerBorder');
         const sweepEl = document.getElementById('sweep');
         const sparkle = document.getElementById('sparkle');
+        const currentModeDisplay = document.getElementById('currentModeDisplay');
+        const autoModeStatus = document.getElementById('autoModeStatus');
+        const currentTeamName = document.getElementById('currentTeamName');
+        const pauseAutoBtn = document.getElementById('pauseAutoBtn');
+        const nextAutoBtn = document.getElementById('nextAutoBtn');
+        const manualModeRadio = document.getElementById('manualMode');
+        const autoModeRadio = document.getElementById('autoMode');
 
         // Initialize
         generateTeamInputs();
@@ -555,10 +639,83 @@
         nextQuestionBtn.addEventListener('click', () => changeQuestion(1));
         resetScoresBtn.addEventListener('click', resetAllScores);
         showAnswerBtn.addEventListener('click', showAnswer);
+        pauseAutoBtn.addEventListener('click', toggleAutoPause);
+        nextAutoBtn.addEventListener('click', skipToNextQuestion);
 
         function switchToQuiz() {
             settingsPage.classList.add('hidden');
             quizPage.classList.remove('hidden');
+        }
+
+
+
+        function startAutoMode() {
+            if (teams.length === 0) return;
+            
+            // Select current team
+            const currentTeam = teams[currentTeamTurn];
+            currentTeamName.textContent = currentTeam.name;
+            activeTeam = currentTeam.id;
+            
+            // Update team button styles
+            document.querySelectorAll('.team-button').forEach((btn, index) => {
+                btn.classList.remove('bg-emerald-200');
+                if (index === currentTeamTurn) {
+                    btn.classList.add('bg-emerald-200');
+                }
+            });
+            
+            // Start timer automatically
+            if (!isAutoPaused) {
+                clearInterval(timer);
+                timeLeft = defaultTime;
+                startTimer();
+            }
+        }
+
+        function stopAutoMode() {
+            clearInterval(autoTimer);
+            clearInterval(timer);
+            resetTimerBorder();
+            isAutoPaused = false;
+            activeTeam = null;
+            
+            // Reset team button styles
+            document.querySelectorAll('.team-button').forEach(btn => {
+                btn.classList.remove('bg-emerald-200');
+            });
+        }
+
+        function toggleAutoPause() {
+            isAutoPaused = !isAutoPaused;
+            
+            if (isAutoPaused) {
+                clearInterval(timer);
+                resetTimerBorder();
+                pauseAutoBtn.innerHTML = '<i class="fas fa-play mr-1"></i>Resume';
+                pauseAutoBtn.classList.remove('bg-yellow-500', 'hover:bg-yellow-600');
+                pauseAutoBtn.classList.add('bg-green-500', 'hover:bg-green-600');
+            } else {
+                timeLeft = defaultTime;
+                startTimer();
+                pauseAutoBtn.innerHTML = '<i class="fas fa-pause mr-1"></i>Pause';
+                pauseAutoBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
+                pauseAutoBtn.classList.add('bg-yellow-500', 'hover:bg-yellow-600');
+            }
+        }
+
+        function skipToNextQuestion() {
+            if (gameMode === 'auto') {
+                // Move to next team
+                currentTeamTurn = (currentTeamTurn + 1) % teams.length;
+                
+                // If we've completed a full round, move to next question
+                if (currentTeamTurn === 0) {
+                    changeQuestion(1);
+                } else {
+                    startAutoMode();
+                }
+            }
         }
 
         function generateTeamInputs() {
@@ -716,19 +873,47 @@
                 return;
             }
 
+            // Set game mode from settings
+            gameMode = autoModeRadio.checked ? 'auto' : 'manual';
+            
+            // Update mode display
+            if (gameMode === 'auto') {
+                currentModeDisplay.innerHTML = '<i class="fas fa-robot mr-1"></i>Otomatis';
+                currentModeDisplay.classList.remove('bg-blue-500');
+                currentModeDisplay.classList.add('bg-green-500');
+                autoModeStatus.classList.remove('hidden');
+                pauseAutoBtn.classList.remove('hidden');
+                nextAutoBtn.classList.remove('hidden');
+            } else {
+                currentModeDisplay.innerHTML = '<i class="fas fa-hand-paper mr-1"></i>Manual';
+                currentModeDisplay.classList.remove('bg-green-500');
+                currentModeDisplay.classList.add('bg-blue-500');
+                autoModeStatus.classList.add('hidden');
+                pauseAutoBtn.classList.add('hidden');
+                nextAutoBtn.classList.add('hidden');
+            }
+
             // Switch to quiz page
             switchToQuiz();
             
             // Initialize quiz
             currentQuestionIndex = 0;
+            currentTeamTurn = 0;
             updateQuestionDisplay();
             generateScoreboard();
             saveGameState();
             
+            // Start auto mode if selected
+            if (gameMode === 'auto') {
+                startAutoMode();
+            }
+            
+            const modeText = gameMode === 'auto' ? 'Mode Otomatis - Giliran tim otomatis' : 'Mode Manual - Klik nama tim untuk memulai';
+            
             Swal.fire({
                 icon: 'success',
                 title: 'Quiz Dimulai!',
-                text: 'Klik nama tim untuk memulai timer',
+                text: modeText,
                 confirmButtonColor: '#10b981'
             });
         }
@@ -747,14 +932,25 @@
             
             scoreboard.innerHTML = teams.map((team, index) => {
                 const color = teamColors[index] || teamColors[0];
-                const currentQuestion = questions[currentQuestionIndex];
-                const correctPoints = currentQuestion ? currentQuestion.score : 100;
-                const wrongPoints = Math.floor(correctPoints * 0.5); // 50% penalty
+                
+                // Auto mode uses fixed scoring: +100 correct, -50 wrong
+                // Manual mode uses question-based scoring
+                let correctPoints, wrongPoints;
+                if (gameMode === 'auto') {
+                    correctPoints = 100;
+                    wrongPoints = 50;
+                } else {
+                    const currentQuestion = questions[currentQuestionIndex];
+                    correctPoints = currentQuestion ? currentQuestion.score : 100;
+                    wrongPoints = Math.floor(correctPoints * 0.5); // 50% penalty
+                }
+                
+                const teamButtonDisabled = gameMode === 'auto' ? 'pointer-events-none opacity-75' : '';
                 
                 return `
                 <div class="${color.bg} rounded-lg p-2 shadow-lg border-2 border-white/30">
                     <button onclick="selectTeam(${team.id})" 
-                            class="team-button w-full text-center font-bold ${color.text} ${color.hover} transition-colors mb-1 text-xs truncate py-1 rounded">
+                            class="team-button w-full text-center font-bold ${color.text} ${color.hover} transition-colors mb-1 text-xs truncate py-1 rounded ${teamButtonDisabled}">
                         ${team.name}
                     </button>
                     <div class="flex items-center justify-between mb-1">
@@ -774,6 +970,9 @@
         }
 
         function selectTeam(teamId) {
+            // Only allow manual team selection in manual mode
+            if (gameMode === 'auto') return;
+            
             activeTeam = teamId;
             const team = teams.find(t => t.id === teamId);
             
@@ -892,6 +1091,20 @@
                 timer: 1500,
                 showConfirmButton: false
             });
+
+            // In auto mode, automatically move to next team after scoring
+            if (gameMode === 'auto' && !isAutoPaused) {
+                setTimeout(() => {
+                    currentTeamTurn = (currentTeamTurn + 1) % teams.length;
+                    
+                    // If we've completed a full round, move to next question
+                    if (currentTeamTurn === 0) {
+                        changeQuestion(1);
+                    } else {
+                        startAutoMode();
+                    }
+                }, 2000); // Wait 2 seconds after scoring
+            }
         }
 
         function updateQuestionDisplay() {
@@ -956,6 +1169,12 @@
                 resetTimerBorder();
                 timeLeft = defaultTime;
                 answerDisplay.classList.add('hidden');
+                
+                // In auto mode, restart with first team
+                if (gameMode === 'auto') {
+                    currentTeamTurn = 0;
+                    startAutoMode();
+                }
             }
         }
 
@@ -1051,5 +1270,5 @@
             }
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97ce31797240ca4b',t:'MTc1NzQ5OTYzMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97ce5b9152f0dfc6',t:'MTc1NzUwMTM1Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
