@@ -21,6 +21,12 @@
             direction: ltr;
             text-align: left;
         }
+        .arabic-only {
+            font-family: 'Amiri', serif;
+            line-height: 1.8;
+            direction: rtl;
+            text-align: right;
+        }
         .question-image {
             max-width: 100%;
             max-height: 300px;
@@ -210,12 +216,14 @@
             <div class="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 relative z-10">
                 <h1 class="text-2xl font-bold text-white mb-1 drop-shadow-lg">
                     <i class="fas fa-mosque text-yellow-300 mr-2 text-2xl"></i>
-                    Game Show Cerdas Cermat Maulid Nabi Muhammad
+                    CERDAS CERMAT
                 </h1>
-                <p class="text-white text-lg arabic-text drop-shadow-md">صلى الله عليه وسلم</p>
+                <h3 class="text-2xl font-bold text-white mb-1 drop-shadow-lg">
+                    <i class="fas fa-mosque text-yellow-300 mr-2 text-2xl"></i>
+                    PERINGATAN MAULID NABI 1447 H
+                </h3>
             </div>
         </div>
-
 
 
         <!-- Settings Page -->
@@ -476,6 +484,14 @@
                 answer: "Kitab/Buku - كِتَاب",
                 score: 150,
                 imageUrl: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop"
+            },
+            {
+                id: 11,
+                category: "Bahasa Arab",
+                text: "مَا اسْمُ هَذَا الْمَسْجِدِ؟",
+                answer: "المسجد الحرام - Masjidil Haram",
+                score: 200,
+                imageUrl: ""
             }
         ];
         let currentQuestionIndex = 0;
@@ -881,7 +897,12 @@
         function updateQuestionDisplay() {
             if (questions.length > 0) {
                 const currentQuestion = questions[currentQuestionIndex];
+                
+                // Detect text direction
+                const textDirection = detectTextDirection(currentQuestion.text);
                 questionText.innerHTML = currentQuestion.text;
+                questionText.className = `text-3xl leading-relaxed font-medium drop-shadow-lg ${textDirection}`;
+                
                 currentQuestionNumber.textContent = currentQuestionIndex + 1;
                 totalQuestions.textContent = questions.length;
                 categoryDisplay.textContent = `Kategori: ${currentQuestion.category}`;
@@ -893,12 +914,12 @@
                     questionImage.src = currentQuestion.imageUrl;
                     questionImage.style.display = 'block';
                     document.getElementById('imageError').style.display = 'none';
-                    questionText.classList.remove('question-text-only');
-                    questionText.classList.add('question-with-image');
+                    // Update class to include image layout
+                    questionText.className = questionText.className.replace('question-text-only', 'question-with-image');
                 } else {
                     questionImageContainer.classList.add('hidden');
-                    questionText.classList.remove('question-with-image');
-                    questionText.classList.add('question-text-only');
+                    // Keep the direction class but update layout class
+                    questionText.className = questionText.className.replace('question-with-image', 'question-text-only');
                 }
                 
                 // Update navigation buttons
@@ -984,6 +1005,26 @@
             localStorage.setItem('maulidQuizGame', JSON.stringify(gameState));
         }
 
+        function detectTextDirection(text) {
+            // Remove HTML tags and extra spaces
+            const cleanText = text.replace(/<[^>]*>/g, '').trim();
+            
+            // Arabic Unicode range: \u0600-\u06FF, \u0750-\u077F, \u08A0-\u08FF, \uFB50-\uFDFF, \uFE70-\uFEFF
+            const arabicRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/g;
+            const latinRegex = /[A-Za-z]/g;
+            
+            const arabicMatches = cleanText.match(arabicRegex) || [];
+            const latinMatches = cleanText.match(latinRegex) || [];
+            
+            // If there are Arabic characters but no Latin characters, use RTL
+            if (arabicMatches.length > 0 && latinMatches.length === 0) {
+                return 'arabic-only question-text-only';
+            }
+            
+            // If there are both Arabic and Latin characters, or only Latin, use LTR
+            return 'mixed-text question-text-only';
+        }
+
         function loadGameState() {
             const savedState = localStorage.getItem('maulidQuizGame');
             if (savedState) {
@@ -1010,5 +1051,5 @@
             }
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97cdaef65365fdc2',t:'MTc1NzQ5NDI4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97ce31797240ca4b',t:'MTc1NzQ5OTYzMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
