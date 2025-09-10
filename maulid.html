@@ -215,10 +215,11 @@
             </div>
             <div class="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 relative z-10">
                 <h1 class="text-2xl font-bold text-white mb-1 drop-shadow-lg">
-                    <i class="fas fa-mosque text-yellow-300 mr-2 text-2xl"></i>
-                    Game Show Cerdas Cermat Maulid Nabi Muhammad
+                    <i class="fas fa-mosque text-white-300 mr-2 text-2xl"></i>
+                    Game Show Cerdas Cermat
+                    <i class="fas fa-graduation-cap text-white ml-2 text-2xl"></i>
                 </h1>
-                <p class="text-white text-lg arabic-text drop-shadow-md">صلى الله عليه وسلم</p>
+                <p class="text-white text-lg arabic-text drop-shadow-md">Peringatan Maulid Nabi Muhammad صلى الله عليه وسلم</p>
             </div>
         </div>
 
@@ -231,50 +232,6 @@
                     <i class="fas fa-cog text-emerald-500 mr-2"></i>Pengaturan Game
                 </h2>
                 
-                <!-- Title & Subtitle Settings -->
-                <div class="mb-8">
-                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Pengaturan Judul & Subtitle</h3>
-                    <div class="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg p-6 border border-emerald-200">
-                        <div class="grid md:grid-cols-1 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-600 mb-2">
-                                    <i class="fas fa-heading text-emerald-500 mr-1"></i>Judul Utama
-                                </label>
-                                <input type="text" id="mainTitle" value="Game Show Cerdas Cermat Maulid Nabi Muhammad" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                       placeholder="Masukkan judul utama aplikasi">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-600 mb-2">
-                                    <i class="fas fa-quote-right text-emerald-500 mr-1"></i>Subtitle (Bahasa Arab/Latin)
-                                </label>
-                                <input type="text" id="subtitle" value="صلى الله عليه وسلم" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 arabic-text"
-                                       placeholder="Masukkan subtitle (mendukung teks Arab)">
-                                <p class="text-xs text-gray-500 mt-1">
-                                    <strong>Contoh untuk mata pelajaran lain:</strong><br>
-                                    • Matematika: "Mari Belajar dengan Menyenangkan"<br>
-                                    • Bahasa Arab: "تعلم اللغة العربية بالمرح"<br>
-                                    • IPA: "Eksplorasi Sains Bersama"<br>
-                                    • Sejarah: "Mengenal Masa Lalu untuk Masa Depan"
-                                </p>
-                            </div>
-                        </div>
-                        <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                            <div class="flex items-start">
-                                <i class="fas fa-info-circle text-blue-500 mr-2 mt-1"></i>
-                                <div>
-                                    <p class="text-sm text-blue-800 font-medium">Tips Penggunaan:</p>
-                                    <p class="text-sm text-blue-700">
-                                        Sesuaikan judul dan subtitle dengan mata pelajaran atau topik yang akan diajarkan. 
-                                        Aplikasi ini dapat digunakan untuk semua mata pelajaran di kelas!
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Team Settings -->
                 <div class="mb-8">
                     <h3 class="text-lg font-semibold text-gray-700 mb-4">Pengaturan Tim</h3>
@@ -349,55 +306,6 @@
                     </div>
                 </div>
 
-                <!-- Question Type Settings -->
-                <div class="mb-8">
-                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Tipe Soal</h3>
-                    <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-6 border border-purple-200">
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div class="space-y-4">
-                                <div>
-                                    <input type="radio" id="multipleChoiceType" name="questionType" value="multiple-choice" checked class="mr-3">
-                                    <label for="multipleChoiceType" class="text-lg font-semibold text-purple-700">
-                                        <i class="fas fa-list-ul mr-2"></i>Multiple Choice
-                                    </label>
-                                    <p class="text-sm text-gray-600 ml-6 mt-1">
-                                        • Menampilkan 4 pilihan jawaban (A, B, C, D)<br>
-                                        • Opsi jawaban diacak otomatis<br>
-                                        • Peserta pilih salah satu jawaban<br>
-                                        • <strong>Cocok untuk soal objektif</strong>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="space-y-4">
-                                <div>
-                                    <input type="radio" id="responseType" name="questionType" value="response" class="mr-3">
-                                    <label for="responseType" class="text-lg font-semibold text-pink-700">
-                                        <i class="fas fa-comment-dots mr-2"></i>Response
-                                    </label>
-                                    <p class="text-sm text-gray-600 ml-6 mt-1">
-                                        • Tidak menampilkan pilihan jawaban<br>
-                                        • Peserta menjawab secara bebas<br>
-                                        • Host menilai jawaban manual<br>
-                                        • <strong>Cocok untuk soal essay/uraian</strong>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-4 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
-                            <div class="flex items-start">
-                                <i class="fas fa-info-circle text-indigo-500 mr-2 mt-1"></i>
-                                <div>
-                                    <p class="text-sm text-indigo-800 font-medium">Catatan Penting:</p>
-                                    <p class="text-sm text-indigo-700">
-                                        <strong>Multiple Choice:</strong> Pastikan soal memiliki 4 pilihan jawaban (A, B, C, D)<br>
-                                        <strong>Response:</strong> Soal dapat berupa pertanyaan terbuka atau essay
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Question Import -->
                 <div class="mb-8">
                     <h3 class="text-lg font-semibold text-gray-700 mb-4">Import Soal</h3>
@@ -408,11 +316,7 @@
                         <button id="uploadBtn" class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                             <i class="fas fa-upload mr-2"></i>Pilih File Excel
                         </button>
-                        <p class="text-sm text-gray-500 mt-2">
-                            <strong>Format Excel:</strong><br>
-                            A=Kategori, B=Pertanyaan, C=Jawaban, D=Skor, E=URL Gambar<br>
-                            <strong>Multiple Choice:</strong> F=Pilihan A, G=Pilihan B, H=Pilihan C, I=Pilihan D, J=Jawaban Benar (A/B/C/D)
-                        </p>
+                        <p class="text-sm text-gray-500 mt-2">Format: Kolom A=Kategori, B=Pertanyaan, C=Jawaban, D=Skor, E=URL Gambar (opsional)</p>
                     </div>
                     <div id="questionPreview" class="mt-4 hidden">
                         <h4 class="font-medium text-gray-700 mb-2">Preview Soal:</h4>
@@ -449,42 +353,6 @@
                             <textarea id="manualAnswer" placeholder="Masukkan kunci jawaban (opsional)" 
                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 mixed-text" 
                                       rows="2"></textarea>
-                        </div>
-                        
-                        <!-- Multiple Choice Options -->
-                        <div id="multipleChoiceOptions" class="space-y-4">
-                            <h4 class="text-md font-semibold text-gray-700">Pilihan Jawaban Multiple Choice</h4>
-                            <div class="grid md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-600 mb-2">Pilihan A</label>
-                                    <input type="text" id="optionA" placeholder="Masukkan pilihan A" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 mixed-text">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-600 mb-2">Pilihan B</label>
-                                    <input type="text" id="optionB" placeholder="Masukkan pilihan B" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 mixed-text">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-600 mb-2">Pilihan C</label>
-                                    <input type="text" id="optionC" placeholder="Masukkan pilihan C" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 mixed-text">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-600 mb-2">Pilihan D</label>
-                                    <input type="text" id="optionD" placeholder="Masukkan pilihan D" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 mixed-text">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-600 mb-2">Jawaban Benar</label>
-                                <select id="correctAnswer" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
-                                    <option value="A">A</option>
-                                    <option value="B">B</option>
-                                    <option value="C">C</option>
-                                    <option value="D">D</option>
-                                </select>
-                            </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-600 mb-2">URL Gambar (Opsional)</label>
@@ -580,28 +448,6 @@
                                 <i class="fas fa-exclamation-triangle mr-2"></i>Gambar gagal dimuat
                             </div>
                         </div>
-                        
-                        <!-- Multiple Choice Options Display -->
-                        <div id="multipleChoiceDisplay" class="hidden w-full max-w-2xl">
-                            <div class="grid grid-cols-1 gap-3 mt-6">
-                                <button id="choiceA" class="choice-button bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-lg text-left font-medium transition-all duration-200 transform hover:scale-105 shadow-lg">
-                                    <span class="choice-letter bg-white text-blue-600 px-3 py-1 rounded-full font-bold mr-3">A</span>
-                                    <span class="choice-text"></span>
-                                </button>
-                                <button id="choiceB" class="choice-button bg-green-600 hover:bg-green-700 text-white p-4 rounded-lg text-left font-medium transition-all duration-200 transform hover:scale-105 shadow-lg">
-                                    <span class="choice-letter bg-white text-green-600 px-3 py-1 rounded-full font-bold mr-3">B</span>
-                                    <span class="choice-text"></span>
-                                </button>
-                                <button id="choiceC" class="choice-button bg-orange-600 hover:bg-orange-700 text-white p-4 rounded-lg text-left font-medium transition-all duration-200 transform hover:scale-105 shadow-lg">
-                                    <span class="choice-letter bg-white text-orange-600 px-3 py-1 rounded-full font-bold mr-3">C</span>
-                                    <span class="choice-text"></span>
-                                </button>
-                                <button id="choiceD" class="choice-button bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-lg text-left font-medium transition-all duration-200 transform hover:scale-105 shadow-lg">
-                                    <span class="choice-letter bg-white text-purple-600 px-3 py-1 rounded-full font-bold mr-3">D</span>
-                                    <span class="choice-text"></span>
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 
@@ -633,12 +479,9 @@
         // Global variables
         let teams = [];
         let gameMode = 'manual'; // 'manual' or 'auto'
-        let questionType = 'multiple-choice'; // 'multiple-choice' or 'response'
         let currentTeamTurn = 0;
         let autoTimer = null;
         let isAutoPaused = false;
-        let appTitle = "Game Show Cerdas Cermat Maulid Nabi Muhammad";
-        let appSubtitle = "صلى الله عليه وسلم";
         let questions = [
             {
                 id: 1,
@@ -646,15 +489,7 @@
                 text: "متى وُلد النبي محمد صلى الله عليه وسلم؟ Kapan Nabi Muhammad SAW dilahirkan?",
                 answer: "12 Rabiul Awwal tahun Gajah (571 M) - عام الفيل",
                 score: 100,
-                imageUrl: "",
-                type: "multiple-choice",
-                options: {
-                    A: "12 Rabiul Awwal tahun Gajah (571 M)",
-                    B: "17 Ramadan tahun Gajah (570 M)",
-                    C: "1 Muharram tahun Gajah (572 M)",
-                    D: "15 Syaban tahun Gajah (569 M)"
-                },
-                correctAnswer: "A"
+                imageUrl: ""
             },
             {
                 id: 2,
@@ -662,15 +497,7 @@
                 text: "ما اسم أم النبي محمد صلى الله عليه وسلم؟ Siapa nama ibu Nabi Muhammad SAW?",
                 answer: "Aminah binti Wahab - آمنة بنت وهب",
                 score: 150,
-                imageUrl: "",
-                type: "multiple-choice",
-                options: {
-                    A: "Khadijah binti Khuwailid",
-                    B: "Aminah binti Wahab",
-                    C: "Fatimah binti Asad",
-                    D: "Halimah As-Sa'diyah"
-                },
-                correctAnswer: "B"
+                imageUrl: ""
             },
             {
                 id: 3,
@@ -678,15 +505,7 @@
                 text: "في أي مدينة وُلد النبي صلى الله عليه وسلم؟ Di kota mana Nabi SAW dilahirkan?",
                 answer: "Makkah Al-Mukarramah - مكة المكرمة",
                 score: 100,
-                imageUrl: "",
-                type: "multiple-choice",
-                options: {
-                    A: "Madinah Al-Munawwarah",
-                    B: "Makkah Al-Mukarramah",
-                    C: "Thaif",
-                    D: "Yaman"
-                },
-                correctAnswer: "B"
+                imageUrl: ""
             },
             {
                 id: 4,
@@ -694,15 +513,7 @@
                 text: "ما اسم جد النبي محمد صلى الله عليه وسلم؟ Siapa nama kakek Nabi Muhammad SAW?",
                 answer: "Abdul Muthalib - عبد المطلب",
                 score: 200,
-                imageUrl: "",
-                type: "multiple-choice",
-                options: {
-                    A: "Abdul Muthalib",
-                    B: "Abdullah",
-                    C: "Abu Thalib",
-                    D: "Hashim"
-                },
-                correctAnswer: "A"
+                imageUrl: ""
             },
             {
                 id: 5,
@@ -710,15 +521,7 @@
                 text: "كم كان عمر النبي صلى الله عليه وسلم عندما توفي والده؟ Berapa usia Nabi SAW ketika ayahnya meninggal?",
                 answer: "Belum lahir (masih dalam kandungan) - لم يولد بعد",
                 score: 250,
-                imageUrl: "",
-                type: "multiple-choice",
-                options: {
-                    A: "2 tahun",
-                    B: "6 tahun",
-                    C: "Belum lahir (dalam kandungan)",
-                    D: "1 tahun"
-                },
-                correctAnswer: "C"
+                imageUrl: ""
             },
             {
                 id: 6,
@@ -726,15 +529,7 @@
                 text: "ما اسم المرضعة التي أرضعت النبي صلى الله عليه وسلم؟ Siapa nama ibu susuan Nabi SAW?",
                 answer: "Halimah As-Sa'diyah - حليمة السعدية",
                 score: 200,
-                imageUrl: "",
-                type: "multiple-choice",
-                options: {
-                    A: "Aminah binti Wahab",
-                    B: "Halimah As-Sa'diyah",
-                    C: "Barakah Ummu Aiman",
-                    D: "Khadijah binti Khuwailid"
-                },
-                correctAnswer: "B"
+                imageUrl: ""
             },
             {
                 id: 7,
@@ -742,15 +537,7 @@
                 text: "في أي عام حدثت بعثة النبي صلى الله عليه وسلم؟ Pada tahun berapa Nabi SAW diutus menjadi Rasul?",
                 answer: "610 M (usia 40 tahun) - عام ٦١٠ م",
                 score: 300,
-                imageUrl: "",
-                type: "multiple-choice",
-                options: {
-                    A: "610 M (usia 40 tahun)",
-                    B: "620 M (usia 50 tahun)",
-                    C: "600 M (usia 30 tahun)",
-                    D: "571 M (saat lahir)"
-                },
-                correctAnswer: "A"
+                imageUrl: ""
             },
             {
                 id: 8,
@@ -758,15 +545,7 @@
                 text: "ما اسم الغار الذي كان يتعبد فيه النبي صلى الله عليه وسلم؟ Apa nama gua tempat Nabi SAW beribadah?",
                 answer: "Gua Hira - غار حراء",
                 score: 250,
-                imageUrl: "",
-                type: "multiple-choice",
-                options: {
-                    A: "Gua Tsur",
-                    B: "Gua Hira",
-                    C: "Gua Uhud",
-                    D: "Gua Quba"
-                },
-                correctAnswer: "B"
+                imageUrl: ""
             },
             {
                 id: 9,
@@ -774,15 +553,7 @@
                 text: "من هو أول من آمن بالنبي صلى الله عليه وسلم من الرجال؟ Siapa laki-laki pertama yang beriman kepada Nabi SAW?",
                 answer: "Abu Bakar Ash-Shiddiq - أبو بكر الصديق",
                 score: 200,
-                imageUrl: "",
-                type: "multiple-choice",
-                options: {
-                    A: "Abu Bakar Ash-Shiddiq",
-                    B: "Umar bin Khattab",
-                    C: "Utsman bin Affan",
-                    D: "Ali bin Abi Thalib"
-                },
-                correctAnswer: "A"
+                imageUrl: ""
             },
             {
                 id: 10,
@@ -790,40 +561,15 @@
                 text: "مَا هَذَا؟ Apa ini?",
                 answer: "Kitab/Buku - كِتَاب",
                 score: 150,
-                imageUrl: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop",
-                type: "response"
+                imageUrl: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop"
             },
             {
                 id: 11,
-                category: "Hijrah",
-                text: "إلى أين هاجر النبي صلى الله عليه وسلم؟ Ke mana Nabi SAW berhijrah?",
-                answer: "Madinah Al-Munawwarah - المدينة المنورة",
+                category: "Bahasa Arab",
+                text: "مَا اسْمُ هَذَا الْمَسْجِدِ؟",
+                answer: "المسجد الحرام - Masjidil Haram",
                 score: 200,
-                imageUrl: "",
-                type: "multiple-choice",
-                options: {
-                    A: "Thaif",
-                    B: "Madinah Al-Munawwarah",
-                    C: "Habasyah (Ethiopia)",
-                    D: "Syam"
-                },
-                correctAnswer: "B"
-            },
-            {
-                id: 12,
-                category: "Akhlak Nabi",
-                text: "ما هو لقب النبي محمد صلى الله عليه وسلم قبل البعثة؟ Apa gelar Nabi Muhammad SAW sebelum diutus?",
-                answer: "Al-Amin (Yang Terpercaya) - الأمين",
-                score: 150,
-                imageUrl: "",
-                type: "multiple-choice",
-                options: {
-                    A: "Al-Amin (Yang Terpercaya)",
-                    B: "As-Shadiq (Yang Jujur)",
-                    C: "Al-Mustafa (Yang Terpilih)",
-                    D: "Ar-Rasul (Utusan)"
-                },
-                correctAnswer: "A"
+                imageUrl: ""
             }
         ];
         let currentQuestionIndex = 0;
@@ -876,27 +622,11 @@
         const nextAutoBtn = document.getElementById('nextAutoBtn');
         const manualModeRadio = document.getElementById('manualMode');
         const autoModeRadio = document.getElementById('autoMode');
-        const multipleChoiceTypeRadio = document.getElementById('multipleChoiceType');
-        const responseTypeRadio = document.getElementById('responseType');
-        const multipleChoiceOptions = document.getElementById('multipleChoiceOptions');
-        const mainTitleInput = document.getElementById('mainTitle');
-        const subtitleInput = document.getElementById('subtitle');
-        const optionA = document.getElementById('optionA');
-        const optionB = document.getElementById('optionB');
-        const optionC = document.getElementById('optionC');
-        const optionD = document.getElementById('optionD');
-        const correctAnswerSelect = document.getElementById('correctAnswer');
-        const multipleChoiceDisplay = document.getElementById('multipleChoiceDisplay');
-        const choiceA = document.getElementById('choiceA');
-        const choiceB = document.getElementById('choiceB');
-        const choiceC = document.getElementById('choiceC');
-        const choiceD = document.getElementById('choiceD');
 
         // Initialize
         generateTeamInputs();
         updateQuestionPreview();
         loadGameState();
-        toggleQuestionTypeOptions();
 
         // Event listeners
         teamCountInput.addEventListener('change', generateTeamInputs);
@@ -912,175 +642,10 @@
         showAnswerBtn.addEventListener('click', showAnswer);
         pauseAutoBtn.addEventListener('click', toggleAutoPause);
         nextAutoBtn.addEventListener('click', skipToNextQuestion);
-        multipleChoiceTypeRadio.addEventListener('change', toggleQuestionTypeOptions);
-        responseTypeRadio.addEventListener('change', toggleQuestionTypeOptions);
-        mainTitleInput.addEventListener('input', updateAppTitle);
-        subtitleInput.addEventListener('input', updateAppSubtitle);
-        
-        // Multiple choice button listeners
-        choiceA.addEventListener('click', () => handleChoiceClick('A'));
-        choiceB.addEventListener('click', () => handleChoiceClick('B'));
-        choiceC.addEventListener('click', () => handleChoiceClick('C'));
-        choiceD.addEventListener('click', () => handleChoiceClick('D'));
 
         function switchToQuiz() {
             settingsPage.classList.add('hidden');
             quizPage.classList.remove('hidden');
-        }
-
-        function toggleQuestionTypeOptions() {
-            if (multipleChoiceTypeRadio.checked) {
-                multipleChoiceOptions.classList.remove('hidden');
-            } else {
-                multipleChoiceOptions.classList.add('hidden');
-            }
-        }
-
-        function updateAppTitle() {
-            appTitle = mainTitleInput.value.trim() || "Game Show Cerdas Cermat";
-            updateHeaderDisplay();
-            saveGameState();
-        }
-
-        function updateAppSubtitle() {
-            appSubtitle = subtitleInput.value.trim() || "";
-            updateHeaderDisplay();
-            saveGameState();
-        }
-
-        function updateHeaderDisplay() {
-            const headerTitle = document.querySelector('h1');
-            const headerSubtitle = document.querySelector('.arabic-text');
-            
-            if (headerTitle) {
-                headerTitle.innerHTML = `<i class="fas fa-mosque text-yellow-300 mr-2 text-2xl"></i>${appTitle}`;
-            }
-            
-            if (headerSubtitle) {
-                if (appSubtitle) {
-                    headerSubtitle.textContent = appSubtitle;
-                    headerSubtitle.style.display = 'block';
-                } else {
-                    headerSubtitle.style.display = 'none';
-                }
-            }
-        }
-
-        function handleChoiceClick(displayLetter) {
-            // Only allow choice selection if there's an active team (manual mode) or in auto mode
-            if (gameMode === 'manual' && !activeTeam) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Pilih Tim Dulu!',
-                    text: 'Silakan pilih tim yang akan menjawab',
-                    confirmButtonColor: '#f59e0b'
-                });
-                return;
-            }
-
-            const currentQuestion = questions[currentQuestionIndex];
-            if (!currentQuestion || currentQuestion.type !== 'multiple-choice') return;
-
-            // Find which button was clicked and get its original letter
-            const clickedButton = document.getElementById(`choice${displayLetter}`);
-            const originalLetter = clickedButton.getAttribute('data-original-letter');
-            
-            // Check if answer is correct
-            const isCorrect = originalLetter === currentQuestion.correctAnswer;
-            
-            // Visual feedback
-            const allChoices = [choiceA, choiceB, choiceC, choiceD];
-            allChoices.forEach(choice => {
-                choice.style.pointerEvents = 'none'; // Disable all buttons
-                const choiceOriginalLetter = choice.getAttribute('data-original-letter');
-                
-                if (choiceOriginalLetter === currentQuestion.correctAnswer) {
-                    // Highlight correct answer in green
-                    choice.classList.remove('bg-blue-600', 'bg-green-600', 'bg-orange-600', 'bg-purple-600');
-                    choice.classList.add('bg-green-500');
-                } else if (choice === clickedButton && !isCorrect) {
-                    // Highlight wrong selected answer in red
-                    choice.classList.remove('bg-blue-600', 'bg-green-600', 'bg-orange-600', 'bg-purple-600');
-                    choice.classList.add('bg-red-500');
-                }
-            });
-
-            // Calculate points
-            let points;
-            if (gameMode === 'auto') {
-                points = isCorrect ? 100 : -50;
-            } else {
-                points = isCorrect ? currentQuestion.score : -Math.floor(currentQuestion.score * 0.5);
-            }
-
-            // Get active team
-            let teamToUpdate;
-            if (gameMode === 'auto') {
-                teamToUpdate = teams[currentTeamTurn];
-            } else {
-                teamToUpdate = teams.find(t => t.id === activeTeam);
-            }
-
-            if (teamToUpdate) {
-                // Update score
-                teamToUpdate.score = Math.max(0, teamToUpdate.score + points);
-                
-                // Stop timer
-                clearInterval(timer);
-                resetTimerBorder();
-                timeLeft = defaultTime;
-                
-                generateScoreboard();
-                saveGameState();
-                
-                const resultText = isCorrect ? 'Benar!' : 'Salah!';
-                const resultIcon = isCorrect ? 'success' : 'error';
-                
-                Swal.fire({
-                    icon: resultIcon,
-                    title: resultText,
-                    text: `${teamToUpdate.name} ${points > 0 ? '+' : ''}${points} poin`,
-                    timer: 2000,
-                    showConfirmButton: false
-                }).then(() => {
-                    // Re-enable buttons after feedback
-                    allChoices.forEach(choice => {
-                        choice.style.pointerEvents = 'auto';
-                    });
-                    
-                    // Reset button colors for next question
-                    resetChoiceButtonColors();
-                });
-
-                // In auto mode, automatically move to next team after scoring
-                if (gameMode === 'auto' && !isAutoPaused) {
-                    setTimeout(() => {
-                        currentTeamTurn = (currentTeamTurn + 1) % teams.length;
-                        
-                        // If we've completed a full round, move to next question
-                        if (currentTeamTurn === 0) {
-                            changeQuestion(1);
-                        } else {
-                            startAutoMode();
-                        }
-                    }, 2500); // Wait 2.5 seconds after scoring
-                }
-            }
-        }
-
-        function resetChoiceButtonColors() {
-            const choices = [choiceA, choiceB, choiceC, choiceD];
-            const colors = [
-                'bg-blue-600 hover:bg-blue-700',
-                'bg-green-600 hover:bg-green-700', 
-                'bg-orange-600 hover:bg-orange-700',
-                'bg-purple-600 hover:bg-purple-700'
-            ];
-            
-            choices.forEach((choice, index) => {
-                choice.className = `choice-button ${colors[index]} text-white p-4 rounded-lg text-left font-medium transition-all duration-200 transform hover:scale-105 shadow-lg`;
-                choice.style.pointerEvents = 'auto';
-            });
         }
 
 
@@ -1190,29 +755,14 @@
                     questions = [];
                     jsonData.forEach((row, index) => {
                         if (row[1] && row[1].toString().trim()) { // Column B for question
-                            const questionData = {
+                            questions.push({
                                 id: Date.now() + index,
                                 category: row[0] ? row[0].toString().trim() : 'Maulid Nabi',
                                 text: row[1].toString().trim(),
                                 answer: row[2] ? row[2].toString().trim() : '',
                                 score: row[3] ? parseInt(row[3]) || 100 : 100,
-                                imageUrl: row[4] ? row[4].toString().trim() : '',
-                                type: 'response' // Default to response type for Excel import
-                            };
-                            
-                            // Check if columns F, G, H, I exist for multiple choice options
-                            if (row[5] && row[6] && row[7] && row[8]) {
-                                questionData.type = 'multiple-choice';
-                                questionData.options = {
-                                    A: row[5].toString().trim(),
-                                    B: row[6].toString().trim(),
-                                    C: row[7].toString().trim(),
-                                    D: row[8].toString().trim()
-                                };
-                                questionData.correctAnswer = row[9] ? row[9].toString().trim().toUpperCase() : 'A';
-                            }
-                            
-                            questions.push(questionData);
+                                imageUrl: row[4] ? row[4].toString().trim() : ''
+                            });
                         }
                     });
 
@@ -1242,7 +792,6 @@
             const answerContent = manualAnswer.value.trim();
             const scoreValue = parseInt(manualScore.value) || 100;
             const imageUrlContent = manualImageUrl.value.trim();
-            const currentQuestionType = multipleChoiceTypeRadio.checked ? 'multiple-choice' : 'response';
             
             if (!questionContent) {
                 Swal.fire({
@@ -1254,43 +803,14 @@
                 return;
             }
 
-            const questionData = {
+            questions.push({
                 id: Date.now(),
                 category: categoryContent,
                 text: questionContent,
                 answer: answerContent,
                 score: scoreValue,
-                imageUrl: imageUrlContent,
-                type: currentQuestionType
-            };
-
-            // Add multiple choice options if selected
-            if (currentQuestionType === 'multiple-choice') {
-                const optionAValue = optionA.value.trim();
-                const optionBValue = optionB.value.trim();
-                const optionCValue = optionC.value.trim();
-                const optionDValue = optionD.value.trim();
-                
-                if (!optionAValue || !optionBValue || !optionCValue || !optionDValue) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Peringatan!',
-                        text: 'Silakan lengkapi semua pilihan jawaban A, B, C, D',
-                        confirmButtonColor: '#f59e0b'
-                    });
-                    return;
-                }
-                
-                questionData.options = {
-                    A: optionAValue,
-                    B: optionBValue,
-                    C: optionCValue,
-                    D: optionDValue
-                };
-                questionData.correctAnswer = correctAnswerSelect.value;
-            }
-
-            questions.push(questionData);
+                imageUrl: imageUrlContent
+            });
 
             // Clear form
             manualCategory.value = '';
@@ -1298,11 +818,6 @@
             manualAnswer.value = '';
             manualScore.value = '100';
             manualImageUrl.value = '';
-            optionA.value = '';
-            optionB.value = '';
-            optionC.value = '';
-            optionD.value = '';
-            correctAnswerSelect.value = 'A';
             
             updateQuestionPreview();
             
@@ -1317,38 +832,19 @@
         function updateQuestionPreview() {
             if (questions.length > 0) {
                 questionPreview.classList.remove('hidden');
-                questionList.innerHTML = questions.map((q, index) => {
-                    const typeIcon = q.type === 'multiple-choice' ? 
-                        '<i class="fas fa-list-ul mr-1"></i>Multiple Choice' : 
-                        '<i class="fas fa-comment-dots mr-1"></i>Response';
-                    const typeColor = q.type === 'multiple-choice' ? 
-                        'bg-purple-100 text-purple-800' : 
-                        'bg-pink-100 text-pink-800';
-                    
-                    return `<div class="mb-2 p-2 bg-white rounded border-l-4 border-emerald-500">
+                questionList.innerHTML = questions.map((q, index) => 
+                    `<div class="mb-2 p-2 bg-white rounded border-l-4 border-emerald-500">
                         <div class="flex items-center justify-between mb-1">
                             <span class="font-medium text-emerald-600">${index + 1}.</span>
                             <div class="flex gap-2">
-                                <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">${q.category}</span>
-                                <span class="${typeColor} px-2 py-1 rounded text-xs">${typeIcon}</span>
+                                <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">${q.category}</span>
                                 <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">${q.score} poin</span>
                                 ${q.imageUrl ? '<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs"><i class="fas fa-image mr-1"></i>Gambar</span>' : ''}
                             </div>
                         </div>
                         <span class="mixed-text">${q.text}</span>
-                        ${q.type === 'multiple-choice' && q.options ? 
-                            `<div class="mt-2 text-xs text-gray-600">
-                                <div class="grid grid-cols-2 gap-1">
-                                    <span>A: ${q.options.A}</span>
-                                    <span>B: ${q.options.B}</span>
-                                    <span>C: ${q.options.C}</span>
-                                    <span>D: ${q.options.D}</span>
-                                </div>
-                                <span class="font-medium text-green-600">Jawaban: ${q.correctAnswer}</span>
-                            </div>` : ''
-                        }
-                    </div>`;
-                }).join('');
+                    </div>`
+                ).join('');
             } else {
                 questionPreview.classList.add('hidden');
             }
@@ -1378,9 +874,8 @@
                 return;
             }
 
-            // Set game mode and question type from settings
+            // Set game mode from settings
             gameMode = autoModeRadio.checked ? 'auto' : 'manual';
-            questionType = multipleChoiceTypeRadio.checked ? 'multiple-choice' : 'response';
             
             // Update mode display
             if (gameMode === 'auto') {
@@ -1613,15 +1108,6 @@
             }
         }
 
-        function shuffleArray(array) {
-            const shuffled = [...array];
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
-            return shuffled;
-        }
-
         function updateQuestionDisplay() {
             if (questions.length > 0) {
                 const currentQuestion = questions[currentQuestionIndex];
@@ -1648,60 +1134,6 @@
                     questionImageContainer.classList.add('hidden');
                     // Keep the direction class but update layout class
                     questionText.className = questionText.className.replace('question-with-image', 'question-text-only');
-                }
-                
-                // Handle multiple choice display
-                if (currentQuestion.type === 'multiple-choice' && currentQuestion.options) {
-                    multipleChoiceDisplay.classList.remove('hidden');
-                    
-                    // Create array of option texts only (without letters)
-                    const optionTexts = [
-                        currentQuestion.options.A,
-                        currentQuestion.options.B,
-                        currentQuestion.options.C,
-                        currentQuestion.options.D
-                    ];
-                    
-                    // Shuffle only the texts
-                    const shuffledTexts = shuffleArray(optionTexts);
-                    
-                    // Update choice buttons - labels stay A, B, C, D but texts are shuffled
-                    const choiceButtons = [choiceA, choiceB, choiceC, choiceD];
-                    const displayLabels = ['A', 'B', 'C', 'D'];
-                    
-                    shuffledTexts.forEach((text, index) => {
-                        const button = choiceButtons[index];
-                        const letterSpan = button.querySelector('.choice-letter');
-                        const textSpan = button.querySelector('.choice-text');
-                        
-                        // Label stays in order A, B, C, D
-                        letterSpan.textContent = displayLabels[index];
-                        textSpan.textContent = text;
-                        
-                        // Find which original letter this text belongs to
-                        let originalLetter = 'A';
-                        if (text === currentQuestion.options.A) originalLetter = 'A';
-                        else if (text === currentQuestion.options.B) originalLetter = 'B';
-                        else if (text === currentQuestion.options.C) originalLetter = 'C';
-                        else if (text === currentQuestion.options.D) originalLetter = 'D';
-                        
-                        // Store the original letter for answer checking
-                        button.setAttribute('data-original-letter', originalLetter);
-                        
-                        // Update colors based on position
-                        const colors = [
-                            { bg: 'bg-blue-600', hover: 'hover:bg-blue-700', letter: 'text-blue-600' },
-                            { bg: 'bg-green-600', hover: 'hover:bg-green-700', letter: 'text-green-600' },
-                            { bg: 'bg-orange-600', hover: 'hover:bg-orange-700', letter: 'text-orange-600' },
-                            { bg: 'bg-purple-600', hover: 'hover:bg-purple-700', letter: 'text-purple-600' }
-                        ];
-                        
-                        const color = colors[index];
-                        button.className = `choice-button ${color.bg} ${color.hover} text-white p-4 rounded-lg text-left font-medium transition-all duration-200 transform hover:scale-105 shadow-lg`;
-                        letterSpan.className = `choice-letter bg-white ${color.letter} px-3 py-1 rounded-full font-bold mr-3`;
-                    });
-                } else {
-                    multipleChoiceDisplay.classList.add('hidden');
                 }
                 
                 // Update navigation buttons
@@ -1738,9 +1170,6 @@
                 resetTimerBorder();
                 timeLeft = defaultTime;
                 answerDisplay.classList.add('hidden');
-                
-                // Reset choice button colors when changing questions
-                resetChoiceButtonColors();
                 
                 // In auto mode, restart with first team
                 if (gameMode === 'auto') {
@@ -1779,16 +1208,7 @@
         function showAnswer() {
             if (questions.length > 0 && questions[currentQuestionIndex]) {
                 const currentQuestion = questions[currentQuestionIndex];
-                let answer = currentQuestion.answer || 'Kunci jawaban tidak tersedia';
-                
-                // For multiple choice questions, also show the correct option
-                if (currentQuestion.type === 'multiple-choice' && currentQuestion.options && currentQuestion.correctAnswer) {
-                    const correctOption = currentQuestion.options[currentQuestion.correctAnswer];
-                    answer = `<div class="mb-2"><strong>Jawaban: ${currentQuestion.correctAnswer}</strong></div><div>${correctOption}</div>`;
-                    if (currentQuestion.answer) {
-                        answer += `<div class="mt-2 text-sm text-blue-700">${currentQuestion.answer}</div>`;
-                    }
-                }
+                const answer = currentQuestion.answer || 'Kunci jawaban tidak tersedia';
                 
                 answerText.innerHTML = answer;
                 answerDisplay.classList.toggle('hidden');
@@ -1800,9 +1220,7 @@
                 teams: teams,
                 questions: questions,
                 currentQuestionIndex: currentQuestionIndex,
-                defaultTime: defaultTime,
-                appTitle: appTitle,
-                appSubtitle: appSubtitle
+                defaultTime: defaultTime
             };
             localStorage.setItem('maulidQuizGame', JSON.stringify(gameState));
         }
@@ -1847,21 +1265,11 @@
                         defaultTimerInput.value = defaultTime;
                         timeLeft = defaultTime;
                     }
-                    if (gameState.appTitle) {
-                        appTitle = gameState.appTitle;
-                        mainTitleInput.value = appTitle;
-                    }
-                    if (gameState.appSubtitle !== undefined) {
-                        appSubtitle = gameState.appSubtitle;
-                        subtitleInput.value = appSubtitle;
-                    }
-                    // Update header display with loaded values
-                    updateHeaderDisplay();
                 } catch (error) {
                     console.log('Error loading game state:', error);
                 }
             }
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97ced1ab527844b9',t:'MTc1NzUwNjE5My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97ce5b9152f0dfc6',t:'MTc1NzUwMTM1Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
