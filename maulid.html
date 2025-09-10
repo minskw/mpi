@@ -213,17 +213,13 @@
                 <div class="light"></div>
                 <div class="light"></div>
             </div>
-<div class="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 relative z-10">
-    <h1 class="text-2xl font-bold text-white mb-1 drop-shadow-lg flex items-center">
-        <i class="fas fa-mosque text-white mr-2 text-2xl"></i>
-        Game Show Cerdas Cermat
-        <i class="fas fa-graduation-cap text-white ml-2 text-2xl"></i>
-    </h1>
-    <p class="text-white text-lg arabic-text drop-shadow-md">
-        Peringatan Maulid Nabi Muhammad SAW 1447H
-    </p>
-</div>
-
+            <div class="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 relative z-10">
+                <h1 class="text-2xl font-bold text-white mb-1 drop-shadow-lg">
+                    <i class="fas fa-mosque text-yellow-300 mr-2 text-2xl"></i>
+                    Game Show Cerdas Cermat Maulid Nabi Muhammad
+                </h1>
+                <p class="text-white text-lg arabic-text drop-shadow-md">صلى الله عليه وسلم</p>
+            </div>
         </div>
 
 
@@ -235,6 +231,50 @@
                     <i class="fas fa-cog text-emerald-500 mr-2"></i>Pengaturan Game
                 </h2>
                 
+                <!-- Title & Subtitle Settings -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Pengaturan Judul & Subtitle</h3>
+                    <div class="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg p-6 border border-emerald-200">
+                        <div class="grid md:grid-cols-1 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-2">
+                                    <i class="fas fa-heading text-emerald-500 mr-1"></i>Judul Utama
+                                </label>
+                                <input type="text" id="mainTitle" value="Game Show Cerdas Cermat Maulid Nabi Muhammad" 
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                       placeholder="Masukkan judul utama aplikasi">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-2">
+                                    <i class="fas fa-quote-right text-emerald-500 mr-1"></i>Subtitle (Bahasa Arab/Latin)
+                                </label>
+                                <input type="text" id="subtitle" value="صلى الله عليه وسلم" 
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 arabic-text"
+                                       placeholder="Masukkan subtitle (mendukung teks Arab)">
+                                <p class="text-xs text-gray-500 mt-1">
+                                    <strong>Contoh untuk mata pelajaran lain:</strong><br>
+                                    • Matematika: "Mari Belajar dengan Menyenangkan"<br>
+                                    • Bahasa Arab: "تعلم اللغة العربية بالمرح"<br>
+                                    • IPA: "Eksplorasi Sains Bersama"<br>
+                                    • Sejarah: "Mengenal Masa Lalu untuk Masa Depan"
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <div class="flex items-start">
+                                <i class="fas fa-info-circle text-blue-500 mr-2 mt-1"></i>
+                                <div>
+                                    <p class="text-sm text-blue-800 font-medium">Tips Penggunaan:</p>
+                                    <p class="text-sm text-blue-700">
+                                        Sesuaikan judul dan subtitle dengan mata pelajaran atau topik yang akan diajarkan. 
+                                        Aplikasi ini dapat digunakan untuk semua mata pelajaran di kelas!
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Team Settings -->
                 <div class="mb-8">
                     <h3 class="text-lg font-semibold text-gray-700 mb-4">Pengaturan Tim</h3>
@@ -597,6 +637,8 @@
         let currentTeamTurn = 0;
         let autoTimer = null;
         let isAutoPaused = false;
+        let appTitle = "Game Show Cerdas Cermat Maulid Nabi Muhammad";
+        let appSubtitle = "صلى الله عليه وسلم";
         let questions = [
             {
                 id: 1,
@@ -637,7 +679,14 @@
                 answer: "Makkah Al-Mukarramah - مكة المكرمة",
                 score: 100,
                 imageUrl: "",
-                type: "response"
+                type: "multiple-choice",
+                options: {
+                    A: "Madinah Al-Munawwarah",
+                    B: "Makkah Al-Mukarramah",
+                    C: "Thaif",
+                    D: "Yaman"
+                },
+                correctAnswer: "B"
             },
             {
                 id: 4,
@@ -645,7 +694,15 @@
                 text: "ما اسم جد النبي محمد صلى الله عليه وسلم؟ Siapa nama kakek Nabi Muhammad SAW?",
                 answer: "Abdul Muthalib - عبد المطلب",
                 score: 200,
-                imageUrl: ""
+                imageUrl: "",
+                type: "multiple-choice",
+                options: {
+                    A: "Abdul Muthalib",
+                    B: "Abdullah",
+                    C: "Abu Thalib",
+                    D: "Hashim"
+                },
+                correctAnswer: "A"
             },
             {
                 id: 5,
@@ -653,7 +710,15 @@
                 text: "كم كان عمر النبي صلى الله عليه وسلم عندما توفي والده؟ Berapa usia Nabi SAW ketika ayahnya meninggal?",
                 answer: "Belum lahir (masih dalam kandungan) - لم يولد بعد",
                 score: 250,
-                imageUrl: ""
+                imageUrl: "",
+                type: "multiple-choice",
+                options: {
+                    A: "2 tahun",
+                    B: "6 tahun",
+                    C: "Belum lahir (dalam kandungan)",
+                    D: "1 tahun"
+                },
+                correctAnswer: "C"
             },
             {
                 id: 6,
@@ -661,7 +726,15 @@
                 text: "ما اسم المرضعة التي أرضعت النبي صلى الله عليه وسلم؟ Siapa nama ibu susuan Nabi SAW?",
                 answer: "Halimah As-Sa'diyah - حليمة السعدية",
                 score: 200,
-                imageUrl: ""
+                imageUrl: "",
+                type: "multiple-choice",
+                options: {
+                    A: "Aminah binti Wahab",
+                    B: "Halimah As-Sa'diyah",
+                    C: "Barakah Ummu Aiman",
+                    D: "Khadijah binti Khuwailid"
+                },
+                correctAnswer: "B"
             },
             {
                 id: 7,
@@ -669,7 +742,15 @@
                 text: "في أي عام حدثت بعثة النبي صلى الله عليه وسلم؟ Pada tahun berapa Nabi SAW diutus menjadi Rasul?",
                 answer: "610 M (usia 40 tahun) - عام ٦١٠ م",
                 score: 300,
-                imageUrl: ""
+                imageUrl: "",
+                type: "multiple-choice",
+                options: {
+                    A: "610 M (usia 40 tahun)",
+                    B: "620 M (usia 50 tahun)",
+                    C: "600 M (usia 30 tahun)",
+                    D: "571 M (saat lahir)"
+                },
+                correctAnswer: "A"
             },
             {
                 id: 8,
@@ -677,7 +758,15 @@
                 text: "ما اسم الغار الذي كان يتعبد فيه النبي صلى الله عليه وسلم؟ Apa nama gua tempat Nabi SAW beribadah?",
                 answer: "Gua Hira - غار حراء",
                 score: 250,
-                imageUrl: ""
+                imageUrl: "",
+                type: "multiple-choice",
+                options: {
+                    A: "Gua Tsur",
+                    B: "Gua Hira",
+                    C: "Gua Uhud",
+                    D: "Gua Quba"
+                },
+                correctAnswer: "B"
             },
             {
                 id: 9,
@@ -685,7 +774,15 @@
                 text: "من هو أول من آمن بالنبي صلى الله عليه وسلم من الرجال؟ Siapa laki-laki pertama yang beriman kepada Nabi SAW?",
                 answer: "Abu Bakar Ash-Shiddiq - أبو بكر الصديق",
                 score: 200,
-                imageUrl: ""
+                imageUrl: "",
+                type: "multiple-choice",
+                options: {
+                    A: "Abu Bakar Ash-Shiddiq",
+                    B: "Umar bin Khattab",
+                    C: "Utsman bin Affan",
+                    D: "Ali bin Abi Thalib"
+                },
+                correctAnswer: "A"
             },
             {
                 id: 10,
@@ -693,15 +790,40 @@
                 text: "مَا هَذَا؟ Apa ini?",
                 answer: "Kitab/Buku - كِتَاب",
                 score: 150,
-                imageUrl: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop"
+                imageUrl: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop",
+                type: "response"
             },
             {
                 id: 11,
-                category: "Bahasa Arab",
-                text: "مَا اسْمُ هَذَا الْمَسْجِدِ؟",
-                answer: "المسجد الحرام - Masjidil Haram",
+                category: "Hijrah",
+                text: "إلى أين هاجر النبي صلى الله عليه وسلم؟ Ke mana Nabi SAW berhijrah?",
+                answer: "Madinah Al-Munawwarah - المدينة المنورة",
                 score: 200,
-                imageUrl: ""
+                imageUrl: "",
+                type: "multiple-choice",
+                options: {
+                    A: "Thaif",
+                    B: "Madinah Al-Munawwarah",
+                    C: "Habasyah (Ethiopia)",
+                    D: "Syam"
+                },
+                correctAnswer: "B"
+            },
+            {
+                id: 12,
+                category: "Akhlak Nabi",
+                text: "ما هو لقب النبي محمد صلى الله عليه وسلم قبل البعثة؟ Apa gelar Nabi Muhammad SAW sebelum diutus?",
+                answer: "Al-Amin (Yang Terpercaya) - الأمين",
+                score: 150,
+                imageUrl: "",
+                type: "multiple-choice",
+                options: {
+                    A: "Al-Amin (Yang Terpercaya)",
+                    B: "As-Shadiq (Yang Jujur)",
+                    C: "Al-Mustafa (Yang Terpilih)",
+                    D: "Ar-Rasul (Utusan)"
+                },
+                correctAnswer: "A"
             }
         ];
         let currentQuestionIndex = 0;
@@ -757,6 +879,8 @@
         const multipleChoiceTypeRadio = document.getElementById('multipleChoiceType');
         const responseTypeRadio = document.getElementById('responseType');
         const multipleChoiceOptions = document.getElementById('multipleChoiceOptions');
+        const mainTitleInput = document.getElementById('mainTitle');
+        const subtitleInput = document.getElementById('subtitle');
         const optionA = document.getElementById('optionA');
         const optionB = document.getElementById('optionB');
         const optionC = document.getElementById('optionC');
@@ -790,6 +914,8 @@
         nextAutoBtn.addEventListener('click', skipToNextQuestion);
         multipleChoiceTypeRadio.addEventListener('change', toggleQuestionTypeOptions);
         responseTypeRadio.addEventListener('change', toggleQuestionTypeOptions);
+        mainTitleInput.addEventListener('input', updateAppTitle);
+        subtitleInput.addEventListener('input', updateAppSubtitle);
         
         // Multiple choice button listeners
         choiceA.addEventListener('click', () => handleChoiceClick('A'));
@@ -807,6 +933,36 @@
                 multipleChoiceOptions.classList.remove('hidden');
             } else {
                 multipleChoiceOptions.classList.add('hidden');
+            }
+        }
+
+        function updateAppTitle() {
+            appTitle = mainTitleInput.value.trim() || "Game Show Cerdas Cermat";
+            updateHeaderDisplay();
+            saveGameState();
+        }
+
+        function updateAppSubtitle() {
+            appSubtitle = subtitleInput.value.trim() || "";
+            updateHeaderDisplay();
+            saveGameState();
+        }
+
+        function updateHeaderDisplay() {
+            const headerTitle = document.querySelector('h1');
+            const headerSubtitle = document.querySelector('.arabic-text');
+            
+            if (headerTitle) {
+                headerTitle.innerHTML = `<i class="fas fa-mosque text-yellow-300 mr-2 text-2xl"></i>${appTitle}`;
+            }
+            
+            if (headerSubtitle) {
+                if (appSubtitle) {
+                    headerSubtitle.textContent = appSubtitle;
+                    headerSubtitle.style.display = 'block';
+                } else {
+                    headerSubtitle.style.display = 'none';
+                }
             }
         }
 
@@ -1644,7 +1800,9 @@
                 teams: teams,
                 questions: questions,
                 currentQuestionIndex: currentQuestionIndex,
-                defaultTime: defaultTime
+                defaultTime: defaultTime,
+                appTitle: appTitle,
+                appSubtitle: appSubtitle
             };
             localStorage.setItem('maulidQuizGame', JSON.stringify(gameState));
         }
@@ -1689,11 +1847,21 @@
                         defaultTimerInput.value = defaultTime;
                         timeLeft = defaultTime;
                     }
+                    if (gameState.appTitle) {
+                        appTitle = gameState.appTitle;
+                        mainTitleInput.value = appTitle;
+                    }
+                    if (gameState.appSubtitle !== undefined) {
+                        appSubtitle = gameState.appSubtitle;
+                        subtitleInput.value = appSubtitle;
+                    }
+                    // Update header display with loaded values
+                    updateHeaderDisplay();
                 } catch (error) {
                     console.log('Error loading game state:', error);
                 }
             }
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97ceb652f1c2dfc6',t:'MTc1NzUwNTA3My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97ced1ab527844b9',t:'MTc1NzUwNjE5My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
