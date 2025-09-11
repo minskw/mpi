@@ -35,6 +35,8 @@
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             border: 3px solid #ffd700;
+            position: relative;
+            overflow: hidden;
         }
 
         .jeopardy-logo {
@@ -44,6 +46,8 @@
             text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
             margin-bottom: 10px;
             letter-spacing: 3px;
+            position: relative;
+            z-index: 2;
         }
 
         .jeopardy-subtitle {
@@ -51,8 +55,44 @@
             color: white;
             font-weight: 700;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
         }
 
+        /* Subtitle editable */
+        .jeopardy-subtitle[contenteditable="true"] {
+            border-bottom: 2px dashed rgba(255, 215, 0, 0.6);
+            outline: none;
+            cursor: text;
+        }
+
+        /* Animasi bintang */
+        .star {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ffd700;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ffd700, 0 0 20px #ffeb3b;
+            animation: rotateStar 6s linear infinite;
+        }
+
+        @keyframes rotateStar {
+            from { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+        }
+
+        .stars-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            z-index: 1;
+            pointer-events: none;
+        }
         /* Scoreboard */
         .scoreboard {
             background: linear-gradient(135deg, #0d47a1, #1565c0);
@@ -592,12 +632,19 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <div class="jeopardy-header">
-            <h1 class="jeopardy-logo">JEOPARDY!</h1>
-            <p class="jeopardy-subtitle">🕌 EDISI MAULID NABI MUHAMMAD SAW 🕌</p>
-        </div>
-
+<!-- Header -->
+<div class="jeopardy-header">
+    <div class="stars-container">
+        <span class="star" style="top:0; left:50%; animation-duration:6s;"></span>
+        <span class="star" style="top:20%; left:80%; animation-duration:8s;"></span>
+        <span class="star" style="top:70%; left:20%; animation-duration:10s;"></span>
+        <span class="star" style="top:90%; left:60%; animation-duration:12s;"></span>
+    </div>
+    <h1 class="jeopardy-logo">THE SMARTEST STUDENT IN THIS CLASS</h1>
+    <p id="gameSubtitle" class="jeopardy-subtitle" contenteditable="true">
+        🕌 EDISI MAULID NABI MUHAMMAD SAW 🕌
+    </p>
+</div>
         <!-- Setup Screen -->
         <div id="setupScreen" class="setup-screen">
             <h2 class="setup-title">🎯 PERSIAPAN JEOPARDY 🎯</h2>
