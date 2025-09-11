@@ -74,15 +74,28 @@
             pointer-events: none;
         }
         
+        
         .light {
             position: absolute;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: radial-gradient(circle, #ffd700 0%, #ffed4e 50%, transparent 70%);
-            box-shadow: 0 0 15px #ffd700, 0 0 25px #ffd700, 0 0 35px #ffd700;
+            width: 18px;
+            height: 18px;
+            background: radial-gradient(circle, #ffd700 0%, #fff8b3 60%, transparent 80%);
+            box-shadow: 0 0 12px #ffd700, 0 0 20px #ffed4e;
             animation: moveLights 4s linear infinite;
+            clip-path: polygon(
+                50% 0%,
+                61% 35%,
+                98% 35%,
+                68% 57%,
+                79% 91%,
+                50% 70%,
+                21% 91%,
+                32% 57%,
+                2% 35%,
+                39% 35%
+            );
         }
+
         
         .light:nth-child(1) { animation-delay: 0s; }
         .light:nth-child(2) { animation-delay: 0.2s; }
@@ -573,6 +586,14 @@
             }
         ];
         let currentQuestionIndex = 0;
+    // 🔹 Fungsi untuk mengacak urutan soal
+    function shuffleQuestions() {
+        for (let i = questions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [questions[i], questions[j]] = [questions[j], questions[i]];
+        }
+    }
+    
         let activeTeam = null;
         let timer = null;
         let timeLeft = 30;
@@ -875,6 +896,8 @@
             }
 
             // Set game mode from settings
+            // 🔹 Acak soal sebelum mulai
+            shuffleQuestions();
             gameMode = autoModeRadio.checked ? 'auto' : 'manual';
             
             // Update mode display
