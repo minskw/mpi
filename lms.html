@@ -3,54 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emes Class - Learning Management System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>EduClass LMS - Google Apps Script</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <!-- Firebase SDK v9 -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
-    
-    <script>
-        // Firebase Configuration - PRODUCTION READY
-        const firebaseConfig = {
-            apiKey: "AIzaSyBY_QE1TeFyh0-zejlbEuHS3E3K0TquI4Y",
-            authDomain: "quizmaster-pro-ff3a2.firebaseapp.com",
-            databaseURL: "https://quizmaster-pro-ff3a2-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "quizmaster-pro-ff3a2",
-            storageBucket: "quizmaster-pro-ff3a2.firebasestorage.app",
-            messagingSenderId: "290206514077",
-            appId: "1:290206514077:web:aabfd60346f1bd9c6a4d74",
-            measurementId: "G-V9F20WVY15"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        
-        // Get Firebase services
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        const storage = firebase.storage();
-        
-        // Make Firebase available globally
-        window.firebaseApp = { auth, db, storage };
-    </script>
-
     <style>
         body {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Google Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
         }
-        
-        .loading-overlay {
+
+        /* Loading Spinner */
+        .loading {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255,255,255,0.9);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -61,7 +33,7 @@
             width: 40px;
             height: 40px;
             border: 4px solid #f3f3f3;
-            border-top: 4px solid #3b82f6;
+            border-top: 4px solid #4285f4;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -71,316 +43,701 @@
             100% { transform: rotate(360deg); }
         }
 
-        .glass-effect {
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #4285f4, #34a853);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .gradient-bg {
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Login Page */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
-        .card-hover {
+        .login-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .login-logo {
+            font-size: 3rem;
+            color: #4285f4;
+            margin-bottom: 1rem;
+        }
+
+        .login-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .role-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .role-option {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .role-option.selected {
+            border-color: #4285f4;
+            background: #f0f7ff;
+        }
+
+        .role-option i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-input {
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4285f4;
+        }
+
+        .btn-primary {
+            background: #4285f4;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #3367d6;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.5rem 0;
+            z-index: 100;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.5rem;
+            cursor: pointer;
             transition: all 0.3s ease;
+            color: #5f6368;
+            text-decoration: none;
+            min-width: 60px;
         }
 
-        .card-hover:hover {
+        .nav-item.active {
+            color: #4285f4;
+        }
+
+        .nav-item:hover {
+            color: #4285f4;
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-item span {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem 6rem 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #202124;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Class Cards */
+        .class-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .class-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .class-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
         }
 
+        .class-header {
+            height: 120px;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 1rem;
+            color: white;
+        }
+
+        .class-header.math {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .class-header.science {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .class-header.english {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        .class-header.history {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+        }
+
+        .class-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .class-teacher {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .class-body {
+            padding: 1rem;
+        }
+
+        .class-stats {
+            display: flex;
+            justify-content: space-between;
+            color: #5f6368;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .recent-activity {
+            background: #f8f9fa;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #5f6368;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #4285f4;
+            border: 2px solid #4285f4;
+        }
+
+        .btn-outline:hover {
+            background: #4285f4;
+            color: white;
+        }
+
+        .btn-success {
+            background: #34a853;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #2d8f47;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
+            transition: all 0.3s ease;
+            z-index: 99;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(66, 133, 244, 0.6);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .close {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #5f6368;
+        }
+
+        .close:hover {
+            color: #202124;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #202124;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Assignment List */
+        .assignment-list {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .assignment-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+            transition: background-color 0.3s ease;
+        }
+
+        .assignment-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .assignment-item:last-child {
+            border-bottom: none;
+        }
+
+        .assignment-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #4285f4;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1rem;
+        }
+
+        .assignment-info {
+            flex: 1;
+        }
+
+        .assignment-title {
+            font-weight: 600;
+            color: #202124;
+            margin-bottom: 0.25rem;
+        }
+
+        .assignment-meta {
+            color: #5f6368;
+            font-size: 0.9rem;
+        }
+
+        .assignment-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: #fef7e0;
+            color: #f57c00;
+        }
+
+        .status-submitted {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .status-overdue {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 1rem;
+            }
+
+            .main-content {
+                padding: 0 1rem 6rem 1rem;
+            }
+
+            .class-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-info span {
+                display: none;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #5f6368;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* File Upload */
+        .file-upload {
+            border: 2px dashed #e0e0e0;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .file-upload:hover {
+            border-color: #4285f4;
+        }
+
+        .file-upload.dragover {
+            border-color: #4285f4;
+            background: #f0f7ff;
+        }
+
+        /* Notification Badge */
         .notification-badge {
             position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #ef4444;
+            top: -5px;
+            right: -5px;
+            background: #ea4335;
             color: white;
             border-radius: 50%;
             width: 20px;
             height: 20px;
-            font-size: 12px;
+            font-size: 0.7rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
         }
-
-        .status-pending { @apply bg-yellow-100 text-yellow-800; }
-        .status-submitted { @apply bg-green-100 text-green-800; }
-        .status-overdue { @apply bg-red-100 text-red-800; }
-        .status-graded { @apply bg-blue-100 text-blue-800; }
-        .status-active { @apply bg-blue-100 text-blue-800; }
-        .status-completed { @apply bg-green-100 text-green-800; }
-        .status-upcoming { @apply bg-gray-100 text-gray-800; }
     </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="loading-overlay">
-        <div class="text-center">
-            <div class="spinner mx-auto mb-4"></div>
-            <p class="text-gray-600">Memuat aplikasi...</p>
-        </div>
+<body>
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
     </div>
-    <!-- Auth Container -->
-    <div id="authContainer" class="min-h-screen gradient-bg flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
-            <!-- Login Form -->
-            <div id="loginForm">
-                <div class="text-center mb-8">
-                    <i class="fas fa-graduation-cap text-5xl text-blue-500 mb-4"></i>
-                    <h1 class="text-3xl font-bold text-gray-800">Emes Class</h1>
-                    <p class="text-gray-600 mt-2">Learning Management System</p>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container hidden">
+        <div class="login-card">
+            <div class="login-logo">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h1 class="login-title">EduClass LMS</h1>
+            <p class="login-subtitle">Sistem Pembelajaran Digital</p>
+            
+            <div class="role-selector">
+                <div class="role-option" data-role="teacher">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <div>Guru</div>
                 </div>
-
-                <form onsubmit="handleLogin(event)" class="space-y-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                        <input type="email" id="loginEmail" required 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                        <input type="password" id="loginPassword" required 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <label class="flex items-center">
-                            <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                            <span class="ml-2 text-sm text-gray-600">Ingat saya</span>
-                        </label>
-                        <button type="button" onclick="showRegisterForm()" class="text-sm text-blue-600 hover:text-blue-800">
-                            Daftar akun baru
-                        </button>
-                    </div>
-
-                    <button type="submit" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors font-medium">
-                        <i class="fas fa-sign-in-alt mr-2"></i>Masuk
-                    </button>
-                </form>
+                <div class="role-option selected" data-role="student">
+                    <i class="fas fa-user-graduate"></i>
+                    <div>Siswa</div>
+                </div>
             </div>
 
-            <!-- Register Form -->
-            <div id="registerForm" class="hidden">
-                <div class="text-center mb-8">
-                    <i class="fas fa-user-plus text-5xl text-green-500 mb-4"></i>
-                    <h1 class="text-3xl font-bold text-gray-800">Daftar Akun</h1>
-                    <p class="text-gray-600 mt-2">Buat akun Emes Class</p>
-                </div>
-
-                <form onsubmit="handleRegister(event)" class="space-y-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
-                        <input type="text" id="registerName" required 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                        <input type="email" id="registerEmail" required 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                        <input type="password" id="registerPassword" required minlength="6"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
-                        <select id="registerRole" required 
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                            <option value="">Pilih Role</option>
-                            <option value="teacher">Guru</option>
-                            <option value="student">Siswa</option>
-                        </select>
-                    </div>
-
-                    <div class="flex space-x-4">
-                        <button type="button" onclick="showLoginForm()" 
-                                class="flex-1 bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-600 transition-colors">
-                            Kembali
-                        </button>
-                        <button type="submit" 
-                                class="flex-1 bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-colors font-medium">
-                            <i class="fas fa-user-plus mr-2"></i>Daftar
-                        </button>
-                    </div>
-                </form>
-            </div>
+            <form class="login-form" onsubmit="handleLogin(event)">
+                <input type="email" class="form-input" placeholder="Email" required id="loginEmail">
+                <input type="password" class="form-input" placeholder="Password" required id="loginPassword">
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Masuk
+                </button>
+            </form>
         </div>
     </div>
 
     <!-- Main App -->
     <div id="mainApp" class="hidden">
         <!-- Header -->
-        <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-16">
-                    <div class="flex items-center">
-                        <i class="fas fa-graduation-cap text-2xl text-blue-500 mr-3"></i>
-                        <h1 class="text-xl font-bold text-gray-800">Emes Class</h1>
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    EduClass
+                </div>
+                <div class="user-menu">
+                    <div class="user-info">
+                        <i class="fas fa-user"></i>
+                        <span id="userName">User</span>
+                        <span id="userRole" class="badge"></span>
                     </div>
-                    
-                    <div class="flex items-center space-x-4">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                                <i class="fas fa-user text-white text-sm"></i>
-                            </div>
-                            <div class="hidden sm:block">
-                                <p class="text-sm font-medium text-gray-700" id="userName">User</p>
-                                <p class="text-xs text-gray-500" id="userRole">Role</p>
-                            </div>
-                        </div>
-                        
-                        <button onclick="handleLogout()" 
-                                class="text-gray-500 hover:text-gray-700 p-2 rounded-lg hover:bg-gray-100 transition-colors">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </button>
-                    </div>
+                    <button class="logout-btn" onclick="handleLogout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
                 </div>
             </div>
         </header>
 
-        <!-- Navigation -->
-        <nav class="bg-white border-b border-gray-200">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex space-x-8">
-                    <button onclick="showSection('dashboard')" 
-                            class="nav-item py-4 px-2 border-b-2 border-blue-500 text-blue-600 font-medium text-sm">
-                        <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
-                    </button>
-                    <button onclick="showSection('classes')" 
-                            class="nav-item py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm">
-                        <i class="fas fa-school mr-2"></i>Kelas
-                    </button>
-                    <button onclick="showSection('assignments')" 
-                            class="nav-item py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm relative">
-                        <i class="fas fa-tasks mr-2"></i>Tugas
-                        <span id="assignmentBadge" class="notification-badge hidden">0</span>
-                    </button>
-                    <button onclick="showSection('exams')" 
-                            class="nav-item py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm relative">
-                        <i class="fas fa-clipboard-check mr-2"></i>Ujian CBT
-                        <span id="examBadge" class="notification-badge hidden">0</span>
-                    </button>
-                    <button onclick="showSection('profile')" 
-                            class="nav-item py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm">
-                        <i class="fas fa-user mr-2"></i>Profil
-                    </button>
-                </div>
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" onclick="showSection('dashboard')">
+                <i class="fas fa-home"></i>
+                <span>Beranda</span>
+            </div>
+            <div class="nav-item" onclick="showSection('classes')">
+                <i class="fas fa-school"></i>
+                <span>Kelas</span>
+            </div>
+            <div class="nav-item" onclick="showSection('assignments')">
+                <i class="fas fa-tasks"></i>
+                <span>Tugas</span>
+                <div id="assignmentBadge" class="notification-badge hidden">0</div>
+            </div>
+            <div class="nav-item" onclick="showSection('profile')">
+                <i class="fas fa-user"></i>
+                <span>Profil</span>
             </div>
         </nav>
 
-        <!-- Main Content -->
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <!-- Dashboard Section -->
-            <div id="dashboardSection">
-                <div class="mb-8">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Dashboard</h2>
-                    <p class="text-gray-600">Selamat datang di Emes Class</p>
-                </div>
+        <!-- Floating Action Button (for teachers) -->
+        <button id="fab" class="fab hidden" onclick="showCreateModal()">
+            <i class="fas fa-plus"></i>
+        </button>
 
-                <!-- Stats Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" id="statsCards">
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section">
+                <h2 class="section-title">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard
+                </h2>
+                
+                <div id="dashboardStats" class="class-grid">
                     <!-- Stats will be populated by JavaScript -->
                 </div>
 
-                <!-- Recent Activity -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                        <i class="fas fa-clock text-blue-500 mr-2"></i>Aktivitas Terbaru
+                <div id="recentActivity">
+                    <h3 class="section-title">
+                        <i class="fas fa-clock"></i>
+                        Aktivitas Terbaru
                     </h3>
-                    <div id="recentActivity">
-                        <!-- Activity will be populated by JavaScript -->
+                    <div class="assignment-list">
+                        <div id="recentActivityList">
+                            <!-- Recent activities will be populated by JavaScript -->
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Classes Section -->
-            <div id="classesSection" class="hidden">
-                <div class="flex justify-between items-center mb-8">
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Kelas</h2>
-                        <p class="text-gray-600">Kelola kelas dan materi pembelajaran</p>
-                    </div>
-                    <button id="createClassBtn" onclick="showCreateClassModal()" 
-                            class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors hidden">
-                        <i class="fas fa-plus mr-2"></i>Buat Kelas
-                    </button>
-                </div>
-
-                <!-- Join Class (Student) -->
-                <div id="joinClassSection" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6 hidden">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Bergabung dengan Kelas</h3>
-                    <div class="flex space-x-4">
-                        <input type="text" id="classCodeInput" placeholder="Masukkan kode kelas" 
-                               class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <button onclick="joinClass()" 
-                                class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">
-                            <i class="fas fa-plus mr-2"></i>Gabung
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Classes Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="classesGrid">
+            <div id="classes-section" class="hidden">
+                <h2 class="section-title">
+                    <i class="fas fa-school"></i>
+                    Kelas Saya
+                </h2>
+                <div class="class-grid" id="classGrid">
                     <!-- Classes will be populated by JavaScript -->
                 </div>
             </div>
 
             <!-- Assignments Section -->
-            <div id="assignmentsSection" class="hidden">
-                <div class="flex justify-between items-center mb-8">
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Tugas</h2>
-                        <p class="text-gray-600">Kelola tugas dan penilaian</p>
-                    </div>
-                    <button id="createAssignmentBtn" onclick="showCreateAssignmentModal()" 
-                            class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors hidden">
-                        <i class="fas fa-plus mr-2"></i>Buat Tugas
-                    </button>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-                    <div id="assignmentsList" class="divide-y divide-gray-200">
-                        <!-- Assignments will be populated by JavaScript -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Exams Section -->
-            <div id="examsSection" class="hidden">
-                <div class="flex justify-between items-center mb-8">
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Ujian CBT</h2>
-                        <p class="text-gray-600">Computer Based Test - Ujian Online</p>
-                    </div>
-                    <button id="createExamBtn" onclick="showCreateExamModal()" 
-                            class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors hidden">
-                        <i class="fas fa-plus mr-2"></i>Buat Ujian
-                    </button>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-                    <div id="examsList" class="divide-y divide-gray-200">
-                        <!-- Exams will be populated by JavaScript -->
-                    </div>
+            <div id="assignments-section" class="hidden">
+                <h2 class="section-title">
+                    <i class="fas fa-tasks"></i>
+                    Tugas & Penilaian
+                </h2>
+                <div class="assignment-list" id="assignmentList">
+                    <!-- Assignments will be populated by JavaScript -->
                 </div>
             </div>
 
             <!-- Profile Section -->
-            <div id="profileSection" class="hidden">
-                <div class="mb-8">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Profil</h2>
-                    <p class="text-gray-600">Informasi akun Anda</p>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div id="profile-section" class="hidden">
+                <h2 class="section-title">
+                    <i class="fas fa-user"></i>
+                    Profil Saya
+                </h2>
+                <div class="assignment-list">
                     <div id="profileInfo">
                         <!-- Profile info will be populated by JavaScript -->
                     </div>
@@ -389,213 +746,108 @@
         </main>
     </div>
 
-    <!-- Modals -->
-    <!-- Create Class Modal -->
-    <div id="createClassModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-gray-800">Buat Kelas Baru</h3>
-                <button onclick="hideModal('createClassModal')" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times"></i>
-                </button>
+    <!-- Create Class Modal (Teacher) -->
+    <div id="createClassModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Buat Kelas Baru</h3>
+                <span class="close" onclick="hideModal('createClassModal')">&times;</span>
             </div>
-            
-            <form onsubmit="createClass(event)" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Kelas</label>
-                    <input type="text" id="className" required 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <form onsubmit="createClass(event)">
+                <div class="form-group">
+                    <label class="form-label">Nama Kelas</label>
+                    <input type="text" class="form-input" id="className" placeholder="Contoh: Matematika Kelas 10A" required>
                 </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Mata Pelajaran</label>
-                    <select id="classSubject" required 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <div class="form-group">
+                    <label class="form-label">Mata Pelajaran</label>
+                    <select class="form-input" id="classSubject" required>
                         <option value="">Pilih Mata Pelajaran</option>
-                        <option value="matematika">Matematika</option>
-                        <option value="fisika">Fisika</option>
-                        <option value="kimia">Kimia</option>
-                        <option value="biologi">Biologi</option>
-                        <option value="bahasa_indonesia">Bahasa Indonesia</option>
-                        <option value="bahasa_inggris">Bahasa Inggris</option>
-                        <option value="sejarah">Sejarah</option>
-                        <option value="geografi">Geografi</option>
-                        <option value="ekonomi">Ekonomi</option>
-                        <option value="lainnya">Lainnya</option>
+                        <option value="math">Matematika</option>
+                        <option value="science">IPA/Fisika</option>
+                        <option value="english">Bahasa Inggris</option>
+                        <option value="history">Sejarah</option>
+                        <option value="other">Lainnya</option>
                     </select>
                 </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
-                    <textarea id="classDescription" rows="3" 
-                              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                <div class="form-group">
+                    <label class="form-label">Deskripsi</label>
+                    <textarea class="form-input form-textarea" id="classDescription" placeholder="Deskripsi singkat tentang kelas ini..."></textarea>
                 </div>
-                
-                <div class="flex space-x-4 pt-4">
-                    <button type="button" onclick="hideModal('createClassModal')" 
-                            class="flex-1 bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600 transition-colors">
-                        Batal
-                    </button>
-                    <button type="submit" 
-                            class="flex-1 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors">
-                        Buat Kelas
-                    </button>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-outline" onclick="hideModal('createClassModal')">Batal</button>
+                    <button type="submit" class="btn btn-primary">Buat Kelas</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Create Exam Modal -->
-    <div id="createExamModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-xl p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-gray-800">Buat Ujian CBT</h3>
-                <button onclick="hideModal('createExamModal')" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times"></i>
-                </button>
+    <!-- Create Assignment Modal (Teacher) -->
+    <div id="createAssignmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Buat Tugas Baru</h3>
+                <span class="close" onclick="hideModal('createAssignmentModal')">&times;</span>
             </div>
-            
-            <form onsubmit="createExam(event)" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Kelas</label>
-                        <select id="examClass" required 
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <option value="">Pilih Kelas</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Judul Ujian</label>
-                        <input type="text" id="examTitle" required 
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
-                    <textarea id="examDescription" rows="2" 
-                              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Durasi (menit)</label>
-                        <input type="number" id="examDuration" required min="5" max="300" value="60"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Mulai</label>
-                        <input type="datetime-local" id="examStartTime" required 
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Berakhir</label>
-                        <input type="datetime-local" id="examEndTime" required 
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-                </div>
-                
-                <div class="border-t pt-4">
-                    <div class="flex justify-between items-center mb-4">
-                        <h4 class="text-lg font-semibold text-gray-800">Soal Ujian</h4>
-                        <button type="button" onclick="addQuestion()" 
-                                class="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 transition-colors text-sm">
-                            <i class="fas fa-plus mr-1"></i>Tambah Soal
-                        </button>
-                    </div>
-                    
-                    <div id="questionsList" class="space-y-4">
-                        <!-- Questions will be added here -->
-                    </div>
-                </div>
-                
-                <div class="flex space-x-4 pt-4 border-t">
-                    <button type="button" onclick="hideModal('createExamModal')" 
-                            class="flex-1 bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600 transition-colors">
-                        Batal
-                    </button>
-                    <button type="submit" 
-                            class="flex-1 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors">
-                        Buat Ujian
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Take Exam Modal -->
-    <div id="takeExamModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-xl p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div id="examInterface">
-                <!-- Exam interface will be populated by JavaScript -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Exam Results Modal -->
-    <div id="examResultsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-xl p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div id="examResults">
-                <!-- Results will be populated by JavaScript -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Create Assignment Modal -->
-    <div id="createAssignmentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-gray-800">Buat Tugas Baru</h3>
-                <button onclick="hideModal('createAssignmentModal')" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <form onsubmit="createAssignment(event)" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Kelas</label>
-                    <select id="assignmentClass" required 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <form onsubmit="createAssignment(event)">
+                <div class="form-group">
+                    <label class="form-label">Pilih Kelas</label>
+                    <select class="form-input" id="assignmentClass" required>
                         <option value="">Pilih Kelas</option>
+                        <!-- Options will be populated by JavaScript -->
                     </select>
                 </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Judul Tugas</label>
-                    <input type="text" id="assignmentTitle" required 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <div class="form-group">
+                    <label class="form-label">Judul Tugas</label>
+                    <input type="text" class="form-input" id="assignmentTitle" placeholder="Contoh: Latihan Soal Persamaan Linear" required>
                 </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
-                    <textarea id="assignmentDescription" rows="3" 
-                              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                <div class="form-group">
+                    <label class="form-label">Deskripsi</label>
+                    <textarea class="form-input form-textarea" id="assignmentDescription" placeholder="Instruksi dan deskripsi tugas..."></textarea>
                 </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Deadline</label>
-                    <input type="datetime-local" id="assignmentDeadline" required 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <div class="form-group">
+                    <label class="form-label">Deadline</label>
+                    <input type="datetime-local" class="form-input" id="assignmentDeadline" required>
                 </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">File Lampiran (Opsional)</label>
-                    <input type="file" id="assignmentFile" 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <div class="form-group">
+                    <label class="form-label">File Lampiran (Opsional)</label>
+                    <div class="file-upload" onclick="document.getElementById('assignmentFile').click()">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #4285f4; margin-bottom: 0.5rem;"></i>
+                        <p>Klik untuk upload file atau drag & drop</p>
+                        <input type="file" id="assignmentFile" style="display: none;" accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.png">
+                    </div>
                 </div>
-                
-                <div class="flex space-x-4 pt-4">
-                    <button type="button" onclick="hideModal('createAssignmentModal')" 
-                            class="flex-1 bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600 transition-colors">
-                        Batal
-                    </button>
-                    <button type="submit" 
-                            class="flex-1 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors">
-                        Buat Tugas
-                    </button>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-outline" onclick="hideModal('createAssignmentModal')">Batal</button>
+                    <button type="submit" class="btn btn-primary">Buat Tugas</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Submit Assignment Modal (Student) -->
+    <div id="submitAssignmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Kumpulkan Tugas</h3>
+                <span class="close" onclick="hideModal('submitAssignmentModal')">&times;</span>
+            </div>
+            <form onsubmit="submitAssignment(event)">
+                <input type="hidden" id="submitAssignmentId">
+                <div class="form-group">
+                    <label class="form-label">Komentar (Opsional)</label>
+                    <textarea class="form-input form-textarea" id="submitComment" placeholder="Tambahkan komentar atau catatan..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">File Jawaban</label>
+                    <div class="file-upload" onclick="document.getElementById('submitFile').click()">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #4285f4; margin-bottom: 0.5rem;"></i>
+                        <p>Klik untuk upload file jawaban</p>
+                        <input type="file" id="submitFile" style="display: none;" accept=".pdf,.doc,.docx,.jpg,.png" required>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-outline" onclick="hideModal('submitAssignmentModal')">Batal</button>
+                    <button type="submit" class="btn btn-success">Kumpulkan</button>
                 </div>
             </form>
         </div>
@@ -605,1251 +857,657 @@
         // Global variables
         let currentUser = null;
         let currentSection = 'dashboard';
-        let userClasses = [];
-        let userAssignments = [];
-        let userExams = [];
-        let currentExam = null;
-        let examTimer = null;
-        let questionIndex = 0;
+        let classes = [];
+        let assignments = [];
+        
+        // Google Apps Script Web App URL - Replace with your deployed web app URL
+        const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz6UyTEW_QUUtruAwn3hTO6yksic3X3H_hAorHgI9XXbv_3iDiPrzS4vktw721HJjNddQ/exec';
+        
+        // API Helper Functions
+        async function callGASFunction(action, data = {}) {
+            try {
+                const response = await fetch(GAS_WEB_APP_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: action,
+                        data: data,
+                        user: currentUser
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                console.error('Error calling GAS function:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Koneksi Error',
+                    text: 'Gagal terhubung ke server. Silakan coba lagi.'
+                });
+                return { success: false, error: error.message };
+            }
+        }
+        
+        async function uploadFileToGoogleDrive(file, folderId = null) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('action', 'uploadFile');
+            formData.append('folderId', folderId || '');
+            
+            try {
+                const response = await fetch(GAS_WEB_APP_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                console.error('Error uploading file:', error);
+                return { success: false, error: error.message };
+            }
+        }
 
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
-            // Check authentication state
-            auth.onAuthStateChanged((user) => {
-                if (user) {
-                    loadUserData(user);
-                } else {
-                    showAuthContainer();
-                }
-            });
+            // Check if user is logged in
+            const savedUser = localStorage.getItem('educlass_user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showMainApp();
+            } else {
+                showLoginPage();
+            }
         });
 
-
-
-        function showAuthContainer() {
-            document.getElementById('loadingOverlay').style.display = 'none';
-            document.getElementById('authContainer').classList.remove('hidden');
+        // Show login page
+        function showLoginPage() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('loginPage').classList.remove('hidden');
             document.getElementById('mainApp').classList.add('hidden');
         }
 
+        // Show main app
         function showMainApp() {
-            document.getElementById('loadingOverlay').style.display = 'none';
-            document.getElementById('authContainer').classList.add('hidden');
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('loginPage').classList.add('hidden');
             document.getElementById('mainApp').classList.remove('hidden');
+            
+            // Update user info
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userRole').textContent = currentUser.role === 'teacher' ? 'Guru' : 'Siswa';
+            
+            // Show FAB for teachers
+            if (currentUser.role === 'teacher') {
+                document.getElementById('fab').classList.remove('hidden');
+            }
+            
+            // Load initial data
+            loadDashboard();
+            loadClasses();
+            loadAssignments();
         }
 
-        function showLoginForm() {
-            document.getElementById('loginForm').classList.remove('hidden');
-            document.getElementById('registerForm').classList.add('hidden');
-        }
+        // Handle role selection
+        document.querySelectorAll('.role-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
 
-        function showRegisterForm() {
-            document.getElementById('loginForm').classList.add('hidden');
-            document.getElementById('registerForm').classList.remove('hidden');
-        }
-
+        // Handle login
         async function handleLogin(event) {
             event.preventDefault();
             
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
-
-            try {
-                showLoading();
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                await loadUserData(userCredential.user);
-                
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Login Berhasil!',
-                    text: 'Selamat datang kembali',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-            } catch (error) {
-                hideLoading();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Login Gagal',
-                    text: getErrorMessage(error.code)
-                });
-            }
-        }
-
-        async function handleRegister(event) {
-            event.preventDefault();
+            const role = document.querySelector('.role-option.selected').dataset.role;
             
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const role = document.getElementById('registerRole').value;
-
-            try {
-                showLoading();
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                
-                // Save user profile to Firestore
-                await db.collection('users').add({
-                    uid: userCredential.user.uid,
-                    name: name,
-                    email: email,
-                    role: role,
-                    createdAt: new Date()
-                });
-
-                await loadUserData(userCredential.user);
-                
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Registrasi Berhasil!',
-                    text: 'Akun Anda telah dibuat',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-            } catch (error) {
-                hideLoading();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Registrasi Gagal',
-                    text: getErrorMessage(error.code)
-                });
-            }
-        }
-
-        async function handleLogout() {
-            const result = await Swal.fire({
-                title: 'Logout',
-                text: 'Apakah Anda yakin ingin keluar?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Keluar',
-                cancelButtonText: 'Batal'
+            // Show loading
+            Swal.fire({
+                title: 'Memverifikasi...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
             });
-
-            if (result.isConfirmed) {
-                try {
-                    await auth.signOut();
-                    currentUser = null;
-                    showAuthContainer();
-                } catch (error) {
+            
+            try {
+                const result = await callGASFunction('login', {
+                    email: email,
+                    password: password,
+                    role: role
+                });
+                
+                if (result.success) {
+                    currentUser = result.user;
+                    localStorage.setItem('educlass_user', JSON.stringify(currentUser));
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Login Berhasil!',
+                        text: `Selamat datang, ${currentUser.name}`,
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        showMainApp();
+                    });
+                } else {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error',
-                        text: 'Gagal logout'
+                        title: 'Login Gagal',
+                        text: result.message || 'Email atau password salah'
+                    });
+                }
+            } catch (error) {
+                // Fallback to demo mode if backend is not available
+                console.log('Using demo mode');
+                const demoUsers = {
+                    'guru@educlass.com': { id: 1, name: 'Bu Sarah Wijaya', role: 'teacher' },
+                    'siswa@educlass.com': { id: 2, name: 'Ahmad Rizki', role: 'student' }
+                };
+                
+                if (demoUsers[email] && password === 'demo123') {
+                    currentUser = { ...demoUsers[email], email };
+                    localStorage.setItem('educlass_user', JSON.stringify(currentUser));
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Login Berhasil! (Demo Mode)',
+                        text: `Selamat datang, ${currentUser.name}`,
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        showMainApp();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Login Gagal',
+                        text: 'Email atau password salah. Demo: guru@educlass.com atau siswa@educlass.com dengan password: demo123'
                     });
                 }
             }
         }
 
-        async function loadUserData(user) {
-            try {
-                // Get user profile from Firestore
-                const userSnapshot = await db.collection('users').where('uid', '==', user.uid).get();
-                
-                if (!userSnapshot.empty) {
-                    const userData = userSnapshot.docs[0].data();
-                    currentUser = {
-                        uid: user.uid,
-                        email: user.email,
-                        ...userData
-                    };
-                    
-                    // Update UI
-                    document.getElementById('userName').textContent = currentUser.name;
-                    document.getElementById('userRole').textContent = currentUser.role === 'teacher' ? 'Guru' : 'Siswa';
-                    
-                    // Show/hide elements based on role
-                    if (currentUser.role === 'teacher') {
-                        document.getElementById('createClassBtn').classList.remove('hidden');
-                        document.getElementById('createAssignmentBtn').classList.remove('hidden');
-                        document.getElementById('createExamBtn').classList.remove('hidden');
-                    } else {
-                        document.getElementById('joinClassSection').classList.remove('hidden');
-                    }
-                    
-                    await loadDashboardData();
-                    showMainApp();
-                } else {
-                    throw new Error('User profile not found');
+        // Handle logout
+        function handleLogout() {
+            Swal.fire({
+                title: 'Logout',
+                text: 'Apakah Anda yakin ingin keluar?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#4285f4',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Keluar',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('educlass_user');
+                    currentUser = null;
+                    showLoginPage();
                 }
-            } catch (error) {
-                console.error('Error loading user data:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Gagal memuat data pengguna'
-                });
-            }
+            });
         }
 
-        async function loadDashboardData() {
-            try {
-                // Load classes
-                if (currentUser.role === 'teacher') {
-                    const classesSnapshot = await db.collection('classes').where('teacherId', '==', currentUser.uid).get();
-                    userClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                } else {
-                    const classesSnapshot = await db.collection('classes').where('students', 'array-contains', currentUser.uid).get();
-                    userClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                }
-
-                // Load assignments
-                const classIds = userClasses.map(cls => cls.id);
-                if (classIds.length > 0) {
-                    const assignmentsSnapshot = await db.collection('assignments').where('classId', 'in', classIds).get();
-                    userAssignments = assignmentsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    
-                    // Load exams
-                    const examsSnapshot = await db.collection('exams').where('classId', 'in', classIds).get();
-                    userExams = examsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                }
-
-                updateDashboard();
-                hideLoading();
-            } catch (error) {
-                console.error('Error loading dashboard data:', error);
-                hideLoading();
-            }
-        }
-
-        function updateDashboard() {
-            // Update stats cards
-            const statsCards = document.getElementById('statsCards');
-            
-            if (currentUser.role === 'teacher') {
-                const totalStudents = userClasses.reduce((sum, cls) => sum + (cls.students?.length || 0), 0);
-                const totalAssignments = userAssignments.length;
-                const totalExams = userExams.length;
-                
-                statsCards.innerHTML = `
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-blue-100">
-                                <i class="fas fa-school text-blue-600 text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Total Kelas</p>
-                                <p class="text-2xl font-bold text-gray-900">${userClasses.length}</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-green-100">
-                                <i class="fas fa-users text-green-600 text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Total Siswa</p>
-                                <p class="text-2xl font-bold text-gray-900">${totalStudents}</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-orange-100">
-                                <i class="fas fa-tasks text-orange-600 text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Total Tugas</p>
-                                <p class="text-2xl font-bold text-gray-900">${totalAssignments}</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-indigo-100">
-                                <i class="fas fa-clipboard-check text-indigo-600 text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Total Ujian</p>
-                                <p class="text-2xl font-bold text-gray-900">${totalExams}</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                const pendingAssignments = userAssignments.filter(assignment => {
-                    const deadline = new Date(assignment.deadline);
-                    return deadline > new Date();
-                }).length;
-                
-                const activeExams = userExams.filter(exam => {
-                    const now = new Date();
-                    const startTime = new Date(exam.startTime);
-                    const endTime = new Date(exam.endTime);
-                    return startTime <= now && now <= endTime;
-                }).length;
-                
-                statsCards.innerHTML = `
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-blue-100">
-                                <i class="fas fa-school text-blue-600 text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Kelas Diikuti</p>
-                                <p class="text-2xl font-bold text-gray-900">${userClasses.length}</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-green-100">
-                                <i class="fas fa-tasks text-green-600 text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Total Tugas</p>
-                                <p class="text-2xl font-bold text-gray-900">${userAssignments.length}</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-yellow-100">
-                                <i class="fas fa-clock text-yellow-600 text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Tugas Pending</p>
-                                <p class="text-2xl font-bold text-gray-900">${pendingAssignments}</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-indigo-100">
-                                <i class="fas fa-clipboard-check text-indigo-600 text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Ujian Aktif</p>
-                                <p class="text-2xl font-bold text-gray-900">${activeExams}</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                // Update notification badges
-                const assignmentBadge = document.getElementById('assignmentBadge');
-                if (pendingAssignments > 0) {
-                    assignmentBadge.textContent = pendingAssignments;
-                    assignmentBadge.classList.remove('hidden');
-                } else {
-                    assignmentBadge.classList.add('hidden');
-                }
-                
-                const examBadge = document.getElementById('examBadge');
-                if (activeExams > 0) {
-                    examBadge.textContent = activeExams;
-                    examBadge.classList.remove('hidden');
-                } else {
-                    examBadge.classList.add('hidden');
-                }
-            }
-
-            // Update recent activity
-            const recentActivity = document.getElementById('recentActivity');
-            if (userClasses.length === 0 && userAssignments.length === 0) {
-                recentActivity.innerHTML = `
-                    <div class="text-center py-8">
-                        <i class="fas fa-clock text-gray-400 text-4xl mb-4"></i>
-                        <p class="text-gray-500">Belum ada aktivitas</p>
-                    </div>
-                `;
-            } else {
-                recentActivity.innerHTML = `
-                    <div class="space-y-4">
-                        ${userClasses.slice(0, 3).map(cls => `
-                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                                <div class="p-2 bg-blue-100 rounded-full mr-3">
-                                    <i class="fas fa-school text-blue-600"></i>
-                                </div>
-                                <div>
-                                    <p class="font-medium text-gray-800">${cls.name}</p>
-                                    <p class="text-sm text-gray-600">${cls.subject}</p>
-                                </div>
-                            </div>
-                        `).join('')}
-                        ${userAssignments.slice(0, 2).map(assignment => `
-                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                                <div class="p-2 bg-orange-100 rounded-full mr-3">
-                                    <i class="fas fa-tasks text-orange-600"></i>
-                                </div>
-                                <div>
-                                    <p class="font-medium text-gray-800">${assignment.title}</p>
-                                    <p class="text-sm text-gray-600">Deadline: ${formatDate(assignment.deadline)}</p>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            }
-        }
-
+        // Navigation
         function showSection(sectionName) {
             // Hide all sections
-            const sections = ['dashboard', 'classes', 'assignments', 'exams', 'profile'];
+            const sections = ['dashboard', 'classes', 'assignments', 'profile'];
             sections.forEach(section => {
-                document.getElementById(section + 'Section').classList.add('hidden');
+                document.getElementById(section + '-section').classList.add('hidden');
             });
 
             // Remove active class from all nav items
             document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('border-blue-500', 'text-blue-600');
-                item.classList.add('border-transparent', 'text-gray-500');
+                item.classList.remove('active');
             });
 
-            // Show selected section and activate nav item
-            document.getElementById(sectionName + 'Section').classList.remove('hidden');
-            event.target.classList.remove('border-transparent', 'text-gray-500');
-            event.target.classList.add('border-blue-500', 'text-blue-600');
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.remove('hidden');
+            event.target.closest('.nav-item').classList.add('active');
             
             currentSection = sectionName;
             
             // Load section-specific data
-            if (sectionName === 'classes') {
-                loadClassesSection();
+            if (sectionName === 'dashboard') {
+                loadDashboard();
+            } else if (sectionName === 'classes') {
+                loadClasses();
             } else if (sectionName === 'assignments') {
-                loadAssignmentsSection();
-            } else if (sectionName === 'exams') {
-                loadExamsSection();
+                loadAssignments();
             } else if (sectionName === 'profile') {
-                loadProfileSection();
+                loadProfile();
             }
         }
 
-        function loadClassesSection() {
-            const classesGrid = document.getElementById('classesGrid');
+        // Load dashboard data
+        function loadDashboard() {
+            const statsContainer = document.getElementById('dashboardStats');
+            const activityContainer = document.getElementById('recentActivityList');
             
-            if (userClasses.length === 0) {
-                classesGrid.innerHTML = `
-                    <div class="col-span-full text-center py-12">
-                        <i class="fas fa-school text-gray-400 text-6xl mb-4"></i>
-                        <h3 class="text-xl font-medium text-gray-600 mb-2">Belum Ada Kelas</h3>
-                        <p class="text-gray-500">${currentUser.role === 'teacher' ? 'Buat kelas pertama Anda' : 'Bergabung dengan kelas menggunakan kode'}</p>
-                    </div>
-                `;
-            } else {
-                classesGrid.innerHTML = userClasses.map(cls => `
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 card-hover cursor-pointer" onclick="openClass('${cls.id}')">
-                        <div class="p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="p-3 bg-blue-100 rounded-full">
-                                    <i class="fas fa-school text-blue-600 text-xl"></i>
-                                </div>
-                                <span class="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full">${cls.code}</span>
+            if (currentUser.role === 'teacher') {
+                statsContainer.innerHTML = `
+                    <div class="class-card">
+                        <div class="class-header math">
+                            <div>
+                                <div class="class-title">Total Kelas</div>
+                                <div class="class-teacher">3 Kelas Aktif</div>
                             </div>
-                            <h3 class="text-lg font-semibold text-gray-800 mb-2">${cls.name}</h3>
-                            <p class="text-sm text-gray-600 mb-4">${cls.subject}</p>
-                            <div class="flex items-center justify-between text-sm text-gray-500">
-                                <span><i class="fas fa-users mr-1"></i>${cls.students?.length || 0} Siswa</span>
-                                <span><i class="fas fa-calendar mr-1"></i>${formatDate(cls.createdAt)}</span>
+                        </div>
+                        <div class="class-body">
+                            <div class="class-stats">
+                                <span><i class="fas fa-users"></i> 75 Siswa</span>
+                                <span><i class="fas fa-tasks"></i> 12 Tugas</span>
                             </div>
                         </div>
                     </div>
-                `).join('');
-            }
-        }
-
-        function loadAssignmentsSection() {
-            const assignmentsList = document.getElementById('assignmentsList');
-            
-            if (userAssignments.length === 0) {
-                assignmentsList.innerHTML = `
-                    <div class="text-center py-12">
-                        <i class="fas fa-tasks text-gray-400 text-6xl mb-4"></i>
-                        <h3 class="text-xl font-medium text-gray-600 mb-2">Belum Ada Tugas</h3>
-                        <p class="text-gray-500">${currentUser.role === 'teacher' ? 'Buat tugas pertama Anda' : 'Tugas akan muncul di sini'}</p>
+                    <div class="class-card">
+                        <div class="class-header science">
+                            <div>
+                                <div class="class-title">Tugas Baru</div>
+                                <div class="class-teacher">Perlu Dinilai</div>
+                            </div>
+                        </div>
+                        <div class="class-body">
+                            <div class="class-stats">
+                                <span><i class="fas fa-clock"></i> 8 Pending</span>
+                                <span><i class="fas fa-check"></i> 15 Selesai</span>
+                            </div>
+                        </div>
                     </div>
                 `;
             } else {
-                assignmentsList.innerHTML = userAssignments.map(assignment => {
-                    const deadline = new Date(assignment.deadline);
-                    const now = new Date();
-                    const isOverdue = deadline < now;
-                    const status = isOverdue ? 'overdue' : 'pending';
-                    
-                    return `
-                        <div class="p-6 hover:bg-gray-50 cursor-pointer" onclick="openAssignment('${assignment.id}')">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <div class="p-3 bg-orange-100 rounded-full mr-4">
-                                        <i class="fas fa-tasks text-orange-600"></i>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-lg font-semibold text-gray-800">${assignment.title}</h3>
-                                        <p class="text-sm text-gray-600">${assignment.className}</p>
-                                        <p class="text-sm text-gray-500">Deadline: ${formatDate(assignment.deadline)}</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <span class="status-${status} px-3 py-1 rounded-full text-xs font-medium">
-                                        ${status === 'overdue' ? 'Terlambat' : 'Aktif'}
-                                    </span>
-                                </div>
+                statsContainer.innerHTML = `
+                    <div class="class-card">
+                        <div class="class-header english">
+                            <div>
+                                <div class="class-title">Kelas Diikuti</div>
+                                <div class="class-teacher">3 Kelas Aktif</div>
                             </div>
                         </div>
-                    `;
-                }).join('');
+                        <div class="class-body">
+                            <div class="class-stats">
+                                <span><i class="fas fa-book"></i> 15 Materi</span>
+                                <span><i class="fas fa-tasks"></i> 8 Tugas</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="class-card">
+                        <div class="class-header history">
+                            <div>
+                                <div class="class-title">Tugas Pending</div>
+                                <div class="class-teacher">Segera Kumpulkan</div>
+                            </div>
+                        </div>
+                        <div class="class-body">
+                            <div class="class-stats">
+                                <span><i class="fas fa-exclamation-triangle"></i> 3 Belum</span>
+                                <span><i class="fas fa-check"></i> 5 Selesai</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Update notification badge
+                document.getElementById('assignmentBadge').textContent = '3';
+                document.getElementById('assignmentBadge').classList.remove('hidden');
             }
+            
+            // Recent activities
+            activityContainer.innerHTML = `
+                <div class="assignment-item">
+                    <div class="assignment-icon">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="assignment-info">
+                        <div class="assignment-title">Tugas baru: Persamaan Linear</div>
+                        <div class="assignment-meta">Matematika • 2 jam yang lalu</div>
+                    </div>
+                </div>
+                <div class="assignment-item">
+                    <div class="assignment-icon">
+                        <i class="fas fa-upload"></i>
+                    </div>
+                    <div class="assignment-info">
+                        <div class="assignment-title">Materi baru: Gelombang dan Bunyi</div>
+                        <div class="assignment-meta">Fisika • 1 hari yang lalu</div>
+                    </div>
+                </div>
+                <div class="assignment-item">
+                    <div class="assignment-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="assignment-info">
+                        <div class="assignment-title">Essay Writing dikumpulkan</div>
+                        <div class="assignment-meta">Bahasa Inggris • 2 hari yang lalu</div>
+                    </div>
+                </div>
+            `;
         }
 
-        function loadProfileSection() {
+        // Load classes
+        async function loadClasses() {
+            const classGrid = document.getElementById('classGrid');
+            
+            try {
+                const result = await callGASFunction('getClasses', { userId: currentUser.id, role: currentUser.role });
+                
+                if (result.success) {
+                    classes = result.data;
+                } else {
+                    // Fallback to demo data
+                    classes = [
+                        {
+                            id: 1,
+                            name: 'Matematika Kelas 10A',
+                            subject: 'math',
+                            teacher: 'Bu Sarah Wijaya',
+                            students: 25,
+                            assignments: 3
+                        },
+                        {
+                            id: 2,
+                            name: 'Fisika Kelas 11',
+                            subject: 'science',
+                            teacher: 'Pak Ahmad Hidayat',
+                            students: 28,
+                            assignments: 2
+                        },
+                        {
+                            id: 3,
+                            name: 'Bahasa Inggris',
+                            subject: 'english',
+                            teacher: 'Ms. Jennifer Smith',
+                            students: 22,
+                            assignments: 4
+                        }
+                    ];
+                }
+            } catch (error) {
+                // Use demo data if backend fails
+                classes = [
+                    {
+                        id: 1,
+                        name: 'Matematika Kelas 10A',
+                        subject: 'math',
+                        teacher: 'Bu Sarah Wijaya',
+                        students: 25,
+                        assignments: 3
+                    },
+                    {
+                        id: 2,
+                        name: 'Fisika Kelas 11',
+                        subject: 'science',
+                        teacher: 'Pak Ahmad Hidayat',
+                        students: 28,
+                        assignments: 2
+                    },
+                    {
+                        id: 3,
+                        name: 'Bahasa Inggris',
+                        subject: 'english',
+                        teacher: 'Ms. Jennifer Smith',
+                        students: 22,
+                        assignments: 4
+                    }
+                ];
+            }
+            
+            classGrid.innerHTML = classes.map(cls => `
+                <div class="class-card" onclick="openClass(${cls.id})">
+                    <div class="class-header ${cls.subject}">
+                        <div>
+                            <div class="class-title">${cls.name}</div>
+                            <div class="class-teacher">${cls.teacher}</div>
+                        </div>
+                    </div>
+                    <div class="class-body">
+                        <div class="class-stats">
+                            <span><i class="fas fa-users"></i> ${cls.students} Siswa</span>
+                            <span><i class="fas fa-tasks"></i> ${cls.assignments} Tugas</span>
+                        </div>
+                        <div class="recent-activity">
+                            Kelas aktif • Materi terbaru minggu ini
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load assignments
+        function loadAssignments() {
+            const assignmentList = document.getElementById('assignmentList');
+            
+            // Demo data
+            const demoAssignments = [
+                {
+                    id: 1,
+                    title: 'Persamaan Linear - Matematika',
+                    class: 'Matematika Kelas 10A',
+                    deadline: '2024-12-15',
+                    status: 'pending',
+                    subject: 'math'
+                },
+                {
+                    id: 2,
+                    title: 'Laporan Praktikum Gelombang - Fisika',
+                    class: 'Fisika Kelas 11',
+                    deadline: '2024-12-20',
+                    status: 'submitted',
+                    subject: 'science'
+                },
+                {
+                    id: 3,
+                    title: 'Essay Writing - Bahasa Inggris',
+                    class: 'Bahasa Inggris',
+                    deadline: '2024-12-12',
+                    status: 'overdue',
+                    subject: 'english'
+                }
+            ];
+            
+            assignments = demoAssignments;
+            
+            assignmentList.innerHTML = demoAssignments.map(assignment => `
+                <div class="assignment-item" onclick="openAssignment(${assignment.id})">
+                    <div class="assignment-icon">
+                        <i class="fas fa-${getSubjectIcon(assignment.subject)}"></i>
+                    </div>
+                    <div class="assignment-info">
+                        <div class="assignment-title">${assignment.title}</div>
+                        <div class="assignment-meta">Deadline: ${formatDate(assignment.deadline)} • ${assignment.class}</div>
+                    </div>
+                    <div class="assignment-status status-${assignment.status}">
+                        ${getStatusText(assignment.status)}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load profile
+        function loadProfile() {
             const profileInfo = document.getElementById('profileInfo');
             
             profileInfo.innerHTML = `
-                <div class="space-y-6">
-                    <div class="flex items-center">
-                        <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mr-4">
-                            <i class="fas fa-user text-white text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-gray-800">${currentUser.name}</h3>
-                            <p class="text-gray-600">${currentUser.role === 'teacher' ? 'Guru' : 'Siswa'}</p>
-                        </div>
+                <div class="assignment-item">
+                    <div class="assignment-icon">
+                        <i class="fas fa-user"></i>
                     </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                            <p class="text-gray-900">${currentUser.email}</p>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
-                            <p class="text-gray-900">${currentUser.role === 'teacher' ? 'Guru' : 'Siswa'}</p>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Bergabung Sejak</label>
-                            <p class="text-gray-900">${formatDate(currentUser.createdAt)}</p>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                            <span class="status-submitted px-3 py-1 rounded-full text-xs font-medium">Aktif</span>
-                        </div>
+                    <div class="assignment-info">
+                        <div class="assignment-title">Nama Lengkap</div>
+                        <div class="assignment-meta">${currentUser.name}</div>
+                    </div>
+                </div>
+                <div class="assignment-item">
+                    <div class="assignment-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="assignment-info">
+                        <div class="assignment-title">Email</div>
+                        <div class="assignment-meta">${currentUser.email}</div>
+                    </div>
+                </div>
+                <div class="assignment-item">
+                    <div class="assignment-icon">
+                        <i class="fas fa-user-tag"></i>
+                    </div>
+                    <div class="assignment-info">
+                        <div class="assignment-title">Role</div>
+                        <div class="assignment-meta">${currentUser.role === 'teacher' ? 'Guru' : 'Siswa'}</div>
+                    </div>
+                </div>
+                <div class="assignment-item">
+                    <div class="assignment-icon">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <div class="assignment-info">
+                        <div class="assignment-title">Bergabung Sejak</div>
+                        <div class="assignment-meta">Januari 2024</div>
                     </div>
                 </div>
             `;
-        }
-
-        function loadExamsSection() {
-            const examsList = document.getElementById('examsList');
-            
-            if (userExams.length === 0) {
-                examsList.innerHTML = `
-                    <div class="text-center py-12">
-                        <i class="fas fa-clipboard-check text-gray-400 text-6xl mb-4"></i>
-                        <h3 class="text-xl font-medium text-gray-600 mb-2">Belum Ada Ujian</h3>
-                        <p class="text-gray-500">${currentUser.role === 'teacher' ? 'Buat ujian CBT pertama Anda' : 'Ujian akan muncul di sini'}</p>
-                    </div>
-                `;
-            } else {
-                examsList.innerHTML = userExams.map(exam => {
-                    const now = new Date();
-                    const startTime = new Date(exam.startTime);
-                    const endTime = new Date(exam.endTime);
-                    
-                    let status = 'upcoming';
-                    let statusText = 'Akan Datang';
-                    let actionButton = '';
-                    
-                    if (now < startTime) {
-                        status = 'upcoming';
-                        statusText = 'Akan Datang';
-                    } else if (now >= startTime && now <= endTime) {
-                        status = 'active';
-                        statusText = 'Aktif';
-                        if (currentUser.role === 'student') {
-                            actionButton = `<button onclick="startExam('${exam.id}')" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm">
-                                <i class="fas fa-play mr-1"></i>Mulai Ujian
-                            </button>`;
-                        }
-                    } else {
-                        status = 'completed';
-                        statusText = 'Selesai';
-                        if (currentUser.role === 'teacher') {
-                            actionButton = `<button onclick="viewExamResults('${exam.id}')" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors text-sm">
-                                <i class="fas fa-chart-bar mr-1"></i>Lihat Hasil
-                            </button>`;
-                        }
-                    }
-                    
-                    return `
-                        <div class="p-6 hover:bg-gray-50">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <div class="p-3 bg-indigo-100 rounded-full mr-4">
-                                        <i class="fas fa-clipboard-check text-indigo-600"></i>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-lg font-semibold text-gray-800">${exam.title}</h3>
-                                        <p class="text-sm text-gray-600">${exam.className}</p>
-                                        <div class="flex items-center space-x-4 mt-1 text-sm text-gray-500">
-                                            <span><i class="fas fa-clock mr-1"></i>${exam.duration} menit</span>
-                                            <span><i class="fas fa-calendar mr-1"></i>${formatDate(exam.startTime)}</span>
-                                            <span><i class="fas fa-question-circle mr-1"></i>${exam.questions?.length || 0} soal</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <span class="status-${status} px-3 py-1 rounded-full text-xs font-medium mb-2 block">
-                                        ${statusText}
-                                    </span>
-                                    ${actionButton}
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            }
         }
 
         // Modal functions
-        function showCreateClassModal() {
-            document.getElementById('createClassModal').classList.remove('hidden');
-        }
-
-        function showCreateAssignmentModal() {
-            // Load classes for assignment
-            const classSelect = document.getElementById('assignmentClass');
-            classSelect.innerHTML = '<option value="">Pilih Kelas</option>' + 
-                userClasses.map(cls => `<option value="${cls.id}">${cls.name}</option>`).join('');
-            
-            document.getElementById('createAssignmentModal').classList.remove('hidden');
-        }
-
-        function showCreateExamModal() {
-            // Load classes for exam
-            const classSelect = document.getElementById('examClass');
-            classSelect.innerHTML = '<option value="">Pilih Kelas</option>' + 
-                userClasses.map(cls => `<option value="${cls.id}">${cls.name}</option>`).join('');
-            
-            // Set default times
-            const now = new Date();
-            const startTime = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour from now
-            const endTime = new Date(startTime.getTime() + 2 * 60 * 60 * 1000); // 2 hours later
-            
-            document.getElementById('examStartTime').value = startTime.toISOString().slice(0, 16);
-            document.getElementById('examEndTime').value = endTime.toISOString().slice(0, 16);
-            
-            // Clear questions
-            document.getElementById('questionsList').innerHTML = '';
-            questionIndex = 0;
-            
-            document.getElementById('createExamModal').classList.remove('hidden');
-        }
-
-        function addQuestion() {
-            questionIndex++;
-            const questionsList = document.getElementById('questionsList');
-            
-            const questionDiv = document.createElement('div');
-            questionDiv.className = 'border border-gray-200 rounded-lg p-4';
-            questionDiv.innerHTML = `
-                <div class="flex justify-between items-center mb-3">
-                    <h5 class="font-medium text-gray-800">Soal ${questionIndex}</h5>
-                    <button type="button" onclick="removeQuestion(this)" class="text-red-500 hover:text-red-700">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-                
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Pertanyaan</label>
-                        <textarea name="question_${questionIndex}" required rows="2" 
-                                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"></textarea>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Pilihan A</label>
-                            <input type="text" name="option_a_${questionIndex}" required 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Pilihan B</label>
-                            <input type="text" name="option_b_${questionIndex}" required 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Pilihan C</label>
-                            <input type="text" name="option_c_${questionIndex}" required 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Pilihan D</label>
-                            <input type="text" name="option_d_${questionIndex}" required 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Jawaban Benar</label>
-                        <select name="correct_answer_${questionIndex}" required 
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                            <option value="">Pilih Jawaban Benar</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                            <option value="D">D</option>
-                        </select>
-                    </div>
-                </div>
-            `;
-            
-            questionsList.appendChild(questionDiv);
-        }
-
-        function removeQuestion(button) {
-            button.closest('.border').remove();
-        }
-
-        async function createExam(event) {
-            event.preventDefault();
-            
-            const classId = document.getElementById('examClass').value;
-            const title = document.getElementById('examTitle').value;
-            const description = document.getElementById('examDescription').value;
-            const duration = parseInt(document.getElementById('examDuration').value);
-            const startTime = document.getElementById('examStartTime').value;
-            const endTime = document.getElementById('examEndTime').value;
-            
-            // Collect questions
-            const questions = [];
-            const questionElements = document.querySelectorAll('#questionsList .border');
-            
-            if (questionElements.length === 0) {
+        function showCreateModal() {
+            if (currentUser.role === 'teacher') {
+                // Show options for teacher
                 Swal.fire({
-                    icon: 'error',
-                    title: 'Soal Kosong',
-                    text: 'Tambahkan minimal 1 soal untuk ujian!'
-                });
-                return;
-            }
-            
-            questionElements.forEach((element, index) => {
-                const questionNumber = index + 1;
-                const question = {
-                    id: questionNumber,
-                    question: element.querySelector(`textarea[name*="question"]`).value,
-                    options: {
-                        A: element.querySelector(`input[name*="option_a"]`).value,
-                        B: element.querySelector(`input[name*="option_b"]`).value,
-                        C: element.querySelector(`input[name*="option_c"]`).value,
-                        D: element.querySelector(`input[name*="option_d"]`).value
-                    },
-                    correctAnswer: element.querySelector(`select[name*="correct_answer"]`).value
-                };
-                questions.push(question);
-            });
-            
-            try {
-                showLoading();
-                
-                const selectedClass = userClasses.find(cls => cls.id === classId);
-                
-                const examData = {
-                    classId: classId,
-                    className: selectedClass.name,
-                    title: title,
-                    description: description,
-                    duration: duration,
-                    startTime: startTime,
-                    endTime: endTime,
-                    questions: questions,
-                    teacherId: currentUser.uid,
-                    teacherName: currentUser.name,
-                    submissions: [],
-                    createdAt: new Date()
-                };
-                
-                const docRef = await db.collection('exams').add(examData);
-                
-                userExams.push({ id: docRef.id, ...examData });
-                
-                hideModal('createExamModal');
-                hideLoading();
-                
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Ujian CBT Berhasil Dibuat!',
-                    html: `
-                        <div class="text-left bg-gray-50 p-4 rounded-lg mt-4">
-                            <p><strong>Judul:</strong> ${title}</p>
-                            <p><strong>Kelas:</strong> ${selectedClass.name}</p>
-                            <p><strong>Durasi:</strong> ${duration} menit</p>
-                            <p><strong>Jumlah Soal:</strong> ${questions.length}</p>
-                            <p><strong>Mulai:</strong> ${formatDate(startTime)}</p>
-                        </div>
-                    `
-                });
-                
-                if (currentSection === 'exams') {
-                    loadExamsSection();
-                }
-                updateDashboard();
-                
-            } catch (error) {
-                hideLoading();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Gagal membuat ujian'
-                });
-            }
-        }
-
-        async function startExam(examId) {
-            const exam = userExams.find(e => e.id === examId);
-            
-            // Check if already submitted
-            const existingSubmission = exam.submissions?.find(s => s.studentId === currentUser.uid);
-            if (existingSubmission) {
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Ujian Sudah Dikerjakan',
-                    text: 'Anda sudah mengerjakan ujian ini!'
-                });
-                return;
-            }
-            
-            const result = await Swal.fire({
-                title: 'Mulai Ujian',
-                html: `
-                    <div class="text-left space-y-2">
-                        <p><strong>Ujian:</strong> ${exam.title}</p>
-                        <p><strong>Durasi:</strong> ${exam.duration} menit</p>
-                        <p><strong>Jumlah Soal:</strong> ${exam.questions.length}</p>
-                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mt-4">
-                            <p class="text-sm text-yellow-800"><strong>Perhatian:</strong></p>
-                            <ul class="text-sm text-yellow-700 mt-1 space-y-1">
-                                <li>• Ujian akan otomatis berakhir saat waktu habis</li>
-                                <li>• Pastikan koneksi internet stabil</li>
-                                <li>• Jawaban akan tersimpan otomatis</li>
-                            </ul>
-                        </div>
-                    </div>
-                `,
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Mulai Ujian',
-                cancelButtonText: 'Batal'
-            });
-            
-            if (result.isConfirmed) {
-                currentExam = {
-                    ...exam,
-                    currentQuestion: 0,
-                    answers: {},
-                    startTime: new Date(),
-                    timeRemaining: exam.duration * 60 // in seconds
-                };
-                
-                showExamInterface();
-                startExamTimer();
-            }
-        }
-
-        function showExamInterface() {
-            const examInterface = document.getElementById('examInterface');
-            const question = currentExam.questions[currentExam.currentQuestion];
-            
-            examInterface.innerHTML = `
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-gray-800">${currentExam.title}</h3>
-                    <div class="flex items-center space-x-4">
-                        <div class="text-sm text-gray-600">
-                            Soal ${currentExam.currentQuestion + 1} dari ${currentExam.questions.length}
-                        </div>
-                        <div id="examTimer" class="bg-red-100 text-red-800 px-3 py-1 rounded-lg font-mono font-bold">
-                            ${formatTime(currentExam.timeRemaining)}
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-gray-50 rounded-lg p-6 mb-6">
-                    <h4 class="text-lg font-medium text-gray-800 mb-4">${question.question}</h4>
-                    
-                    <div class="space-y-3">
-                        ${Object.entries(question.options).map(([key, value]) => `
-                            <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-white cursor-pointer">
-                                <input type="radio" name="answer" value="${key}" 
-                                       ${currentExam.answers[currentExam.currentQuestion] === key ? 'checked' : ''}
-                                       onchange="saveAnswer('${key}')"
-                                       class="mr-3 text-blue-600 focus:ring-blue-500">
-                                <span class="font-medium text-gray-700 mr-2">${key}.</span>
-                                <span class="text-gray-800">${value}</span>
-                            </label>
-                        `).join('')}
-                    </div>
-                </div>
-                
-                <div class="flex justify-between items-center">
-                    <button onclick="previousQuestion()" 
-                            ${currentExam.currentQuestion === 0 ? 'disabled' : ''}
-                            class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                        <i class="fas fa-chevron-left mr-2"></i>Sebelumnya
-                    </button>
-                    
-                    <div class="flex space-x-2">
-                        ${currentExam.questions.map((_, index) => `
-                            <button onclick="goToQuestion(${index})" 
-                                    class="w-8 h-8 rounded-full text-sm font-medium transition-colors
-                                           ${index === currentExam.currentQuestion ? 'bg-blue-500 text-white' : 
-                                             currentExam.answers[index] ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}">
-                                ${index + 1}
-                            </button>
-                        `).join('')}
-                    </div>
-                    
-                    ${currentExam.currentQuestion === currentExam.questions.length - 1 ? 
-                        `<button onclick="finishExam()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
-                            <i class="fas fa-check mr-2"></i>Selesai
-                        </button>` :
-                        `<button onclick="nextQuestion()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
-                            Selanjutnya<i class="fas fa-chevron-right ml-2"></i>
-                        </button>`
-                    }
-                </div>
-            `;
-            
-            document.getElementById('takeExamModal').classList.remove('hidden');
-        }
-
-        function saveAnswer(answer) {
-            currentExam.answers[currentExam.currentQuestion] = answer;
-        }
-
-        function previousQuestion() {
-            if (currentExam.currentQuestion > 0) {
-                currentExam.currentQuestion--;
-                showExamInterface();
-            }
-        }
-
-        function nextQuestion() {
-            if (currentExam.currentQuestion < currentExam.questions.length - 1) {
-                currentExam.currentQuestion++;
-                showExamInterface();
-            }
-        }
-
-        function goToQuestion(index) {
-            currentExam.currentQuestion = index;
-            showExamInterface();
-        }
-
-        function startExamTimer() {
-            examTimer = setInterval(() => {
-                currentExam.timeRemaining--;
-                
-                const timerElement = document.getElementById('examTimer');
-                if (timerElement) {
-                    timerElement.textContent = formatTime(currentExam.timeRemaining);
-                    
-                    // Change color when time is running out
-                    if (currentExam.timeRemaining <= 300) { // 5 minutes
-                        timerElement.className = 'bg-red-500 text-white px-3 py-1 rounded-lg font-mono font-bold animate-pulse';
-                    }
-                }
-                
-                if (currentExam.timeRemaining <= 0) {
-                    clearInterval(examTimer);
-                    finishExam(true); // Auto-submit
-                }
-            }, 1000);
-        }
-
-        async function finishExam(autoSubmit = false) {
-            clearInterval(examTimer);
-            
-            if (!autoSubmit) {
-                const result = await Swal.fire({
-                    title: 'Selesaikan Ujian?',
-                    text: 'Pastikan semua jawaban sudah benar!',
+                    title: 'Buat Baru',
+                    text: 'Apa yang ingin Anda buat?',
                     icon: 'question',
                     showCancelButton: true,
-                    confirmButtonText: 'Ya, Selesai',
-                    cancelButtonText: 'Periksa Lagi'
-                });
-                
-                if (!result.isConfirmed) {
-                    startExamTimer(); // Resume timer
-                    return;
-                }
-            }
-            
-            try {
-                showLoading();
-                
-                // Calculate score
-                let correctAnswers = 0;
-                currentExam.questions.forEach((question, index) => {
-                    if (currentExam.answers[index] === question.correctAnswer) {
-                        correctAnswers++;
+                    confirmButtonText: '<i class="fas fa-school"></i> Buat Kelas',
+                    cancelButtonText: '<i class="fas fa-tasks"></i> Buat Tugas',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        showModal('createClassModal');
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        loadClassOptions();
+                        showModal('createAssignmentModal');
                     }
                 });
-                
-                const score = Math.round((correctAnswers / currentExam.questions.length) * 100);
-                
-                // Save submission
-                const submission = {
-                    studentId: currentUser.uid,
-                    studentName: currentUser.name,
-                    answers: currentExam.answers,
-                    score: score,
-                    correctAnswers: correctAnswers,
-                    totalQuestions: currentExam.questions.length,
-                    submittedAt: new Date(),
-                    duration: currentExam.duration * 60 - currentExam.timeRemaining // time taken in seconds
-                };
-                
-                // Update exam document
-                const examRef = db.collection('exams').doc(currentExam.id);
-                await examRef.update({
-                    submissions: firebase.firestore.FieldValue.arrayUnion(submission)
-                });
-                
-                // Update local data
-                const examIndex = userExams.findIndex(e => e.id === currentExam.id);
-                if (examIndex !== -1) {
-                    userExams[examIndex].submissions = userExams[examIndex].submissions || [];
-                    userExams[examIndex].submissions.push(submission);
-                }
-                
-                hideModal('takeExamModal');
-                hideLoading();
-                
-                // Show results
-                showExamResults(submission, autoSubmit);
-                
-            } catch (error) {
-                hideLoading();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Gagal menyimpan hasil ujian'
-                });
             }
         }
 
-        function showExamResults(submission, autoSubmit = false) {
-            const grade = submission.score >= 75 ? 'Lulus' : 'Tidak Lulus';
-            const gradeColor = submission.score >= 75 ? 'text-green-600' : 'text-red-600';
-            
-            Swal.fire({
-                title: autoSubmit ? 'Waktu Habis!' : 'Ujian Selesai!',
-                html: `
-                    <div class="text-center space-y-4">
-                        <div class="text-6xl font-bold ${gradeColor}">${submission.score}</div>
-                        <div class="text-lg font-medium ${gradeColor}">${grade}</div>
-                        
-                        <div class="bg-gray-50 rounded-lg p-4 space-y-2">
-                            <div class="flex justify-between">
-                                <span>Jawaban Benar:</span>
-                                <span class="font-medium">${submission.correctAnswers} dari ${submission.totalQuestions}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span>Waktu Pengerjaan:</span>
-                                <span class="font-medium">${formatTime(submission.duration)}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span>Status:</span>
-                                <span class="font-medium ${gradeColor}">${grade}</span>
-                            </div>
-                        </div>
-                        
-                        ${autoSubmit ? '<p class="text-sm text-red-600">Ujian berakhir otomatis karena waktu habis</p>' : ''}
-                    </div>
-                `,
-                confirmButtonText: 'Tutup',
-                allowOutsideClick: false
-            });
-        }
-
-        async function viewExamResults(examId) {
-            const exam = userExams.find(e => e.id === examId);
-            
-            if (!exam.submissions || exam.submissions.length === 0) {
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Belum Ada Hasil',
-                    text: 'Belum ada siswa yang mengerjakan ujian ini'
-                });
-                return;
-            }
-            
-            const results = document.getElementById('examResults');
-            const averageScore = exam.submissions.reduce((sum, s) => sum + s.score, 0) / exam.submissions.length;
-            
-            results.innerHTML = `
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-gray-800">Hasil Ujian: ${exam.title}</h3>
-                    <button onclick="hideModal('examResultsModal')" class="text-gray-500 hover:text-gray-700">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div class="bg-blue-50 rounded-lg p-4 text-center">
-                        <div class="text-2xl font-bold text-blue-600">${exam.submissions.length}</div>
-                        <div class="text-sm text-blue-800">Total Peserta</div>
-                    </div>
-                    <div class="bg-green-50 rounded-lg p-4 text-center">
-                        <div class="text-2xl font-bold text-green-600">${Math.round(averageScore)}</div>
-                        <div class="text-sm text-green-800">Rata-rata Nilai</div>
-                    </div>
-                    <div class="bg-orange-50 rounded-lg p-4 text-center">
-                        <div class="text-2xl font-bold text-orange-600">${exam.submissions.filter(s => s.score >= 75).length}</div>
-                        <div class="text-sm text-orange-800">Lulus</div>
-                    </div>
-                </div>
-                
-                <div class="overflow-x-auto">
-                    <table class="w-full border-collapse border border-gray-200">
-                        <thead>
-                            <tr class="bg-gray-50">
-                                <th class="border border-gray-200 px-4 py-2 text-left">Nama Siswa</th>
-                                <th class="border border-gray-200 px-4 py-2 text-center">Nilai</th>
-                                <th class="border border-gray-200 px-4 py-2 text-center">Benar</th>
-                                <th class="border border-gray-200 px-4 py-2 text-center">Waktu</th>
-                                <th class="border border-gray-200 px-4 py-2 text-center">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${exam.submissions.sort((a, b) => b.score - a.score).map(submission => `
-                                <tr class="hover:bg-gray-50">
-                                    <td class="border border-gray-200 px-4 py-2">${submission.studentName}</td>
-                                    <td class="border border-gray-200 px-4 py-2 text-center font-bold ${submission.score >= 75 ? 'text-green-600' : 'text-red-600'}">${submission.score}</td>
-                                    <td class="border border-gray-200 px-4 py-2 text-center">${submission.correctAnswers}/${submission.totalQuestions}</td>
-                                    <td class="border border-gray-200 px-4 py-2 text-center">${formatTime(submission.duration)}</td>
-                                    <td class="border border-gray-200 px-4 py-2 text-center">
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium ${submission.score >= 75 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
-                                            ${submission.score >= 75 ? 'Lulus' : 'Tidak Lulus'}
-                                        </span>
-                                    </td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="flex justify-end mt-6">
-                    <button onclick="exportExamResults('${examId}')" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
-                        <i class="fas fa-download mr-2"></i>Export Excel
-                    </button>
-                </div>
-            `;
-            
-            document.getElementById('examResultsModal').classList.remove('hidden');
-        }
-
-        function exportExamResults(examId) {
-            const exam = userExams.find(e => e.id === examId);
-            
-            // Create CSV content
-            let csvContent = "Nama Siswa,Nilai,Jawaban Benar,Total Soal,Waktu Pengerjaan,Status,Tanggal\n";
-            
-            exam.submissions.forEach(submission => {
-                const status = submission.score >= 75 ? 'Lulus' : 'Tidak Lulus';
-                const date = new Date(submission.submittedAt).toLocaleDateString('id-ID');
-                csvContent += `"${submission.studentName}",${submission.score},${submission.correctAnswers},${submission.totalQuestions},"${formatTime(submission.duration)}","${status}","${date}"\n`;
-            });
-            
-            // Create and download file
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            link.setAttribute('href', url);
-            link.setAttribute('download', `hasil_ujian_${exam.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.csv`);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            Swal.fire({
-                icon: 'success',
-                title: 'Export Berhasil!',
-                text: 'File hasil ujian telah diunduh'
-            });
-        }
-
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
         }
 
         function hideModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
+            document.getElementById(modalId).style.display = 'none';
         }
 
+        // Create class (Teacher)
         async function createClass(event) {
             event.preventDefault();
             
-            const name = document.getElementById('className').value;
-            const subject = document.getElementById('classSubject').value;
-            const description = document.getElementById('classDescription').value;
+            const className = document.getElementById('className').value;
+            const classSubject = document.getElementById('classSubject').value;
+            const classDescription = document.getElementById('classDescription').value;
+            
+            // Show loading
+            Swal.fire({
+                title: 'Membuat Kelas...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
             
             try {
-                showLoading();
+                const result = await callGASFunction('createClass', {
+                    name: className,
+                    subject: classSubject,
+                    description: classDescription,
+                    teacherId: currentUser.id,
+                    teacherName: currentUser.name
+                });
                 
-                const classCode = generateClassCode();
-                const classData = {
-                    name: name,
-                    subject: subject,
-                    description: description,
+                if (result.success) {
+                    hideModal('createClassModal');
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Kelas Berhasil Dibuat!',
+                        html: `
+                            <p><strong>Nama Kelas:</strong> ${className}</p>
+                            <p><strong>Kode Kelas:</strong> <code>${result.classCode}</code></p>
+                            <p>Bagikan kode kelas kepada siswa untuk bergabung.</p>
+                        `,
+                        confirmButtonColor: '#4285f4'
+                    });
+                    
+                    // Refresh classes if currently viewing classes section
+                    if (currentSection === 'classes') {
+                        loadClasses();
+                    }
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal Membuat Kelas',
+                        text: result.message || 'Terjadi kesalahan saat membuat kelas'
+                    });
+                }
+            } catch (error) {
+                // Fallback to local creation
+                const classCode = 'EDU' + Math.random().toString(36).substr(2, 6).toUpperCase();
+                
+                const newClass = {
+                    id: classes.length + 1,
+                    name: className,
+                    subject: classSubject,
+                    teacher: currentUser.name,
+                    students: 0,
+                    assignments: 0,
                     code: classCode,
-                    teacherId: currentUser.uid,
-                    teacherName: currentUser.name,
-                    students: [],
-                    createdAt: new Date()
+                    description: classDescription
                 };
                 
-                const docRef = await db.collection('classes').add(classData);
-                
-                userClasses.push({ id: docRef.id, ...classData });
-                
+                classes.push(newClass);
                 hideModal('createClassModal');
-                hideLoading();
                 
                 Swal.fire({
                     icon: 'success',
-                    title: 'Kelas Berhasil Dibuat!',
+                    title: 'Kelas Berhasil Dibuat! (Demo Mode)',
                     html: `
-                        <div class="text-left bg-gray-50 p-4 rounded-lg mt-4">
-                            <p><strong>Nama:</strong> ${name}</p>
-                            <p><strong>Kode:</strong> <code class="bg-blue-100 px-2 py-1 rounded">${classCode}</code></p>
-                            <p><strong>Mata Pelajaran:</strong> ${subject}</p>
-                        </div>
-                        <p class="mt-4 text-sm text-gray-600">Bagikan kode kelas kepada siswa untuk bergabung!</p>
-                    `
+                        <p><strong>Nama Kelas:</strong> ${className}</p>
+                        <p><strong>Kode Kelas:</strong> <code>${classCode}</code></p>
+                        <p>Bagikan kode kelas kepada siswa untuk bergabung.</p>
+                    `,
+                    confirmButtonColor: '#4285f4'
                 });
                 
                 if (currentSection === 'classes') {
-                    loadClassesSection();
+                    loadClasses();
                 }
-                updateDashboard();
-                
-                // Reset form
-                document.getElementById('className').value = '';
-                document.getElementById('classSubject').value = '';
-                document.getElementById('classDescription').value = '';
-                
-            } catch (error) {
-                hideLoading();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Gagal membuat kelas'
-                });
             }
+            
+            // Reset form
+            document.getElementById('className').value = '';
+            document.getElementById('classSubject').value = '';
+            document.getElementById('classDescription').value = '';
         }
 
-        async function createAssignment(event) {
+        // Load class options for assignment creation
+        function loadClassOptions() {
+            const classSelect = document.getElementById('assignmentClass');
+            classSelect.innerHTML = '<option value="">Pilih Kelas</option>' + 
+                classes.map(cls => `<option value="${cls.id}">${cls.name}</option>`).join('');
+        }
+
+        // Create assignment (Teacher)
+        function createAssignment(event) {
             event.preventDefault();
             
             const classId = document.getElementById('assignmentClass').value;
@@ -1858,206 +1516,178 @@
             const deadline = document.getElementById('assignmentDeadline').value;
             const file = document.getElementById('assignmentFile').files[0];
             
-            try {
-                showLoading();
-                
-                const selectedClass = userClasses.find(cls => cls.id === classId);
-                
-                let fileUrl = null;
-                if (file) {
-                    const fileRef = storage.ref(`assignments/${Date.now()}_${file.name}`);
-                    const snapshot = await fileRef.put(file);
-                    fileUrl = await snapshot.ref.getDownloadURL();
-                }
-                
-                const assignmentData = {
-                    classId: classId,
-                    className: selectedClass.name,
-                    title: title,
-                    description: description,
-                    deadline: deadline,
-                    teacherId: currentUser.uid,
-                    teacherName: currentUser.name,
-                    fileUrl: fileUrl,
-                    fileName: file ? file.name : null,
-                    createdAt: new Date()
-                };
-                
-                const docRef = await db.collection('assignments').add(assignmentData);
-                
-                userAssignments.push({ id: docRef.id, ...assignmentData });
-                
-                hideModal('createAssignmentModal');
-                hideLoading();
-                
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Tugas Berhasil Dibuat!',
-                    html: `
-                        <div class="text-left bg-gray-50 p-4 rounded-lg mt-4">
-                            <p><strong>Judul:</strong> ${title}</p>
-                            <p><strong>Kelas:</strong> ${selectedClass.name}</p>
-                            <p><strong>Deadline:</strong> ${formatDate(deadline)}</p>
-                        </div>
-                    `
-                });
-                
-                if (currentSection === 'assignments') {
-                    loadAssignmentsSection();
-                }
-                updateDashboard();
-                
-                // Reset form
-                document.getElementById('assignmentClass').value = '';
-                document.getElementById('assignmentTitle').value = '';
-                document.getElementById('assignmentDescription').value = '';
-                document.getElementById('assignmentDeadline').value = '';
-                document.getElementById('assignmentFile').value = '';
-                
-            } catch (error) {
-                hideLoading();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Gagal membuat tugas'
-                });
-            }
-        }
-
-        async function joinClass() {
-            const classCode = document.getElementById('classCodeInput').value.trim().toUpperCase();
+            const selectedClass = classes.find(cls => cls.id == classId);
             
-            if (!classCode) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Kode Kelas Kosong',
-                    text: 'Silakan masukkan kode kelas!'
-                });
-                return;
+            // Create assignment object (in real app, this would be saved to Google Sheets)
+            const newAssignment = {
+                id: assignments.length + 1,
+                title: title,
+                description: description,
+                class: selectedClass.name,
+                classId: classId,
+                deadline: deadline,
+                status: 'active',
+                subject: selectedClass.subject,
+                file: file ? file.name : null
+            };
+            
+            assignments.push(newAssignment);
+            
+            hideModal('createAssignmentModal');
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Tugas Berhasil Dibuat!',
+                text: `Tugas "${title}" telah dibuat untuk kelas ${selectedClass.name}`,
+                confirmButtonColor: '#4285f4'
+            });
+            
+            // Refresh assignments if currently viewing assignments section
+            if (currentSection === 'assignments') {
+                loadAssignments();
             }
             
-            try {
-                showLoading();
-                
-                // Find class by code
-                const classSnapshot = await db.collection('classes').where('code', '==', classCode).get();
-                
-                if (classSnapshot.empty) {
-                    hideLoading();
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Kelas Tidak Ditemukan',
-                        text: 'Kode kelas tidak valid!'
-                    });
-                    return;
-                }
-                
-                const classDoc = classSnapshot.docs[0];
-                const classData = classDoc.data();
-                
-                if (classData.students && classData.students.includes(currentUser.uid)) {
-                    hideLoading();
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'Sudah Bergabung',
-                        text: 'Anda sudah bergabung dengan kelas ini!'
-                    });
-                    return;
-                }
-                
-                // Add student to class
-                const updatedStudents = [...(classData.students || []), currentUser.uid];
-                await db.collection('classes').doc(classDoc.id).update({
-                    students: updatedStudents
-                });
-                
-                // Update local data
-                userClasses.push({ id: classDoc.id, ...classData, students: updatedStudents });
-                
-                hideLoading();
-                
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil Bergabung!',
-                    html: `
-                        <div class="text-left bg-gray-50 p-4 rounded-lg mt-4">
-                            <p><strong>Kelas:</strong> ${classData.name}</p>
-                            <p><strong>Guru:</strong> ${classData.teacherName}</p>
-                            <p><strong>Mata Pelajaran:</strong> ${classData.subject}</p>
-                        </div>
-                    `
-                });
-                
-                document.getElementById('classCodeInput').value = '';
-                
-                if (currentSection === 'classes') {
-                    loadClassesSection();
-                }
-                updateDashboard();
-                
-            } catch (error) {
-                hideLoading();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Gagal bergabung dengan kelas'
-                });
-            }
+            // Reset form
+            document.getElementById('assignmentClass').value = '';
+            document.getElementById('assignmentTitle').value = '';
+            document.getElementById('assignmentDescription').value = '';
+            document.getElementById('assignmentDeadline').value = '';
+            document.getElementById('assignmentFile').value = '';
         }
 
+        // Open class details
         function openClass(classId) {
-            const selectedClass = userClasses.find(cls => cls.id === classId);
-            const classAssignments = userAssignments.filter(a => a.classId === classId);
+            const selectedClass = classes.find(cls => cls.id === classId);
             
             Swal.fire({
                 title: selectedClass.name,
                 html: `
-                    <div class="text-left space-y-3">
-                        <p><strong>Guru:</strong> ${selectedClass.teacherName}</p>
-                        <p><strong>Mata Pelajaran:</strong> ${selectedClass.subject}</p>
-                        <p><strong>Kode Kelas:</strong> <code class="bg-gray-100 px-2 py-1 rounded">${selectedClass.code}</code></p>
-                        <p><strong>Jumlah Siswa:</strong> ${selectedClass.students?.length || 0}</p>
-                        <p><strong>Jumlah Tugas:</strong> ${classAssignments.length}</p>
+                    <div style="text-align: left;">
+                        <p><strong>Guru:</strong> ${selectedClass.teacher}</p>
+                        <p><strong>Jumlah Siswa:</strong> ${selectedClass.students}</p>
+                        <p><strong>Jumlah Tugas:</strong> ${selectedClass.assignments}</p>
+                        ${selectedClass.code ? `<p><strong>Kode Kelas:</strong> <code>${selectedClass.code}</code></p>` : ''}
                         ${selectedClass.description ? `<p><strong>Deskripsi:</strong> ${selectedClass.description}</p>` : ''}
                     </div>
                 `,
-                confirmButtonText: 'Tutup'
+                confirmButtonText: 'Tutup',
+                confirmButtonColor: '#4285f4'
             });
         }
 
+        // Open assignment details
         function openAssignment(assignmentId) {
-            const assignment = userAssignments.find(a => a.id === assignmentId);
+            const assignment = assignments.find(a => a.id === assignmentId);
+            
+            if (currentUser.role === 'student' && assignment.status === 'pending') {
+                Swal.fire({
+                    title: assignment.title,
+                    html: `
+                        <div style="text-align: left;">
+                            <p><strong>Kelas:</strong> ${assignment.class}</p>
+                            <p><strong>Deadline:</strong> ${formatDate(assignment.deadline)}</p>
+                            <p><strong>Status:</strong> ${getStatusText(assignment.status)}</p>
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="fas fa-upload"></i> Kumpulkan Tugas',
+                    cancelButtonText: 'Tutup',
+                    confirmButtonColor: '#34a853',
+                    cancelButtonColor: '#6c757d'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('submitAssignmentId').value = assignmentId;
+                        showModal('submitAssignmentModal');
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: assignment.title,
+                    html: `
+                        <div style="text-align: left;">
+                            <p><strong>Kelas:</strong> ${assignment.class}</p>
+                            <p><strong>Deadline:</strong> ${formatDate(assignment.deadline)}</p>
+                            <p><strong>Status:</strong> ${getStatusText(assignment.status)}</p>
+                        </div>
+                    `,
+                    confirmButtonText: 'Tutup',
+                    confirmButtonColor: '#4285f4'
+                });
+            }
+        }
+
+        // Submit assignment (Student)
+        function submitAssignment(event) {
+            event.preventDefault();
+            
+            const assignmentId = document.getElementById('submitAssignmentId').value;
+            const comment = document.getElementById('submitComment').value;
+            const file = document.getElementById('submitFile').files[0];
+            
+            if (!file) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'File Diperlukan',
+                    text: 'Silakan pilih file jawaban untuk dikumpulkan.'
+                });
+                return;
+            }
+            
+            // Update assignment status (in real app, this would be saved to Google Sheets)
+            const assignment = assignments.find(a => a.id == assignmentId);
+            if (assignment) {
+                assignment.status = 'submitted';
+            }
+            
+            hideModal('submitAssignmentModal');
             
             Swal.fire({
-                title: assignment.title,
-                html: `
-                    <div class="text-left space-y-3">
-                        <p><strong>Kelas:</strong> ${assignment.className}</p>
-                        <p><strong>Deadline:</strong> ${formatDate(assignment.deadline)}</p>
-                        <p><strong>Deskripsi:</strong> ${assignment.description || 'Tidak ada deskripsi'}</p>
-                        ${assignment.fileUrl ? `<p><strong>File:</strong> <a href="${assignment.fileUrl}" target="_blank" class="text-blue-600 hover:underline">${assignment.fileName}</a></p>` : ''}
-                    </div>
-                `,
-                confirmButtonText: 'Tutup'
+                icon: 'success',
+                title: 'Tugas Berhasil Dikumpulkan!',
+                text: 'Tugas Anda telah berhasil dikumpulkan.',
+                confirmButtonColor: '#4285f4'
             });
+            
+            // Refresh assignments and update notification badge
+            if (currentSection === 'assignments') {
+                loadAssignments();
+            }
+            
+            // Update notification badge
+            const pendingCount = assignments.filter(a => a.status === 'pending').length;
+            const badge = document.getElementById('assignmentBadge');
+            if (pendingCount > 0) {
+                badge.textContent = pendingCount;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+            
+            // Reset form
+            document.getElementById('submitComment').value = '';
+            document.getElementById('submitFile').value = '';
         }
 
         // Utility functions
-        function showLoading() {
-            document.getElementById('loadingOverlay').style.display = 'flex';
+        function getSubjectIcon(subject) {
+            const icons = {
+                math: 'calculator',
+                science: 'flask',
+                english: 'book-open',
+                history: 'landmark',
+                other: 'book'
+            };
+            return icons[subject] || 'book';
         }
 
-        function hideLoading() {
-            document.getElementById('loadingOverlay').style.display = 'none';
-        }
-
-        function generateClassCode() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let result = '';
-            for (let i = 0; i < 6; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return result;
+        function getStatusText(status) {
+            const statusTexts = {
+                pending: 'Belum Dikerjakan',
+                submitted: 'Sudah Dikumpulkan',
+                overdue: 'Terlambat',
+                active: 'Aktif'
+            };
+            return statusTexts[status] || status;
         }
 
         function formatDate(dateString) {
@@ -2071,26 +1701,45 @@
             });
         }
 
-        function getErrorMessage(errorCode) {
-            const errorMessages = {
-                'auth/user-not-found': 'Email tidak terdaftar',
-                'auth/wrong-password': 'Password salah',
-                'auth/email-already-in-use': 'Email sudah digunakan',
-                'auth/weak-password': 'Password terlalu lemah',
-                'auth/invalid-email': 'Format email tidak valid'
-            };
-            return errorMessages[errorCode] || 'Terjadi kesalahan';
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
         }
 
-        // Set minimum date for assignment deadline
-        document.addEventListener('DOMContentLoaded', function() {
-            const deadlineInput = document.getElementById('assignmentDeadline');
-            if (deadlineInput) {
-                const now = new Date();
-                now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-                deadlineInput.min = now.toISOString().slice(0, 16);
-            }
+        // File upload drag and drop
+        document.querySelectorAll('.file-upload').forEach(upload => {
+            upload.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('dragover');
+            });
+            
+            upload.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+            });
+            
+            upload.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    const fileInput = this.querySelector('input[type="file"]');
+                    if (fileInput) {
+                        fileInput.files = files;
+                        this.querySelector('p').textContent = `File dipilih: ${files[0].name}`;
+                    }
+                }
+            });
         });
+
+        // Set minimum date for assignment deadline
+        document.getElementById('assignmentDeadline').min = new Date().toISOString().slice(0, 16);
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'986304bf55e88799',t:'MTc1OTA2MDE3OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'986238ad5730b995',t:'MTc1OTA1MTgxOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
