@@ -124,33 +124,7 @@
         </div>
     </div>
 
-    <!-- Setup Modal -->
-    <div id="setupModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
-            <div class="text-center mb-6">
-                <i class="fas fa-cog text-4xl text-blue-500 mb-4"></i>
-                <h2 class="text-2xl font-bold text-gray-800">Setup Firebase</h2>
-                <p class="text-gray-600 mt-2">Untuk menggunakan sistem ini, Anda perlu setup Firebase terlebih dahulu</p>
-            </div>
-            
-            <div class="space-y-4">
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <h3 class="font-semibold text-blue-800 mb-2">Langkah Setup:</h3>
-                    <ol class="text-sm text-blue-700 space-y-1">
-                        <li>1. Buka <a href="https://console.firebase.google.com" target="_blank" class="underline">Firebase Console</a></li>
-                        <li>2. Buat project baru</li>
-                        <li>3. Enable Authentication & Firestore</li>
-                        <li>4. Copy config ke kode ini</li>
-                        <li>5. Deploy ke hosting</li>
-                    </ol>
-                </div>
-                
-                <button onclick="closeSetupModal()" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors">
-                    Saya Mengerti
-                </button>
-            </div>
-        </div>
-    </div>
+
 
     <!-- Auth Container -->
     <div id="authContainer" class="min-h-screen gradient-bg flex items-center justify-center p-4">
@@ -643,12 +617,6 @@
 
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if Firebase is configured
-            if (!window.firebaseApp) {
-                showSetupModal();
-                return;
-            }
-
             // Check authentication state
             auth.onAuthStateChanged((user) => {
                 if (user) {
@@ -659,15 +627,7 @@
             });
         });
 
-        function showSetupModal() {
-            document.getElementById('setupModal').classList.remove('hidden');
-            document.getElementById('loadingOverlay').style.display = 'none';
-        }
 
-        function closeSetupModal() {
-            document.getElementById('setupModal').classList.add('hidden');
-            document.getElementById('loadingOverlay').style.display = 'flex';
-        }
 
         function showAuthContainer() {
             document.getElementById('loadingOverlay').style.display = 'none';
@@ -2135,5 +2095,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98630079d050835c',t:'MTc1OTA2MDAwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'986304bf55e88799',t:'MTc1OTA2MDE3OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
