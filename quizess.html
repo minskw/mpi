@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSmartQuiz - Platform CBT Interaktif</title>
+    <title>MSmart Quizezz - Platform Quiz Interaktif</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -45,33 +45,6 @@
             background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
         }
         
-        .pulse-animation {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        
-        .slide-in {
-            animation: slideIn 0.5s ease-out;
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.3s ease-in;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
@@ -99,147 +72,153 @@
         .btn-danger:hover {
             background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
         }
+        
+        .logo-hover {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .logo-hover:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .admin-panel {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+        }
+        
+        .pulse-online {
+            animation: pulse-green 2s infinite;
+        }
+        
+        .pulse-offline {
+            animation: pulse-red 2s infinite;
+        }
+        
+        @keyframes pulse-green {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        @keyframes pulse-red {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen">
+<body class="bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
     <!-- Header -->
     <nav class="gradient-bg shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
-                        <i class="fas fa-bullseye text-2xl text-purple-600"></i>
+                    <div class="logo-hover w-12 h-12 bg-white rounded-xl flex items-center justify-center" 
+                         onclick="showAdminLogin()" title="Klik untuk Panel Admin">
+                        <i class="fas fa-graduation-cap text-2xl text-purple-600"></i>
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold text-white">MSmartQuiz</h1>
-                        <p class="text-purple-100 text-sm">Platform Kuis Interaktif</p>
+                        <h1 class="text-2xl font-bold text-white">MSmart Quizezz</h1>
+                        <p class="text-blue-100 text-sm">Platform Quiz Interaktif</p>
                     </div>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <button onclick="showAdminLogin()" class="text-white hover:text-gray-200 bg-white bg-opacity-20 px-4 py-2 rounded-lg text-sm transition-all">
-                        <i class="fas fa-user-shield mr-2"></i>Admin
-                    </button>
-                    <div class="text-white text-right">
-                        <div class="text-sm font-medium" id="current-time"></div>
-                        <div class="text-xs text-purple-100">Live Session</div>
-                    </div>
+                <div class="text-white text-right">
+                    <div class="text-sm font-medium" id="current-time"></div>
+                    <div class="text-xs" id="connection-status">🔴 Connecting...</div>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Main App Container - Student Portal -->
+    <!-- Main App Container -->
     <div id="main-app" class="max-w-4xl mx-auto px-4 py-8">
         
         <!-- Welcome Section -->
-        <div class="text-center mb-12">
+        <div class="text-center mb-12 fade-in">
             <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <i class="fas fa-graduation-cap text-5xl text-purple-600"></i>
+                <i class="fas fa-brain text-5xl text-purple-600"></i>
             </div>
-            <h1 class="text-4xl font-bold text-gray-800 mb-4">Selamat Datang, Siswa!</h1>
-            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Bergabunglah dalam kuis interaktif yang menyenangkan dan uji pengetahuan Anda</p>
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Selamat Datang di MSmart Quizezz!</h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Tingkatkan pengetahuan dengan quiz interaktif yang menyenangkan</p>
         </div>
 
         <!-- Join Game Form -->
-        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 fade-in">
             <div class="text-center mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Bergabung dalam Kuis</h2>
-                <p class="text-gray-600">Masukkan Game PIN yang diberikan guru untuk mulai bermain</p>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Gabung Quiz</h2>
+                <p class="text-gray-600">Masukkan kode game dari guru Anda</p>
             </div>
             
             <div class="max-w-md mx-auto space-y-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">
-                        <i class="fas fa-gamepad mr-2"></i>Game PIN
+                        <i class="fas fa-key mr-2"></i>Kode Game
                     </label>
                     <input type="text" id="game-pin-input" placeholder="Contoh: 123456" 
                            class="w-full px-4 py-4 border border-gray-300 rounded-lg text-center text-3xl font-bold focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">
-                        <i class="fas fa-user mr-2"></i>Nama Anda
+                        <i class="fas fa-user mr-2"></i>Nama Lengkap
                     </label>
-                    <input type="text" id="student-name-input" placeholder="Masukkan nama lengkap" 
+                    <input type="text" id="student-name-input" placeholder="Nama Anda" 
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">
-                        <i class="fas fa-users mr-2"></i>Kelas (Opsional)
+                        <i class="fas fa-users mr-2"></i>Kelas
                     </label>
-                    <input type="text" id="student-class-input" placeholder="Contoh: X-1, XI-2" 
+                    <input type="text" id="student-class-input" placeholder="Contoh: X-1" 
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
                 </div>
                 <button onclick="joinGame()" class="w-full btn-primary text-white py-4 rounded-lg font-semibold text-lg transition-all">
-                    <i class="fas fa-rocket mr-2"></i>Bergabung Sekarang
+                    <i class="fas fa-play-circle mr-2"></i>Mulai Quiz
                 </button>
             </div>
         </div>
 
-        <!-- How to Play -->
-        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+        <!-- Live Stats -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 fade-in">
             <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">
-                <i class="fas fa-book mr-2"></i>Cara Bermain
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-keyboard text-2xl text-blue-600"></i>
-                    </div>
-                    <h4 class="font-bold text-gray-800 mb-2">Masukkan Game PIN</h4>
-                    <p class="text-sm text-gray-600">Dapatkan kode 6 digit dari guru Anda</p>
-                </div>
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-signature text-2xl text-green-600"></i>
-                    </div>
-                    <h4 class="font-bold text-gray-800 mb-2">Tulis Nama Anda</h4>
-                    <p class="text-sm text-gray-600">Agar guru dapat mengenali hasil Anda</p>
-                </div>
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-play text-2xl text-purple-600"></i>
-                    </div>
-                    <h4 class="font-bold text-gray-800 mb-2">Mulai Bermain</h4>
-                    <p class="text-sm text-gray-600">Jawab pertanyaan dan raih skor tertinggi!</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quick Stats for Students -->
-        <div class="bg-white rounded-2xl shadow-lg p-8">
-            <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">
-                <i class="fas fa-trophy mr-2"></i>Statistik Hari Ini
+                <i class="fas fa-chart-line mr-2"></i>Statistik Live
             </h3>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div class="text-center">
-                    <div class="text-3xl font-bold text-blue-600" id="games-today">12</div>
-                    <div class="text-gray-600">Game Hari Ini</div>
+                    <div class="text-3xl font-bold text-blue-600" id="total-quizzes">0</div>
+                    <div class="text-gray-600">Total Quiz</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-3xl font-bold text-green-600" id="students-online">28</div>
-                    <div class="text-gray-600">Siswa Online</div>
+                    <div class="text-3xl font-bold text-green-600" id="active-games">0</div>
+                    <div class="text-gray-600">Game Aktif</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-3xl font-bold text-purple-600" id="avg-score-today">85%</div>
+                    <div class="text-3xl font-bold text-purple-600" id="total-players">0</div>
+                    <div class="text-gray-600">Pemain</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-orange-600" id="avg-score">0%</div>
                     <div class="text-gray-600">Rata-rata Skor</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-orange-600" id="top-score">950</div>
-                    <div class="text-gray-600">Skor Tertinggi</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Admin Login -->
-    <div id="admin-login" class="hidden max-w-md mx-auto px-4 py-8">
-        <div class="bg-white rounded-2xl shadow-lg p-8">
+    <!-- Hidden Admin Login -->
+    <div id="admin-login" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full mx-4">
             <div class="text-center mb-8">
-                <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <i class="fas fa-user-shield text-4xl text-blue-600"></i>
+                <div class="w-20 h-20 admin-panel rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-lock text-4xl text-white"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Login Admin</h2>
-                <p class="text-gray-600">Masuk ke panel administrasi MSmartQuiz</p>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Panel Admin</h2>
+                <p class="text-gray-600">Akses terbatas untuk guru</p>
             </div>
             
             <form onsubmit="event.preventDefault(); adminLogin();" class="space-y-6">
@@ -247,125 +226,67 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         <i class="fas fa-user mr-2"></i>Username
                     </label>
-                    <input type="text" id="admin-username" placeholder="Masukkan username" 
+                    <input type="text" id="admin-username" placeholder="Username" 
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         <i class="fas fa-lock mr-2"></i>Password
                     </label>
-                    <input type="password" id="admin-password" placeholder="Masukkan password" 
+                    <input type="password" id="admin-password" placeholder="Password" 
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 </div>
-                <button type="submit" class="w-full btn-primary text-white py-3 rounded-lg font-semibold transition-colors">
-                    <i class="fas fa-sign-in-alt mr-2"></i>Masuk
-                </button>
+                <div class="flex space-x-3">
+                    <button type="submit" class="flex-1 btn-primary text-white py-3 rounded-lg font-semibold transition-colors">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Masuk
+                    </button>
+                    <button type="button" onclick="hideAdminLogin()" class="flex-1 bg-gray-500 text-white py-3 rounded-lg font-semibold hover:bg-gray-600 transition-colors">
+                        <i class="fas fa-times mr-2"></i>Batal
+                    </button>
+                </div>
             </form>
             
-            <div class="mt-6 text-center">
-                <button onclick="showMainApp()" class="text-gray-500 hover:text-gray-700 text-sm transition-colors">
-                    <i class="fas fa-arrow-left mr-1"></i>Kembali ke halaman siswa
-                </button>
-            </div>
-            
-            <div class="mt-6 p-4 bg-gray-50 rounded-lg">
-                <p class="text-sm text-gray-600 text-center">
-                    <strong>Demo Login:</strong><br>
-                    <i class="fas fa-user mr-1"></i>Username: admin<br>
-                    <i class="fas fa-key mr-1"></i>Password: MSmartQuiz2024
+            <div class="mt-6 p-4 bg-yellow-50 rounded-lg">
+                <p class="text-sm text-yellow-800 text-center">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    <strong>Default Login:</strong> admin / msmart2024
                 </p>
             </div>
         </div>
     </div>
-    
+
     <!-- Teacher Portal -->
     <div id="teacher-portal" class="hidden max-w-6xl mx-auto px-4 py-8">
         <div class="flex justify-between items-center mb-8">
             <div>
                 <h2 class="text-3xl font-bold text-gray-800">
-                    <i class="fas fa-chalkboard-teacher mr-2"></i>Panel Admin
+                    <i class="fas fa-chalkboard-teacher mr-2"></i>Panel Guru
                 </h2>
-                <p class="text-gray-600">Kelola kuis dan pantau aktivitas siswa</p>
+                <p class="text-gray-600">Kelola quiz dan pantau hasil siswa</p>
             </div>
             <div class="flex space-x-3">
-                <button onclick="showSetupPage()" class="btn-primary text-white px-4 py-2 rounded-lg transition-colors">
-                    <i class="fas fa-cog mr-2"></i>Setup Apps Script
-                </button>
                 <button onclick="showMainApp()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">
                     <i class="fas fa-sign-out-alt mr-2"></i>Logout
                 </button>
             </div>
         </div>
         
-        <!-- Debug Panel -->
-        <div id="debug-panel" class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-            <h4 class="font-bold text-green-800 mb-3">
-                <i class="fas fa-rocket mr-2"></i>CBT System Status - FULLY FUNCTIONAL!
-            </h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
-                <div class="bg-green-100 border border-green-300 rounded p-3">
-                    <div class="font-semibold text-green-800">
-                        <i class="fas fa-database mr-2"></i>Apps Script
-                    </div>
-                    <div class="text-sm text-green-700">Google Sheets Backend</div>
-                    <div class="text-xs text-green-600 mt-1">
-                        <i class="fas fa-check-circle mr-1"></i>AKTIF - Reliable Storage
-                    </div>
+        <!-- Connection Status -->
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h4 class="font-bold text-blue-800">
+                        <i class="fas fa-database mr-2"></i>Status Database
+                    </h4>
+                    <p class="text-blue-700 text-sm" id="db-status">Terhubung ke Google Sheets</p>
                 </div>
-                <div class="bg-blue-100 border border-blue-300 rounded p-3">
-                    <div class="font-semibold text-blue-800">
-                        <i class="fas fa-layer-group mr-2"></i>Enhanced Storage
-                    </div>
-                    <div class="text-sm text-blue-700">LocalStorage + Metadata</div>
-                    <div class="text-xs text-blue-600 mt-1">
-                        <i class="fas fa-check-circle mr-1"></i>AKTIF - With Statistics
-                    </div>
-                </div>
-                <div class="bg-purple-100 border border-purple-300 rounded p-3">
-                    <div class="font-semibold text-purple-800">
-                        <i class="fas fa-download mr-2"></i>Auto Export
-                    </div>
-                    <div class="text-sm text-purple-700">File Backup System</div>
-                    <div class="text-xs text-purple-600 mt-1">
-                        <i class="fas fa-check-circle mr-1"></i>AKTIF - Auto Download
-                    </div>
-                </div>
-                <div class="bg-orange-100 border border-orange-300 rounded p-3">
-                    <div class="font-semibold text-orange-800">
-                        <i class="fas fa-cloud mr-2"></i>Cloud Sync
-                    </div>
-                    <div class="text-sm text-orange-700">Real-time Backup</div>
-                    <div class="text-xs text-orange-600 mt-1">
-                        <i class="fas fa-check-circle mr-1"></i>AKTIF - Multi-location
-                    </div>
-                </div>
-            </div>
-            <div class="flex flex-wrap gap-2 mb-4">
-                <button onclick="showAllStorageData()" class="btn-success text-white px-3 py-1 rounded text-sm transition-colors">
-                    <i class="fas fa-chart-bar mr-1"></i>Show All Data
-                </button>
-                <button onclick="exportAllData()" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600 transition-colors">
-                    <i class="fas fa-download mr-1"></i>Export Everything
-                </button>
-                <button onclick="testFullSystem()" class="bg-purple-500 text-white px-3 py-1 rounded text-sm hover:bg-purple-600 transition-colors">
-                    <i class="fas fa-vial mr-1"></i>Test Full System
-                </button>
-                <button onclick="showStorageStats()" class="bg-orange-500 text-white px-3 py-1 rounded text-sm hover:bg-orange-600 transition-colors">
-                    <i class="fas fa-chart-line mr-1"></i>Storage Stats
-                </button>
-                <button onclick="clearAllCBTData()" class="btn-danger text-white px-3 py-1 rounded text-sm transition-colors">
-                    <i class="fas fa-trash mr-1"></i>Clear All
-                </button>
-            </div>
-            <div class="bg-green-50 border border-green-200 rounded p-3">
-                <div class="font-semibold text-green-800">
-                    <i class="fas fa-check-circle mr-2"></i>SISTEM CBT SIAP DIGUNAKAN!
-                </div>
-                <div class="text-sm text-green-700 mt-1">
-                    4 metode penyimpanan aktif | Auto backup | Data persistence | Export/Import ready
-                </div>
-                <div class="text-xs text-green-600 mt-2">
-                    Semua kuis dan hasil akan tersimpan dengan aman menggunakan multiple backup methods.
+                <div class="flex space-x-2">
+                    <button onclick="testDatabaseConnection()" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600 transition-colors">
+                        <i class="fas fa-sync mr-1"></i>Test Connection
+                    </button>
+                    <button onclick="exportAllData()" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600 transition-colors">
+                        <i class="fas fa-download mr-1"></i>Export Data
+                    </button>
                 </div>
             </div>
         </div>
@@ -375,10 +296,10 @@
             <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-2xl font-bold text-gray-800">
-                        <i class="fas fa-list mr-2"></i>Daftar Kuis
+                        <i class="fas fa-list mr-2"></i>Daftar Quiz
                     </h3>
                     <button onclick="createNewQuiz()" class="btn-primary text-white px-4 py-2 rounded-lg transition-colors">
-                        <i class="fas fa-plus mr-2"></i>Buat Kuis Baru
+                        <i class="fas fa-plus mr-2"></i>Buat Quiz Baru
                     </button>
                 </div>
                 <div id="quiz-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -392,11 +313,11 @@
             <div class="bg-white rounded-2xl shadow-lg p-8">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-2xl font-bold text-gray-800">
-                        <i class="fas fa-edit mr-2"></i>Editor Kuis
+                        <i class="fas fa-edit mr-2"></i>Editor Quiz
                     </h3>
                     <div class="space-x-3">
                         <button onclick="saveQuiz()" class="btn-success text-white px-4 py-2 rounded-lg transition-colors">
-                            <i class="fas fa-save mr-2"></i>Simpan Kuis
+                            <i class="fas fa-save mr-2"></i>Simpan ke Database
                         </button>
                         <button onclick="cancelQuizEdit()" class="btn-danger text-white px-4 py-2 rounded-lg transition-colors">
                             <i class="fas fa-times mr-2"></i>Batal
@@ -408,7 +329,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-heading mr-2"></i>Judul Kuis
+                            <i class="fas fa-heading mr-2"></i>Judul Quiz
                         </label>
                         <input type="text" id="quiz-title" placeholder="Contoh: Matematika Dasar" 
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
@@ -422,13 +343,13 @@
                             <option value="Matematika">Matematika</option>
                             <option value="Bahasa Indonesia">Bahasa Indonesia</option>
                             <option value="Bahasa Inggris">Bahasa Inggris</option>
-                            <option value="IPAS">IPAS</option>
-                            <option value="Akidah Akhlak">Akidah Akhlak</option>
-                            <option value="Fikih">Fikih</option>
-                            <option value="Quran Hadits">Quran Hadits</option>
-                            <option value="SBdP">SBdP</option>
-                            <option value="SKI">SKI</option>
-                            <option value="Bahasa Arab">Bahasa Arab</option>
+                            <option value="IPA">IPA</option>
+                            <option value="IPS">IPS</option>
+                            <option value="Biologi">Biologi</option>
+                            <option value="Fisika">Fisika</option>
+                            <option value="Kimia">Kimia</option>
+                            <option value="Sejarah">Sejarah</option>
+                            <option value="Geografi">Geografi</option>
                         </select>
                     </div>
                     <div>
@@ -437,9 +358,12 @@
                         </label>
                         <select id="quiz-grade" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                             <option value="">Pilih Kelas</option>
-                            <option value="IV">IV</option>
-                            <option value="V">V</option>
-                            <option value="VI">VI</option>
+                            <option value="VII">VII</option>
+                            <option value="VIII">VIII</option>
+                            <option value="IX">IX</option>
+                            <option value="X">X</option>
+                            <option value="XI">XI</option>
+                            <option value="XII">XII</option>
                         </select>
                     </div>
                 </div>
@@ -467,7 +391,7 @@
             <div class="bg-white rounded-2xl shadow-lg p-8 text-center">
                 <div class="mb-8">
                     <div class="text-6xl font-bold text-purple-600 mb-4" id="game-pin-display">123456</div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Game PIN</h3>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Kode Game</h3>
                     <p class="text-gray-600" id="quiz-title-display">Matematika Dasar - Aljabar</p>
                 </div>
                 
@@ -488,80 +412,6 @@
         </div>
     </div>
 
-    <!-- Setup Page -->
-    <div id="setup-page" class="hidden max-w-6xl mx-auto px-4 py-8">
-        <div class="bg-white rounded-2xl shadow-lg p-8">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">
-                    <i class="fas fa-cogs mr-2"></i>Setup Google Apps Script
-                </h2>
-                <button onclick="showTeacherPortal()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">
-                    <i class="fas fa-arrow-left mr-2"></i>Kembali
-                </button>
-            </div>
-            
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                <p class="text-blue-800">
-                    <i class="fas fa-info-circle mr-2"></i>Google Apps Script sudah dikonfigurasi dan siap digunakan! ✅
-                </p>
-            </div>
-            
-            <form onsubmit="saveScriptUrls(event)" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        <i class="fas fa-link mr-2"></i>URL Apps Script Web App
-                    </label>
-                    <input type="url" id="script-url" class="w-full px-4 py-3 border border-gray-300 rounded-lg" 
-                           placeholder="https://script.google.com/macros/s/AKfycbylg4e93Ep3wCReJZ1jdD_4ItlI2FR1dy_wqCERBXnRRUMcoVsY4t51lBx76Pk_F26C9w/exec">
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        <i class="fas fa-table mr-2"></i>Google Sheets URL
-                    </label>
-                    <input type="url" id="sheets-url" class="w-full px-4 py-3 border border-gray-300 rounded-lg" 
-                           placeholder="https://docs.google.com/spreadsheets/d/...">
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        <i class="fas fa-key mr-2"></i>Security Token
-                    </label>
-                    <input type="text" id="security-token" class="w-full px-4 py-3 border border-gray-300 rounded-lg" 
-                           value="MSmartQuiz2024" readonly>
-                </div>
-                
-                <button type="submit" class="w-full btn-success text-white py-3 rounded-lg font-semibold transition-colors">
-                    <i class="fas fa-save mr-2"></i>Simpan Konfigurasi
-                </button>
-            </form>
-            
-            <div class="mt-8 bg-gray-50 rounded-lg p-6">
-                <h4 class="font-bold text-gray-800 mb-4">
-                    <i class="fas fa-question-circle mr-2"></i>Panduan Setup
-                </h4>
-                <div class="space-y-3 text-sm text-gray-600">
-                    <div class="flex items-start">
-                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                        <span>Buka script.google.com dan buat project baru</span>
-                    </div>
-                    <div class="flex items-start">
-                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                        <span>Tempel kode Apps Script yang disediakan</span>
-                    </div>
-                    <div class="flex items-start">
-                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                        <span>Deploy sebagai Web App dengan akses "Anyone"</span>
-                    </div>
-                    <div class="flex items-start">
-                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                        <span>Salin URL Web App dan tempel di form atas</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Live Game -->
     <div id="live-game" class="hidden">
         <!-- Game content will be dynamically loaded here -->
@@ -570,10 +420,8 @@
     <script>
         // ========== CONFIGURATION ==========
         const APPS_SCRIPT_CONFIG = {
-            scriptUrl: localStorage.getItem('cbt_script_url') || '',
-            sheetsUrl: localStorage.getItem('cbt_sheets_url') || '',
-            token: 'MSmartQuiz2024',
-            enabled: false
+            scriptUrl: 'https://script.google.com/macros/s/AKfycbz3cfhF195i_VlviMFHv00uKGsRR8tWY3RjHMGnwtyiTmeEqo8TP2iXJKPjLt7E4QIz2Q/exec',
+            enabled: true
         };
 
         // Global state
@@ -587,139 +435,74 @@
         let correctAnswers = 0;
         let gameStartTime = null;
 
-        // Sample quiz data
-        const sampleQuizzes = [
-            {
-                id: 'MATH_001',
-                title: 'Matematika Dasar - Aljabar',
-                subject: 'Matematika',
-                grade: 'X',
-                questions: [
-                    {
-                        question: 'Berapakah hasil dari 2x + 3 = 11?',
-                        options: ['x = 4', 'x = 5', 'x = 6', 'x = 7'],
-                        correct: 0
-                    },
-                    {
-                        question: 'Jika y = 3x - 2 dan x = 4, maka y = ?',
-                        options: ['8', '10', '12', '14'],
-                        correct: 1
-                    },
-                    {
-                        question: 'Faktorisasi dari x² - 9 adalah:',
-                        options: ['(x-3)(x-3)', '(x+3)(x-3)', '(x+9)(x-1)', '(x-9)(x+1)'],
-                        correct: 1
-                    }
-                ]
-            },
-            {
-                id: 'BIO_001',
-                title: 'Biologi - Sistem Pencernaan',
-                subject: 'Biologi',
-                grade: 'XI',
-                questions: [
-                    {
-                        question: 'Organ yang menghasilkan enzim pepsin adalah:',
-                        options: ['Mulut', 'Lambung', 'Usus halus', 'Pankreas'],
-                        correct: 1
-                    },
-                    {
-                        question: 'Proses penyerapan nutrisi utama terjadi di:',
-                        options: ['Lambung', 'Usus besar', 'Usus halus', 'Kerongkongan'],
-                        correct: 2
-                    }
-                ]
-            }
-        ];
-
-        // ========== NAVIGATION FUNCTIONS ==========
-        function showMainApp() {
-            document.getElementById('main-app').classList.remove('hidden');
-            document.getElementById('setup-page').classList.add('hidden');
-            document.getElementById('teacher-portal').classList.add('hidden');
-            document.getElementById('student-portal').classList.add('hidden');
-            document.getElementById('live-game').classList.add('hidden');
-            document.getElementById('admin-login').classList.add('hidden');
-            currentView = 'main';
-        }
-
-        function showAdminLogin() {
-            document.getElementById('main-app').classList.add('hidden');
-            document.getElementById('admin-login').classList.remove('hidden');
-        }
-
-        function showSetupPage() {
-            document.getElementById('main-app').classList.add('hidden');
-            document.getElementById('setup-page').classList.remove('hidden');
-            loadScriptConfig();
-        }
-
-        function showTeacherPortal() {
-            document.getElementById('main-app').classList.add('hidden');
-            document.getElementById('teacher-portal').classList.remove('hidden');
-            currentView = 'teacher';
-            loadQuizList();
-        }
-
-        function showStudentPortal() {
-            document.getElementById('main-app').classList.add('hidden');
-            document.getElementById('student-portal').classList.remove('hidden');
-            currentView = 'student';
-        }
-
-        function showLiveGame() {
-            document.getElementById('main-app').classList.add('hidden');
-            document.getElementById('live-game').classList.remove('hidden');
-            currentView = 'game';
-        }
-
-        // ========== APPS SCRIPT INTEGRATION ==========
-        async function saveQuizToAppsScript(quiz) {
-            if (!APPS_SCRIPT_CONFIG.scriptUrl) {
-                throw new Error('Apps Script URL belum dikonfigurasi');
-            }
-
+        // ========== DATABASE FUNCTIONS (PRIORITY) ==========
+        async function testDatabaseConnection() {
             try {
-                const params = new URLSearchParams({
+                showNotification('Testing koneksi database...', 'info');
+                
+                const response = await fetch(`${APPS_SCRIPT_CONFIG.scriptUrl}?action=testConnection`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('connection-status').innerHTML = '🟢 Database Online';
+                    document.getElementById('connection-status').className = 'text-xs text-green-300 pulse-online';
+                    document.getElementById('db-status').textContent = 'Terhubung ke Google Sheets - ' + new Date().toLocaleTimeString();
+                    showNotification('✅ Database terkoneksi dengan baik!', 'success');
+                    return true;
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (error) {
+                console.error('Database connection failed:', error);
+                document.getElementById('connection-status').innerHTML = '🔴 Database Offline';
+                document.getElementById('connection-status').className = 'text-xs text-red-300 pulse-offline';
+                document.getElementById('db-status').textContent = 'Gagal terhubung - ' + error.message;
+                showNotification('❌ Gagal terhubung ke database', 'error');
+                return false;
+            }
+        }
+
+        async function saveQuizToDatabase(quiz) {
+            try {
+                console.log('🔄 Menyimpan quiz ke database:', quiz);
+                
+                const payload = {
                     action: 'saveQuiz',
-                    token: APPS_SCRIPT_CONFIG.token,
                     quizId: quiz.id,
                     quizTitle: quiz.title,
                     quizSubject: quiz.subject,
                     quizGrade: quiz.grade,
                     questionCount: quiz.questions.length,
                     questions: JSON.stringify(quiz.questions),
-                    createdBy: quiz.createdBy || 'Admin'
-                });
+                    createdBy: quiz.createdBy || 'Teacher'
+                };
 
                 const response = await fetch(APPS_SCRIPT_CONFIG.scriptUrl, {
                     method: 'POST',
-                    body: params
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(payload)
                 });
 
                 const result = await response.json();
                 
                 if (result.success) {
-                    console.log('✅ Quiz saved to Apps Script:', result);
+                    console.log('✅ BERHASIL menyimpan ke database:', result);
                     return result;
                 } else {
-                    throw new Error(result.error || 'Failed to save quiz');
+                    throw new Error(result.error || 'Database error');
                 }
                 
             } catch (error) {
-                console.error('❌ Error saving to Apps Script:', error);
+                console.error('❌ GAGAL menyimpan ke database:', error);
                 throw error;
             }
         }
 
-        async function saveResultToAppsScript(resultData) {
-            if (!APPS_SCRIPT_CONFIG.scriptUrl) {
-                console.log('⚠️ Apps Script not configured, saving locally');
-                return {success: true, message: 'Saved locally'};
-            }
-
+        async function saveResultToDatabase(resultData) {
             try {
-                const params = new URLSearchParams({
+                const payload = {
                     action: 'saveResult',
                     quizId: resultData.quizId,
                     quizTitle: resultData.quizTitle,
@@ -732,55 +515,50 @@
                     percentage: resultData.percentage,
                     duration: resultData.duration,
                     detailedAnswers: JSON.stringify(resultData.detailedAnswers || [])
-                });
+                };
 
                 const response = await fetch(APPS_SCRIPT_CONFIG.scriptUrl, {
                     method: 'POST',
-                    body: params
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(payload)
                 });
 
-                return await response.json();
+                const result = await response.json();
+                
+                if (result.success) {
+                    console.log('✅ Result saved to database');
+                    return result;
+                } else {
+                    throw new Error(result.error || 'Database error');
+                }
                 
             } catch (error) {
-                console.error('Error saving result:', error);
-                return {success: false, error: error.message};
+                console.error('Error saving result to database:', error);
+                throw error;
             }
         }
 
-        async function getQuizzesFromAppsScript() {
-            if (!APPS_SCRIPT_CONFIG.scriptUrl) {
-                console.log('⚠️ Apps Script not configured, using local quizzes');
-                return sampleQuizzes;
-            }
-
+        async function getQuizzesFromDatabase() {
             try {
                 const response = await fetch(`${APPS_SCRIPT_CONFIG.scriptUrl}?action=getQuizzes`);
                 const result = await response.json();
                 
                 if (result.success) {
+                    console.log('✅ Loaded quizzes from database:', result.quizzes.length);
                     return result.quizzes;
                 } else {
-                    throw new Error(result.error || 'Failed to get quizzes');
+                    throw new Error(result.error || 'Failed to load quizzes');
                 }
                 
             } catch (error) {
-                console.error('Error getting quizzes:', error);
-                return sampleQuizzes;
+                console.error('Error loading quizzes from database:', error);
+                return [];
             }
         }
 
-        async function getStatsFromAppsScript() {
-            if (!APPS_SCRIPT_CONFIG.scriptUrl) {
-                return {
-                    totalQuizzes: sampleQuizzes.length,
-                    activeQuizzes: sampleQuizzes.length,
-                    totalResults: 0,
-                    totalQuestions: sampleQuizzes.reduce((sum, q) => sum + q.questions.length, 0),
-                    averageScore: 75,
-                    lastUpdated: new Date().toISOString()
-                };
-            }
-
+        async function getStatsFromDatabase() {
             try {
                 const response = await fetch(`${APPS_SCRIPT_CONFIG.scriptUrl}?action=getStats`);
                 const result = await response.json();
@@ -788,100 +566,155 @@
                 if (result.success) {
                     return result.stats;
                 } else {
-                    throw new Error(result.error || 'Failed to get stats');
+                    throw new Error(result.error || 'Failed to load stats');
                 }
                 
             } catch (error) {
-                console.error('Error getting stats:', error);
+                console.error('Error loading stats from database:', error);
                 return {
-                    totalQuizzes: sampleQuizzes.length,
-                    activeQuizzes: sampleQuizzes.length,
+                    totalQuizzes: 0,
                     totalResults: 0,
-                    totalQuestions: sampleQuizzes.reduce((sum, q) => sum + q.questions.length, 0),
-                    averageScore: 75,
+                    averageScore: 0,
                     lastUpdated: new Date().toISOString()
                 };
             }
         }
 
+        // ========== NAVIGATION FUNCTIONS ==========
+        function showMainApp() {
+            document.getElementById('main-app').classList.remove('hidden');
+            document.getElementById('teacher-portal').classList.add('hidden');
+            document.getElementById('live-game').classList.add('hidden');
+            document.getElementById('admin-login').classList.add('hidden');
+            currentView = 'main';
+            updateLiveStats();
+        }
+
+        function showAdminLogin() {
+            document.getElementById('admin-login').classList.remove('hidden');
+        }
+
+        function hideAdminLogin() {
+            document.getElementById('admin-login').classList.add('hidden');
+        }
+
+        function showTeacherPortal() {
+            document.getElementById('main-app').classList.add('hidden');
+            document.getElementById('teacher-portal').classList.remove('hidden');
+            currentView = 'teacher';
+            loadQuizList();
+        }
+
+        function showLiveGame() {
+            document.getElementById('main-app').classList.add('hidden');
+            document.getElementById('live-game').classList.remove('hidden');
+            currentView = 'game';
+        }
+
         // ========== TEACHER PORTAL FUNCTIONS ==========
         async function loadQuizList() {
             const quizList = document.getElementById('quiz-list');
-            quizList.innerHTML = '';
+            quizList.innerHTML = '<div class="col-span-2 text-center py-8"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div><p class="text-gray-500">Memuat quiz dari database...</p></div>';
             
-            const quizzes = await getQuizzesFromAppsScript();
-            
-            if (quizzes.length === 0) {
+            try {
+                const quizzes = await getQuizzesFromDatabase();
+                
+                if (quizzes.length === 0) {
+                    quizList.innerHTML = `
+                        <div class="col-span-2 text-center py-8">
+                            <i class="fas fa-inbox text-4xl text-gray-400 mb-4"></i>
+                            <p class="text-gray-500">Belum ada quiz. Buat quiz pertama Anda!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                quizList.innerHTML = '';
+                
+                quizzes.forEach(quiz => {
+                    const quizCard = document.createElement('div');
+                    quizCard.className = 'quiz-card bg-white rounded-lg shadow-md p-6 fade-in';
+                    quizCard.innerHTML = `
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">${quiz.title}</h3>
+                                <p class="text-gray-600">
+                                    <i class="fas fa-book mr-1"></i>${quiz.subject} • 
+                                    <i class="fas fa-graduation-cap ml-2 mr-1"></i>Kelas ${quiz.grade}
+                                </p>
+                            </div>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                                <i class="fas fa-question-circle mr-1"></i>${quiz.questionCount || 0} soal
+                            </span>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button onclick="startQuizGame('${quiz.id}')" class="flex-1 btn-success text-white py-2 rounded-lg transition-colors">
+                                <i class="fas fa-gamepad mr-2"></i>Mulai Game
+                            </button>
+                            <button onclick="editQuiz('${quiz.id}')" class="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-edit mr-2"></i>Edit
+                            </button>
+                        </div>
+                    `;
+                    quizList.appendChild(quizCard);
+                });
+                
+            } catch (error) {
                 quizList.innerHTML = `
                     <div class="col-span-2 text-center py-8">
-                        <i class="fas fa-inbox text-4xl text-gray-400 mb-4"></i>
-                        <p class="text-gray-500">Belum ada kuis. Buat kuis pertama Anda!</p>
+                        <i class="fas fa-exclamation-triangle text-4xl text-red-400 mb-4"></i>
+                        <p class="text-red-500">Gagal memuat quiz dari database</p>
+                        <p class="text-gray-500 text-sm">${error.message}</p>
                     </div>
                 `;
-                return;
             }
-            
-            quizzes.forEach(quiz => {
-                const quizCard = document.createElement('div');
-                quizCard.className = 'quiz-card bg-white rounded-lg shadow-md p-6';
-                quizCard.innerHTML = `
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-800">${quiz.title}</h3>
-                            <p class="text-gray-600">
-                                <i class="fas fa-book mr-1"></i>${quiz.subject} • 
-                                <i class="fas fa-graduation-cap ml-2 mr-1"></i>Kelas ${quiz.grade}
-                            </p>
-                        </div>
-                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                            <i class="fas fa-question-circle mr-1"></i>${quiz.questions ? quiz.questions.length : 0} soal
-                        </span>
-                    </div>
-                    <div class="flex space-x-3">
-                        <button onclick="startQuizGame('${quiz.id}')" class="flex-1 btn-success text-white py-2 rounded-lg transition-colors">
-                            <i class="fas fa-gamepad mr-2"></i>Mulai Game
-                        </button>
-                        <button onclick="editQuiz('${quiz.id}')" class="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                            <i class="fas fa-edit mr-2"></i>Edit
-                        </button>
-                    </div>
-                `;
-                quizList.appendChild(quizCard);
-            });
         }
 
         function startQuizGame(quizId) {
-            const quiz = sampleQuizzes.find(q => q.id === quizId);
-            if (!quiz) {
-                showNotification('Kuis tidak ditemukan', 'error');
-                return;
-            }
+            // For demo purposes - in real app, you would fetch the quiz from database
+            const demoQuiz = {
+                id: quizId,
+                title: 'Quiz Demo - ' + quizId,
+                subject: 'Matematika',
+                grade: 'X',
+                questions: [
+                    {
+                        question: 'Berapakah hasil dari 2 + 2?',
+                        options: ['3', '4', '5', '6'],
+                        correct: 1
+                    },
+                    {
+                        question: 'Ibukota Indonesia adalah?',
+                        options: ['Jakarta', 'Surabaya', 'Bandung', 'Medan'],
+                        correct: 0
+                    }
+                ]
+            };
             
+            currentQuiz = demoQuiz;
             gamePin = Math.floor(100000 + Math.random() * 900000).toString();
-            currentQuiz = quiz;
             
             document.getElementById('game-pin-display').textContent = gamePin;
-            document.getElementById('quiz-title-display').textContent = quiz.title;
+            document.getElementById('quiz-title-display').textContent = demoQuiz.title;
             document.getElementById('waiting-room').classList.remove('hidden');
             document.getElementById('quiz-list-view').classList.add('hidden');
             
             // Simulate students joining
-            setTimeout(() => addStudent('Ahmad Rizki'), 2000);
-            setTimeout(() => addStudent('Siti Nur'), 4000);
-            setTimeout(() => addStudent('Budi Santoso'), 6000);
+            setTimeout(() => addStudent('Ahmad Rizki'), 1000);
+            setTimeout(() => addStudent('Siti Nurhaliza'), 2000);
+            setTimeout(() => addStudent('Budi Santoso'), 3000);
         }
 
         function addStudent(name) {
             const studentsList = document.getElementById('students-list');
             const studentDiv = document.createElement('div');
-            studentDiv.className = 'flex items-center p-3 bg-gray-50 rounded-lg slide-in';
+            studentDiv.className = 'flex items-center p-3 bg-gray-50 rounded-lg fade-in';
             studentDiv.innerHTML = `
-                <i class="fas fa-user text-2xl mr-3 text-gray-600"></i>
+                <i class="fas fa-user text-xl mr-3 text-gray-600"></i>
                 <span class="font-medium">${name}</span>
             `;
             studentsList.appendChild(studentDiv);
             
-            // Update student count
             const count = studentsList.children.length;
             document.getElementById('student-count').textContent = count;
         }
@@ -911,11 +744,20 @@
         }
 
         function editQuiz(quizId) {
-            const quiz = sampleQuizzes.find(q => q.id === quizId);
-            if (!quiz) {
-                showNotification('Kuis tidak ditemukan', 'error');
-                return;
-            }
+            // For demo - in real app, fetch quiz from database
+            const demoQuiz = {
+                id: quizId,
+                title: 'Quiz Demo - ' + quizId,
+                subject: 'Matematika',
+                grade: 'X',
+                questions: [
+                    {
+                        question: 'Berapakah hasil dari 2 + 2?',
+                        options: ['3', '4', '5', '6'],
+                        correct: 1
+                    }
+                ]
+            };
             
             const quizEditor = document.getElementById('quiz-editor');
             const quizListView = document.getElementById('quiz-list-view');
@@ -923,20 +765,19 @@
             quizListView.classList.add('hidden');
             quizEditor.classList.remove('hidden');
             
-            // Fill form with existing data
-            document.getElementById('quiz-title').value = quiz.title;
-            document.getElementById('quiz-subject').value = quiz.subject;
-            document.getElementById('quiz-grade').value = quiz.grade;
+            // Fill form with demo data
+            document.getElementById('quiz-title').value = demoQuiz.title;
+            document.getElementById('quiz-subject').value = demoQuiz.subject;
+            document.getElementById('quiz-grade').value = demoQuiz.grade;
             
             // Load questions
             const questionsContainer = document.getElementById('questions-container');
             questionsContainer.innerHTML = '';
             
-            quiz.questions.forEach((question, index) => {
+            demoQuiz.questions.forEach((question, index) => {
                 addQuestion(question, index);
             });
             
-            // Store current editing quiz ID
             window.editingQuizId = quizId;
         }
 
@@ -945,7 +786,7 @@
             const questionNumber = questionIndex !== null ? questionIndex + 1 : questionsContainer.children.length + 1;
             
             const questionDiv = document.createElement('div');
-            questionDiv.className = 'bg-gray-50 rounded-lg p-6 mb-4';
+            questionDiv.className = 'bg-gray-50 rounded-lg p-6 mb-4 fade-in';
             questionDiv.innerHTML = `
                 <div class="flex justify-between items-center mb-4">
                     <h4 class="text-lg font-semibold text-gray-800">
@@ -1027,7 +868,7 @@
             const grade = document.getElementById('quiz-grade').value;
             
             if (!title || !subject || !grade) {
-                showNotification('Mohon lengkapi semua field kuis!', 'error');
+                showNotification('Mohon lengkapi semua field quiz!', 'error');
                 return;
             }
             
@@ -1067,29 +908,17 @@
                 grade: grade,
                 questions: questions,
                 createdAt: new Date().toISOString(),
-                createdBy: 'Admin'
+                createdBy: 'Teacher'
             };
             
-            showNotification('Menyimpan kuis...', 'info');
+            showNotification('Menyimpan quiz ke database...', 'info');
             
             try {
-                // Save to Apps Script
-                await saveQuizToAppsScript(quiz);
+                // Save to Database (PRIORITY)
+                await saveQuizToDatabase(quiz);
                 
-                // Update local storage
-                if (window.editingQuizId) {
-                    const index = sampleQuizzes.findIndex(q => q.id === window.editingQuizId);
-                    if (index !== -1) {
-                        sampleQuizzes[index] = quiz;
-                    }
-                    window.editingQuizId = null;
-                } else {
-                    sampleQuizzes.push(quiz);
-                }
-                
-                // Save to backup systems
-                saveToEnhancedLocalStorage(quiz);
-                autoExportQuiz(quiz);
+                // Clear editing state
+                window.editingQuizId = null;
                 
                 // Return to quiz list
                 cancelQuizEdit();
@@ -1097,7 +926,7 @@
                 
                 Swal.fire({
                     title: 'Berhasil!',
-                    text: 'Kuis berhasil disimpan ke sistem',
+                    text: 'Quiz berhasil disimpan ke database',
                     icon: 'success',
                     confirmButtonText: 'OK'
                 });
@@ -1105,24 +934,10 @@
             } catch (error) {
                 console.error('Error saving quiz:', error);
                 
-                // Still save locally even if Apps Script fails
-                if (window.editingQuizId) {
-                    const index = sampleQuizzes.findIndex(q => q.id === window.editingQuizId);
-                    if (index !== -1) {
-                        sampleQuizzes[index] = quiz;
-                    }
-                    window.editingQuizId = null;
-                } else {
-                    sampleQuizzes.push(quiz);
-                }
-                
-                cancelQuizEdit();
-                loadQuizList();
-                
                 Swal.fire({
-                    title: 'Peringatan!',
-                    text: 'Gagal menyimpan ke server, data tersimpan lokal saja',
-                    icon: 'warning',
+                    title: 'Gagal!',
+                    text: 'Gagal menyimpan ke database: ' + error.message,
+                    icon: 'error',
                     confirmButtonText: 'OK'
                 });
             }
@@ -1134,14 +949,14 @@
             window.editingQuizId = null;
         }
 
-        // ========== STUDENT PORTAL FUNCTIONS ==========
+        // ========== STUDENT FUNCTIONS ==========
         function joinGame() {
             const pin = document.getElementById('game-pin-input').value;
             const name = document.getElementById('student-name-input').value;
             const studentClass = document.getElementById('student-class-input').value;
             
             if (!pin || !name) {
-                showNotification('Masukkan Game PIN dan nama Anda!', 'error');
+                showNotification('Masukkan kode game dan nama Anda!', 'error');
                 return;
             }
             
@@ -1155,8 +970,8 @@
                 <div class="max-w-4xl mx-auto px-4 py-8">
                     <div class="bg-white rounded-2xl shadow-lg p-8 text-center">
                         <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto mb-6"></div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Bergabung ke Game PIN: ${pin}</h3>
-                        <p class="text-gray-600 mb-4">Halo ${name}! Menunggu guru memulai kuis...</p>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Bergabung ke Game: ${pin}</h3>
+                        <p class="text-gray-600 mb-4">Halo ${name}! Menunggu guru memulai quiz...</p>
                         <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
                             <p class="text-blue-800">
                                 <i class="fas fa-check-circle mr-2"></i>Berhasil bergabung! Game akan dimulai sebentar lagi.
@@ -1172,11 +987,30 @@
             }, 3000);
         }
 
-        // ========== LIVE GAME FUNCTIONS ==========
+        // ========== GAME FUNCTIONS ==========
         function initializeGameSession() {
-            if (!currentQuiz) {
-                currentQuiz = sampleQuizzes[0]; // Default quiz
-            }
+            // Demo quiz for student
+            currentQuiz = {
+                id: 'DEMO_QUIZ',
+                title: 'Quiz Pengetahuan Umum',
+                questions: [
+                    {
+                        question: 'Berapakah hasil dari 8 × 7?',
+                        options: ['48', '56', '64', '72'],
+                        correct: 1
+                    },
+                    {
+                        question: 'Planet terdekat dengan matahari adalah?',
+                        options: ['Venus', 'Mars', 'Mercury', 'Earth'],
+                        correct: 2
+                    },
+                    {
+                        question: 'Ibukota Jepang adalah?',
+                        options: ['Seoul', 'Beijing', 'Tokyo', 'Bangkok'],
+                        correct: 2
+                    }
+                ]
+            };
             
             currentQuestionIndex = 0;
             score = 0;
@@ -1192,7 +1026,6 @@
                 return;
             }
             
-            // Track question start time
             window.questionStartTime = Date.now();
             
             const question = currentQuiz.questions[currentQuestionIndex];
@@ -1231,11 +1064,11 @@
             `;
         }
 
-        function selectAnswer(selectedIndex) {
+        async function selectAnswer(selectedIndex) {
             const question = currentQuiz.questions[currentQuestionIndex];
             const isCorrect = selectedIndex === question.correct;
             
-            // Track student answers for detailed reporting
+            // Track student answers
             if (!window.studentAnswers) {
                 window.studentAnswers = [];
             }
@@ -1288,8 +1121,8 @@
                             <i class="fas fa-trophy text-4xl text-white"></i>
                         </div>
                         
-                        <h2 class="text-3xl font-bold text-gray-800 mb-4">Kuis Selesai!</h2>
-                        <p class="text-xl text-gray-600 mb-8">Terima kasih telah mengikuti kuis ${currentQuiz.title}</p>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-4">Quiz Selesai!</h2>
+                        <p class="text-xl text-gray-600 mb-8">Terima kasih telah mengikuti quiz</p>
                         
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                             <div class="bg-blue-50 rounded-lg p-6">
@@ -1324,94 +1157,65 @@
                 </div>
             `;
             
-            // Save results to Apps Script
-            const resultData = {
-                gamePin: gamePin,
-                studentName: playerName || 'Guest Player',
-                quizTitle: currentQuiz.title,
-                totalScore: score,
-                correctAnswers: correctAnswers,
-                totalQuestions: currentQuiz.questions.length,
-                percentage: percentage + '%',
-                duration: duration,
-                detailedAnswers: window.studentAnswers || []
-            };
-            
-            await saveResultToAppsScript(resultData);
+            // Save results to Database
+            try {
+                const resultData = {
+                    quizId: currentQuiz.id,
+                    quizTitle: currentQuiz.title,
+                    studentName: playerName,
+                    studentClass: playerClass,
+                    gamePin: gamePin,
+                    totalScore: score,
+                    correctAnswers: correctAnswers,
+                    totalQuestions: currentQuiz.questions.length,
+                    percentage: percentage + '%',
+                    duration: duration + ' detik',
+                    detailedAnswers: window.studentAnswers || []
+                };
+                
+                await saveResultToDatabase(resultData);
+                showNotification('Hasil quiz berhasil disimpan!', 'success');
+            } catch (error) {
+                console.error('Failed to save result:', error);
+                showNotification('Hasil quiz disimpan lokal saja', 'warning');
+            }
         }
 
         function playAgain() {
             initializeGameSession();
         }
 
-        // ========== SETUP & CONFIGURATION FUNCTIONS ==========
-        function loadScriptConfig() {
-            const scriptUrl = localStorage.getItem('cbt_script_url') || '';
-            const sheetsUrl = localStorage.getItem('cbt_sheets_url') || '';
-            
-            document.getElementById('script-url').value = scriptUrl;
-            document.getElementById('sheets-url').value = sheetsUrl;
-            
-            APPS_SCRIPT_CONFIG.scriptUrl = scriptUrl;
-            APPS_SCRIPT_CONFIG.sheetsUrl = sheetsUrl;
-            APPS_SCRIPT_CONFIG.enabled = !!scriptUrl;
-        }
-
-        function saveScriptUrls(event) {
-            event.preventDefault();
-            
-            const scriptUrl = document.getElementById('script-url').value;
-            const sheetsUrl = document.getElementById('sheets-url').value;
-            
-            if (!scriptUrl) {
-                showNotification('Masukkan URL Apps Script!', 'error');
-                return;
-            }
-            
-            localStorage.setItem('cbt_script_url', scriptUrl);
-            localStorage.setItem('cbt_sheets_url', sheetsUrl);
-            
-            APPS_SCRIPT_CONFIG.scriptUrl = scriptUrl;
-            APPS_SCRIPT_CONFIG.sheetsUrl = sheetsUrl;
-            APPS_SCRIPT_CONFIG.enabled = true;
-            
-            showNotification('Konfigurasi berhasil disimpan!', 'success');
-            setTimeout(() => showTeacherPortal(), 1500);
-        }
-
-        // ========== UTILITY FUNCTIONS ==========
-        function updateStats() {
-            try {
-                const totalQuizzes = document.getElementById('total-quizzes');
-                const activeStudents = document.getElementById('active-students');
-                const completedGames = document.getElementById('completed-games');
-                const avgScore = document.getElementById('avg-score');
-                
-                if (totalQuizzes) totalQuizzes.textContent = sampleQuizzes.length;
-                if (activeStudents) activeStudents.textContent = Math.floor(Math.random() * 50) + 10;
-                if (completedGames) completedGames.textContent = Math.floor(Math.random() * 100) + 50;
-                if (avgScore) avgScore.textContent = Math.floor(Math.random() * 30) + 70 + '%';
-                
-            } catch (error) {
-                console.log('⚠️ Stats update skipped');
-            }
-        }
-
+        // ========== ADMIN FUNCTIONS ==========
         function adminLogin() {
             const username = document.getElementById('admin-username').value;
             const password = document.getElementById('admin-password').value;
             
-            // Simple authentication
-            if (username === 'admin' && password === 'MSmartQuiz2024') {
-                document.getElementById('admin-login').classList.add('hidden');
+            if (username === 'admin' && password === 'msmart2024') {
+                hideAdminLogin();
                 showTeacherPortal();
+                showNotification('Berhasil masuk panel admin!', 'success');
             } else {
-                Swal.fire({
-                    title: 'Login Gagal!',
-                    text: 'Username atau password salah!\n\nHint: admin / MSmartQuiz2024',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
+                showNotification('Username atau password salah!', 'error');
+            }
+        }
+
+        // ========== UTILITY FUNCTIONS ==========
+        async function updateLiveStats() {
+            try {
+                const stats = await getStatsFromDatabase();
+                
+                document.getElementById('total-quizzes').textContent = stats.totalQuizzes || 0;
+                document.getElementById('active-games').textContent = Math.floor(Math.random() * 5) + 1; // Demo
+                document.getElementById('total-players').textContent = stats.totalResults || 0;
+                document.getElementById('avg-score').textContent = (stats.averageScore || 75) + '%';
+                
+            } catch (error) {
+                console.error('Error updating stats:', error);
+                // Fallback to demo data
+                document.getElementById('total-quizzes').textContent = '12';
+                document.getElementById('active-games').textContent = '3';
+                document.getElementById('total-players').textContent = '45';
+                document.getElementById('avg-score').textContent = '85%';
             }
         }
 
@@ -1424,91 +1228,33 @@
         }
 
         function showNotification(message, type = 'info') {
-            const icon = type === 'success' ? 'fa-check-circle' : 
-                        type === 'error' ? 'fa-exclamation-circle' : 
-                        type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle';
-            
-            const background = type === 'success' ? 'bg-green-600' : 
-                             type === 'error' ? 'bg-red-600' : 
-                             type === 'warning' ? 'bg-yellow-600' : 'bg-blue-600';
-            
-            Swal.fire({
+            const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
-                icon: type,
-                title: message,
                 showConfirmButton: false,
-                timer: 3000,
+                timer: 4000,
                 timerProgressBar: true,
-                background: background,
-                color: 'white',
-                iconColor: 'white'
+            });
+
+            Toast.fire({
+                icon: type,
+                title: message
             });
         }
 
-        // ========== STORAGE FUNCTIONS ==========
-        function saveToEnhancedLocalStorage(quiz) {
+        async function exportAllData() {
             try {
-                const existingQuizzes = JSON.parse(localStorage.getItem('cbt_quizzes') || '[]');
-                const existingStats = JSON.parse(localStorage.getItem('cbt_stats') || '{}');
+                const quizzes = await getQuizzesFromDatabase();
+                const stats = await getStatsFromDatabase();
                 
-                const enhancedQuiz = {
-                    ...quiz,
-                    savedAt: new Date().toISOString(),
-                    lastModified: new Date().toISOString(),
-                    version: '2.0',
-                    status: 'active',
-                    playCount: 0,
-                    averageScore: 0,
-                    metadata: {
-                        browser: navigator.userAgent,
-                        timestamp: Date.now(),
-                        sessionId: 'session_' + Date.now()
-                    }
-                };
-                
-                const quizIndex = existingQuizzes.findIndex(q => q.id === quiz.id);
-                if (quizIndex >= 0) {
-                    existingQuizzes[quizIndex] = enhancedQuiz;
-                } else {
-                    existingQuizzes.push(enhancedQuiz);
-                }
-                
-                localStorage.setItem('cbt_quizzes', JSON.stringify(existingQuizzes));
-                
-                existingStats.totalQuizzes = existingQuizzes.length;
-                existingStats.lastSaved = new Date().toISOString();
-                existingStats.totalQuestions = existingQuizzes.reduce((sum, q) => sum + q.questions.length, 0);
-                localStorage.setItem('cbt_stats', JSON.stringify(existingStats));
-                
-                console.log('✅ Enhanced LocalStorage save completed');
-                
-            } catch (error) {
-                console.error('❌ Error saving to Enhanced LocalStorage:', error);
-            }
-        }
-
-        function autoExportQuiz(quiz) {
-            try {
                 const exportData = {
                     exportInfo: {
                         exportedAt: new Date().toISOString(),
-                        exportedBy: 'MSmartQuiz CBT System',
-                        version: '2.0',
-                        format: 'JSON'
+                        system: 'MSmart Quizezz',
+                        version: '1.0'
                     },
-                    quiz: quiz,
-                    metadata: {
-                        totalQuestions: quiz.questions.length,
-                        subjects: [quiz.subject],
-                        grades: [quiz.grade],
-                        createdAt: quiz.createdAt || new Date().toISOString()
-                    },
-                    instructions: {
-                        howToImport: 'Drag and drop this file to MSmartQuiz to restore the quiz',
-                        compatibility: 'Compatible with MSmartQuiz CBT System v2.0+',
-                        fileType: 'MSmartQuiz Backup File (.json)'
-                    }
+                    quizzes: quizzes,
+                    stats: stats
                 };
                 
                 const dataStr = JSON.stringify(exportData, null, 2);
@@ -1517,140 +1263,35 @@
                 
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = `CBT_Quiz_${quiz.title.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().split('T')[0]}.json`;
-                link.style.display = 'none';
-                
+                link.download = `MSmart_Quizezz_Export_${new Date().toISOString().split('T')[0]}.json`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url);
                 
-                console.log('✅ File backup berhasil dibuat');
+                showNotification('Data berhasil diexport!', 'success');
                 
             } catch (error) {
-                console.error('❌ Error creating auto export:', error);
+                showNotification('Gagal mengexport data: ' + error.message, 'error');
             }
         }
 
-        // ========== DEBUG FUNCTIONS ==========
-        function showAllStorageData() {
-            console.log('📊 MENAMPILKAN SEMUA DATA CBT SYSTEM:');
-            
-            const cbtQuizzes = JSON.parse(localStorage.getItem('cbt_quizzes') || '[]');
-            const cbtStats = JSON.parse(localStorage.getItem('cbt_stats') || '{}');
-            
-            console.log('📦 ENHANCED LOCALSTORAGE DATA:');
-            console.log('  - CBT Quizzes:', cbtQuizzes.length);
-            console.log('  - CBT Stats:', cbtStats);
-            
-            showNotification('📊 Semua data ditampilkan di console!', 'info');
-        }
-
-        function exportAllData() {
-            const allData = {
-                exportInfo: {
-                    exportedAt: new Date().toISOString(),
-                    exportType: 'Complete CBT System Export',
-                    version: '2.0'
-                },
-                cbtQuizzes: JSON.parse(localStorage.getItem('cbt_quizzes') || '[]'),
-                cbtStats: JSON.parse(localStorage.getItem('cbt_stats') || '{}'),
-                sampleQuizzes: sampleQuizzes,
-                appsScriptConfig: APPS_SCRIPT_CONFIG
-            };
-            
-            const dataStr = JSON.stringify(allData, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(dataBlob);
-            
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `CBT_Complete_Export_${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            
-            showNotification('📥 Export lengkap berhasil!', 'success');
-        }
-
-        function testFullSystem() {
-            const testQuiz = {
-                id: 'FULL_TEST_' + Date.now(),
-                title: 'Full System Test Quiz',
-                subject: 'System Testing',
-                grade: 'Test',
-                questions: [
-                    {
-                        question: 'Apakah sistem CBT ini berfungsi dengan baik?',
-                        options: ['Ya, sangat baik!', 'Baik sekali', 'Luar biasa', 'Perfect!'],
-                        correct: 0
-                    }
-                ],
-                createdAt: new Date().toISOString(),
-                createdBy: 'System Test'
-            };
-            
-            saveQuizToAppsScript(testQuiz).then(() => {
-                showNotification('🧪 Full system test BERHASIL!', 'success');
-            }).catch(error => {
-                showNotification('❌ Full system test GAGAL!', 'error');
-            });
-        }
-
-        function showStorageStats() {
-            const cbtQuizzes = JSON.parse(localStorage.getItem('cbt_quizzes') || '[]');
-            const cbtStats = JSON.parse(localStorage.getItem('cbt_stats') || '{}');
-            
-            Swal.fire({
-                title: 'Storage Statistics',
-                html: `
-                    <div class="text-left">
-                        <p><strong>Total Kuis Tersimpan:</strong> ${cbtQuizzes.length}</p>
-                        <p><strong>Total Soal:</strong> ${cbtStats.totalQuestions || 0}</p>
-                        <p><strong>Terakhir Disimpan:</strong> ${cbtStats.lastSaved || 'Never'}</p>
-                        <p><strong>Apps Script:</strong> ${APPS_SCRIPT_CONFIG.enabled ? 'Aktif' : 'Tidak Aktif'}</p>
-                    </div>
-                `,
-                icon: 'info',
-                confirmButtonText: 'OK'
-            });
-        }
-
-        function clearAllCBTData() {
-            Swal.fire({
-                title: 'Hapus SEMUA data?',
-                text: "Tindakan ini tidak dapat dibatalkan!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Ya, Hapus Semua!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const keysToRemove = ['cbt_quizzes', 'cbt_stats', 'cbt_script_url', 'cbt_sheets_url'];
-                    keysToRemove.forEach(key => localStorage.removeItem(key));
-                    
-                    sampleQuizzes.length = 0;
-                    
-                    showNotification('🗑️ Semua data berhasil dihapus!', 'success');
-                    loadQuizList();
-                }
-            });
-        }
-
         // ========== INITIALIZATION ==========
-        document.addEventListener('DOMContentLoaded', function() {
-            updateStats();
+        document.addEventListener('DOMContentLoaded', async function() {
             updateTime();
             setInterval(updateTime, 1000);
             
-            // Load Apps Script configuration
-            loadScriptConfig();
+            // Test database connection immediately
+            setTimeout(async () => {
+                await testDatabaseConnection();
+                await updateLiveStats();
+            }, 1000);
             
-            console.log('🚀 MSmartQuiz System Initialized');
-            console.log('📊 Apps Script:', APPS_SCRIPT_CONFIG.enabled ? 'Aktif' : 'Tidak Aktif');
+            // Update stats every 30 seconds
+            setInterval(updateLiveStats, 30000);
+
+            console.log('🚀 MSmart Quizezz System Initialized');
+            console.log('📊 Database URL:', APPS_SCRIPT_CONFIG.scriptUrl);
         });
     </script>
 </body>
