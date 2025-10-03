@@ -14,6 +14,9 @@
     <!-- SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
+    <!-- SheetJS untuk import Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
     <style>
         body {
             box-sizing: border-box;
@@ -112,6 +115,21 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        .file-upload-area {
+            border: 2px dashed #cbd5e0;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload-area:hover {
+            border-color: #667eea;
+            background-color: #f7fafc;
+        }
+        
+        .file-upload-area.dragover {
+            border-color: #667eea;
+            background-color: #ebf8ff;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
@@ -131,7 +149,7 @@
                 </div>
                 <div class="text-white text-right">
                     <div class="text-sm font-medium" id="current-time"></div>
-                    <div class="text-xs" id="connection-status">🔴 Connecting...</div>
+                    <div class="text-xs" id="connection-status">🟡 Connecting...</div>
                 </div>
             </div>
         </div>
@@ -278,7 +296,7 @@
                     <h4 class="font-bold text-blue-800">
                         <i class="fas fa-database mr-2"></i>Status Database
                     </h4>
-                    <p class="text-blue-700 text-sm" id="db-status">Terhubung ke Google Sheets</p>
+                    <p class="text-blue-700 text-sm" id="db-status">Menyiapkan koneksi...</p>
                 </div>
                 <div class="flex space-x-2">
                     <button onclick="testDatabaseConnection()" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600 transition-colors">
@@ -287,7 +305,46 @@
                     <button onclick="exportAllData()" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600 transition-colors">
                         <i class="fas fa-download mr-1"></i>Export Data
                     </button>
+                    <button onclick="clearDatabase()" class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600 transition-colors">
+                        <i class="fas fa-trash mr-1"></i>Clear Data
+                    </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Import Excel Section -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">
+                    <i class="fas fa-file-excel mr-2"></i>Import dari Excel
+                </h3>
+            </div>
+            
+            <div class="file-upload-area rounded-lg p-8 text-center cursor-pointer" 
+                 id="excel-drop-zone"
+                 onclick="document.getElementById('excel-file-input').click()">
+                <input type="file" id="excel-file-input" accept=".xlsx,.xls" class="hidden">
+                <i class="fas fa-file-excel text-4xl text-green-500 mb-4"></i>
+                <h4 class="text-lg font-semibold text-gray-800 mb-2">Import Soal dari Excel</h4>
+                <p class="text-gray-600 mb-4">Klik atau drop file Excel di sini</p>
+                <p class="text-sm text-gray-500">Format: .xlsx atau .xls</p>
+                <div class="mt-4 p-3 bg-yellow-50 rounded-lg">
+                    <p class="text-sm text-yellow-800">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        Download template: 
+                        <button type="button" onclick="downloadExcelTemplate()" class="text-blue-600 hover:text-blue-800 underline">
+                            Template_Excel_Quiz.xlsx
+                        </button>
+                    </p>
+                </div>
+            </div>
+            
+            <div id="import-preview" class="hidden mt-6">
+                <h4 class="font-bold text-gray-800 mb-3">Preview Data:</h4>
+                <div id="preview-content" class="bg-gray-50 rounded-lg p-4 max-h-64 overflow-y-auto"></div>
+                <button onclick="confirmImport()" class="btn-success text-white px-4 py-2 rounded-lg mt-4 transition-colors">
+                    <i class="fas fa-check mr-2"></i>Konfirmasi Import
+                </button>
             </div>
         </div>
         
@@ -298,12 +355,17 @@
                     <h3 class="text-2xl font-bold text-gray-800">
                         <i class="fas fa-list mr-2"></i>Daftar Quiz
                     </h3>
-                    <button onclick="createNewQuiz()" class="btn-primary text-white px-4 py-2 rounded-lg transition-colors">
-                        <i class="fas fa-plus mr-2"></i>Buat Quiz Baru
-                    </button>
+                    <div class="flex space-x-3">
+                        <button onclick="createNewQuiz()" class="btn-primary text-white px-4 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-plus mr-2"></i>Buat Quiz Baru
+                        </button>
+                    </div>
                 </div>
                 <div id="quiz-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Quiz cards will be loaded here -->
+                    <div class="col-span-2 text-center py-8">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                        <p class="text-gray-500">Memuat quiz dari database...</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -420,7 +482,7 @@
     <script>
         // ========== CONFIGURATION ==========
         const APPS_SCRIPT_CONFIG = {
-            scriptUrl: 'https://script.google.com/macros/s/AKfycbz3cfhF195i_VlviMFHv00uKGsRR8tWY3RjHMGnwtyiTmeEqo8TP2iXJKPjLt7E4QIz2Q/exec',
+            scriptUrl: 'https://script.google.com/macros/s/AKfycbzKHmo5UIi3_pxpUuNO64sZRdEkChq0EWtXQ6JcQYw_x2aLQfzS2cuCQMglFXZ2dIyQOA/exec',
             enabled: true
         };
 
@@ -434,38 +496,44 @@
         let score = 0;
         let correctAnswers = 0;
         let gameStartTime = null;
+        let currentImportData = null;
 
-        // ========== DATABASE FUNCTIONS (PRIORITY) ==========
+        // ========== DATABASE FUNCTIONS ==========
         async function testDatabaseConnection() {
             try {
                 showNotification('Testing koneksi database...', 'info');
                 
-                const response = await fetch(`${APPS_SCRIPT_CONFIG.scriptUrl}?action=testConnection`);
+                // Add timestamp to avoid cache
+                const timestamp = new Date().getTime();
+                const response = await fetch(`${APPS_SCRIPT_CONFIG.scriptUrl}?action=testConnection&t=${timestamp}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const result = await response.json();
                 
                 if (result.success) {
                     document.getElementById('connection-status').innerHTML = '🟢 Database Online';
                     document.getElementById('connection-status').className = 'text-xs text-green-300 pulse-online';
-                    document.getElementById('db-status').textContent = 'Terhubung ke Google Sheets - ' + new Date().toLocaleTimeString();
+                    document.getElementById('db-status').textContent = 'Terhubung - ' + new Date().toLocaleTimeString();
                     showNotification('✅ Database terkoneksi dengan baik!', 'success');
                     return true;
                 } else {
-                    throw new Error(result.error);
+                    throw new Error(result.error || 'Unknown error');
                 }
             } catch (error) {
                 console.error('Database connection failed:', error);
                 document.getElementById('connection-status').innerHTML = '🔴 Database Offline';
                 document.getElementById('connection-status').className = 'text-xs text-red-300 pulse-offline';
                 document.getElementById('db-status').textContent = 'Gagal terhubung - ' + error.message;
-                showNotification('❌ Gagal terhubung ke database', 'error');
+                showNotification('❌ Gagal terhubung ke database: ' + error.message, 'error');
                 return false;
             }
         }
 
         async function saveQuizToDatabase(quiz) {
             try {
-                console.log('🔄 Menyimpan quiz ke database:', quiz);
-                
                 const payload = {
                     action: 'saveQuiz',
                     quizId: quiz.id,
@@ -488,14 +556,12 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    console.log('✅ BERHASIL menyimpan ke database:', result);
                     return result;
                 } else {
                     throw new Error(result.error || 'Database error');
                 }
                 
             } catch (error) {
-                console.error('❌ GAGAL menyimpan ke database:', error);
                 throw error;
             }
         }
@@ -578,6 +644,287 @@
                     lastUpdated: new Date().toISOString()
                 };
             }
+        }
+
+        async function importExcelToDatabase(excelData) {
+            try {
+                const payload = {
+                    action: 'importExcel',
+                    excelData: JSON.stringify(excelData)
+                };
+
+                const response = await fetch(APPS_SCRIPT_CONFIG.scriptUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(payload)
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    return result;
+                } else {
+                    throw new Error(result.error || 'Import failed');
+                }
+                
+            } catch (error) {
+                throw error;
+            }
+        }
+
+        async function clearDatabase() {
+            try {
+                Swal.fire({
+                    title: 'Hapus Semua Data?',
+                    text: "Tindakan ini akan menghapus SEMUA data quiz dan tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, Hapus Semua!',
+                    cancelButtonText: 'Batal'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        const response = await fetch(`${APPS_SCRIPT_CONFIG.scriptUrl}?action=clearData`);
+                        const result = await response.json();
+                        
+                        if (result.success) {
+                            showNotification('✅ Semua data berhasil dihapus!', 'success');
+                            loadQuizList();
+                        } else {
+                            throw new Error(result.error);
+                        }
+                    }
+                });
+            } catch (error) {
+                showNotification('❌ Gagal menghapus data: ' + error.message, 'error');
+            }
+        }
+
+        // ========== EXCEL IMPORT FUNCTIONS ==========
+        function setupExcelImport() {
+            const dropZone = document.getElementById('excel-drop-zone');
+            const fileInput = document.getElementById('excel-file-input');
+            
+            // Drag and drop handlers
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => {
+                    dropZone.classList.add('dragover');
+                }, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => {
+                    dropZone.classList.remove('dragover');
+                }, false);
+            });
+            
+            dropZone.addEventListener('drop', handleDrop, false);
+            fileInput.addEventListener('change', handleFileSelect, false);
+        }
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+        
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            handleFiles(files);
+        }
+        
+        function handleFiles(files) {
+            if (files.length === 0) return;
+            
+            const file = files[0];
+            if (!file.name.match(/\.(xlsx|xls)$/)) {
+                showNotification('Hanya file Excel (.xlsx, .xls) yang didukung!', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    
+                    // Process the first sheet
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+                    
+                    if (jsonData.length === 0) {
+                        showNotification('File Excel kosong!', 'error');
+                        return;
+                    }
+                    
+                    // Process Excel data
+                    processExcelData(jsonData);
+                    
+                } catch (error) {
+                    console.error('Error reading Excel file:', error);
+                    showNotification('Gagal membaca file Excel: ' + error.message, 'error');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+        
+        function processExcelData(excelData) {
+            try {
+                const quizzes = [];
+                let currentQuiz = null;
+                
+                excelData.forEach(row => {
+                    // Jika ada kolom 'Quiz Title', anggap sebagai quiz baru
+                    if (row['Quiz Title']) {
+                        if (currentQuiz) {
+                            quizzes.push(currentQuiz);
+                        }
+                        currentQuiz = {
+                            title: row['Quiz Title'],
+                            subject: row['Subject'] || 'Umum',
+                            grade: row['Grade'] || 'X',
+                            questions: []
+                        };
+                    }
+                    
+                    // Jika ada pertanyaan
+                    if (row['Question'] && currentQuiz) {
+                        const question = {
+                            question: row['Question'],
+                            options: [
+                                row['Option A'] || '',
+                                row['Option B'] || '',
+                                row['Option C'] || '',
+                                row['Option D'] || ''
+                            ],
+                            correct: getCorrectIndex(row['Correct Answer'])
+                        };
+                        currentQuiz.questions.push(question);
+                    }
+                });
+                
+                // Add the last quiz
+                if (currentQuiz) {
+                    quizzes.push(currentQuiz);
+                }
+                
+                if (quizzes.length === 0) {
+                    showNotification('Tidak ada data quiz yang ditemukan dalam file!', 'error');
+                    return;
+                }
+                
+                // Store for confirmation
+                currentImportData = quizzes;
+                
+                // Show preview
+                showImportPreview(quizzes);
+                
+            } catch (error) {
+                console.error('Error processing Excel data:', error);
+                showNotification('Gagal memproses data Excel: ' + error.message, 'error');
+            }
+        }
+        
+        function getCorrectIndex(correctAnswer) {
+            if (!correctAnswer) return 0;
+            const answer = correctAnswer.toString().toUpperCase();
+            if (answer === 'A') return 0;
+            if (answer === 'B') return 1;
+            if (answer === 'C') return 2;
+            if (answer === 'D') return 3;
+            return 0;
+        }
+        
+        function showImportPreview(quizzes) {
+            const preview = document.getElementById('import-preview');
+            const content = document.getElementById('preview-content');
+            
+            let html = '';
+            quizzes.forEach((quiz, index) => {
+                html += `
+                    <div class="mb-4 p-3 bg-white rounded border">
+                        <h5 class="font-bold text-blue-600">Quiz ${index + 1}: ${quiz.title}</h5>
+                        <p class="text-sm text-gray-600">${quiz.subject} - Kelas ${quiz.grade}</p>
+                        <p class="text-sm text-green-600">${quiz.questions.length} soal</p>
+                    </div>
+                `;
+            });
+            
+            content.innerHTML = html;
+            preview.classList.remove('hidden');
+        }
+        
+        async function confirmImport() {
+            if (!currentImportData || currentImportData.length === 0) {
+                showNotification('Tidak ada data untuk diimport!', 'error');
+                return;
+            }
+            
+            try {
+                showNotification('Mengimport data ke database...', 'info');
+                
+                const result = await importExcelToDatabase(currentImportData);
+                
+                if (result.success) {
+                    showNotification(`✅ Berhasil mengimport ${result.importedCount} quiz!`, 'success');
+                    document.getElementById('import-preview').classList.add('hidden');
+                    currentImportData = null;
+                    loadQuizList();
+                } else {
+                    throw new Error(result.error);
+                }
+                
+            } catch (error) {
+                showNotification('❌ Gagal mengimport data: ' + error.message, 'error');
+            }
+        }
+        
+        function downloadExcelTemplate() {
+            // Create sample data for template
+            const templateData = [
+                {
+                    'Quiz Title': 'Matematika Dasar',
+                    'Subject': 'Matematika',
+                    'Grade': 'X',
+                    'Question': 'Berapakah hasil dari 2 + 2?',
+                    'Option A': '3',
+                    'Option B': '4',
+                    'Option C': '5',
+                    'Option D': '6',
+                    'Correct Answer': 'B'
+                },
+                {
+                    'Quiz Title': '',
+                    'Subject': '',
+                    'Grade': '',
+                    'Question': 'Apa ibukota Indonesia?',
+                    'Option A': 'Surabaya',
+                    'Option B': 'Bandung',
+                    'Option C': 'Jakarta',
+                    'Option D': 'Medan',
+                    'Correct Answer': 'C'
+                }
+            ];
+            
+            const worksheet = XLSX.utils.json_to_sheet(templateData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Template');
+            
+            // Download
+            XLSX.writeFile(workbook, 'Template_Excel_Quiz.xlsx');
+            showNotification('Template berhasil didownload!', 'success');
         }
 
         // ========== NAVIGATION FUNCTIONS ==========
@@ -1281,17 +1628,24 @@
             updateTime();
             setInterval(updateTime, 1000);
             
-            // Test database connection immediately
+            // Setup Excel import
+            setupExcelImport();
+            
+            // Test database connection
             setTimeout(async () => {
-                await testDatabaseConnection();
-                await updateLiveStats();
+                const connected = await testDatabaseConnection();
+                if (connected) {
+                    await updateLiveStats();
+                    if (currentView === 'teacher') {
+                        await loadQuizList();
+                    }
+                }
             }, 1000);
             
-            // Update stats every 30 seconds
-            setInterval(updateLiveStats, 30000);
+            // Auto-reconnect every 30 seconds
+            setInterval(testDatabaseConnection, 30000);
 
             console.log('🚀 MSmart Quizezz System Initialized');
-            console.log('📊 Database URL:', APPS_SCRIPT_CONFIG.scriptUrl);
         });
     </script>
 </body>
