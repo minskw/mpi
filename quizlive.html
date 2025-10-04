@@ -1,4 +1,3 @@
-<!-- FIXED VERSION: assistant injected robust shuffleArray, startGameFromDatabase, startTimer, helper functions, and minimal modals. Review console for any remaining ID mismatches. -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -17,29 +16,7 @@
         .animate-pulse-custom { animation: pulse 2s infinite; }
         .animate-slide-in { animation: slideIn 0.5s ease-out; }
         .timer-bar { transition: width 1s linear; }
-        
-        /* Admin Panel Styles */
-        .admin-nav-btn.active {
-            background-color: #dbeafe;
-            color: #1e40af;
-        }
-        .admin-nav-btn.active:hover {
-            background-color: #dbeafe;
-        }
-        .admin-sidebar-collapsed {
-            width: 70px !important;
-        }
-        .admin-sidebar-collapsed .sidebar-text {
-            display: none !important;
-        }
-        .admin-sidebar-collapsed .sidebar-stats {
-            display: none !important;
-        }
-        .admin-main-expanded {
-            margin-left: 70px !important;
-        }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 <body class="bg-gradient-to-br from-purple-600 via-blue-600 to-teal-500 min-h-screen">
     <!-- Header -->
@@ -55,6 +32,8 @@
             </div>
         </div>
     </div>
+
+
 
     <!-- Main Content -->
     <div class="container mx-auto px-4 py-8">
@@ -176,417 +155,442 @@
         </div>
 
         <!-- Admin Panel -->
-        <div id="adminPanel" class="hidden fixed inset-0 z-50">
-            <!-- Sidebar -->
-            <div id="adminSidebar" class="fixed left-0 top-0 h-full w-64 bg-white shadow-xl transition-all duration-300 ease-in-out overflow-y-auto">
-                <!-- Header -->
-                <div class="bg-white border-b border-gray-200 p-4">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <i class="fas fa-chalkboard-teacher text-blue-500 text-xl mr-2"></i>
-                            <div class="sidebar-text">
-                                <h2 class="text-lg font-bold text-gray-800">Panel Admin</h2>
-                                <p class="text-gray-600 text-xs">Kelola Kuis & Monitoring</p>
+        <div id="adminPanel" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 max-w-4xl w-full border border-white/20 max-h-[90vh] overflow-y-auto">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold text-white">👩‍🏫 Panel Admin Guru</h2>
+                    <button onclick="closeAdminPanel()" class="text-white/60 hover:text-white text-2xl">✕</button>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Create New Quiz -->
+                    <div class="bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-2xl p-6 border border-white/30">
+                        <div class="text-4xl mb-4">🎯</div>
+                        <h3 class="text-xl font-bold text-white mb-3">Buat Kuis Baru</h3>
+                        <p class="text-white/70 text-sm mb-6">Buat soal sendiri atau gunakan contoh</p>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div>
+                                <label class="block text-white/80 mb-2">Nama Kuis</label>
+                                <input type="text" id="quizName" placeholder="Contoh: Kuis Matematika Kelas 7" class="w-full px-3 py-2 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50">
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-white/80 mb-2">Mata Pelajaran</label>
+                                    <select id="quizSubject" class="w-full px-3 py-2 rounded-lg bg-white/20 text-white border border-white/30">
+                                        <option value="">Pilih Mapel</option>
+                                        <option value="Matematika">Matematika</option>
+                                        <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                                        <option value="Bahasa Inggris">Bahasa Inggris</option>
+                                        <option value="IPA">IPA</option>
+                                        <option value="IPS">IPS</option>
+                                        <option value="PKN">PKN</option>
+                                        <option value="Agama">Agama</option>
+                                        <option value="Seni Budaya">Seni Budaya</option>
+                                        <option value="PJOK">PJOK</option>
+                                        <option value="Prakarya">Prakarya</option>
+                                        <option value="Fisika">Fisika</option>
+                                        <option value="Kimia">Kimia</option>
+                                        <option value="Biologi">Biologi</option>
+                                        <option value="Sejarah">Sejarah</option>
+                                        <option value="Geografi">Geografi</option>
+                                        <option value="Ekonomi">Ekonomi</option>
+                                        <option value="Sosiologi">Sosiologi</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-white/80 mb-2">Kelas</label>
+                                    <select id="quizClass" class="w-full px-3 py-2 rounded-lg bg-white/20 text-white border border-white/30" style="background-color: rgba(255,255,255,0.2) !important; color: white !important;">
+                                        <option value="" style="background-color: #1f2937; color: white;">Pilih Kelas</option>
+                                        <option value="4A" style="background-color: #1f2937; color: white;">4A</option>
+                                        <option value="4B" style="background-color: #1f2937; color: white;">4B</option>
+                                        <option value="5A" style="background-color: #1f2937; color: white;">5A</option>
+                                        <option value="5B" style="background-color: #1f2937; color: white;">5B</option>
+                                        <option value="6A" style="background-color: #1f2937; color: white;">6A</option>
+                                        <option value="6B" style="background-color: #1f2937; color: white;">6B</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-white/80 mb-2">Nama Guru</label>
+                                <input type="text" id="teacherName" placeholder="Nama Anda" class="w-full px-3 py-2 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50">
+                            </div>
+                            <div>
+                                <label class="block text-white/80 mb-2">Waktu per Soal</label>
+                                <select id="adminTimeLimit" class="w-full px-3 py-2 rounded-lg bg-white/20 text-white border border-white/30">
+                                    <option value="10">10 detik</option>
+                                    <option value="15" selected>15 detik</option>
+                                    <option value="30">30 detik</option>
+                                </select>
                             </div>
                         </div>
-                        <button onclick="toggleAdminSidebar()" class="text-gray-500 hover:text-gray-700 transition-colors p-1 rounded">
-                            <i class="fas fa-chevron-left text-sm"></i>
-                        </button>
+                        
+                        <div class="grid grid-cols-1 gap-3">
+                            <button onclick="showQuestionBuilder()" class="bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 text-sm">
+                                ✏️ Buat Soal Sendiri
+                            </button>
+                            <button onclick="showExcelImport()" class="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 text-sm">
+                                📊 Import dari Excel
+                            </button>
+                            <button onclick="createQuizWithSamples()" class="bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 text-sm">
+                                🚀 Pakai Contoh
+                            </button>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Navigation Menu -->
-                <div class="p-3">
-                    <nav class="space-y-1">
-                        <button onclick="showAdminSection('createQuiz')" class="admin-nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center">
-                            <i class="fas fa-plus-circle text-green-500 mr-3 w-5 text-center"></i>
-                            <span class="font-medium text-gray-700 sidebar-text">Buat Kuis Baru</span>
-                        </button>
+                    
+                    <!-- Quiz Library -->
+                    <div class="bg-gradient-to-br from-green-500/20 to-teal-500/20 rounded-2xl p-6 border border-white/30">
+                        <div class="text-4xl mb-4">📚</div>
+                        <h3 class="text-xl font-bold text-white mb-3">Library Kuis</h3>
+                        <p class="text-white/70 text-sm mb-6">Kelola dan mainkan kuis tersimpan</p>
                         
-                        <button onclick="showAdminSection('quizLibrary')" class="admin-nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center">
-                            <i class="fas fa-book text-blue-500 mr-3 w-5 text-center"></i>
-                            <span class="font-medium text-gray-700 sidebar-text">Library Kuis</span>
-                        </button>
-                        
-                        <button onclick="showAdminSection('monitoring')" class="admin-nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center">
-                            <i class="fas fa-chart-line text-orange-500 mr-3 w-5 text-center"></i>
-                            <span class="font-medium text-gray-700 sidebar-text">Monitoring Live</span>
-                        </button>
-                        
-                        <button onclick="showAdminSection('results')" class="admin-nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center">
-                            <i class="fas fa-clipboard-list text-purple-500 mr-3 w-5 text-center"></i>
-                            <span class="font-medium text-gray-700 sidebar-text">Kelola Hasil</span>
-                        </button>
-                        
-                        <button onclick="showAdminSection('stats')" class="admin-nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center">
-                            <i class="fas fa-chart-bar text-teal-500 mr-3 w-5 text-center"></i>
-                            <span class="font-medium text-gray-700 sidebar-text">Statistik</span>
-                        </button>
-                    </nav>
-                </div>
-
-                <!-- Footer Buttons -->
-                <div class="absolute bottom-0 left-0 right-0 p-3 border-t border-gray-200 bg-white">
-                    <div class="space-y-2">
-                        <button onclick="refreshSidebarStats()" class="admin-nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center">
-                            <i class="fas fa-sync-alt text-gray-500 mr-3 w-5 text-center"></i>
-                            <span class="font-medium text-gray-700 sidebar-text">Refresh</span>
-                        </button>
-                        
-                        <button onclick="closeAdminPanel()" class="admin-nav-btn w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center">
-                            <i class="fas fa-times text-red-500 mr-3 w-5 text-center"></i>
-                            <span class="font-medium text-gray-700 sidebar-text">Tutup Panel</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Main Content Area -->
-            <div id="adminMainContent" class="ml-64 min-h-screen bg-gray-50 transition-all duration-300">
-                <!-- Create Quiz Section -->
-                <div id="adminCreateQuiz" class="admin-section p-6">
-                    <div class="max-w-4xl mx-auto">
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                            <div class="flex items-center mb-6">
-                                <i class="fas fa-plus-circle text-green-500 text-xl mr-3"></i>
-                                <h2 class="text-xl font-bold text-gray-800">Buat Kuis Baru</h2>
-                            </div>
-                            
-                            <div class="grid md:grid-cols-2 gap-6">
-                                <!-- Quiz Info Form -->
-                                <div class="space-y-4">
-                                    <div>
-                                        <label class="block text-gray-700 font-medium mb-2">Nama Kuis</label>
-                                        <input type="text" id="quizName" placeholder="Contoh: Kuis Matematika Kelas 7" class="w-full px-3 py-2 bg-white text-gray-800 placeholder-gray-500 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                    </div>
-                                    
-                                    <div class="grid grid-cols-2 gap-3">
-                                        <div>
-                                            <label class="block text-gray-700 font-medium mb-2">Mata Pelajaran</label>
-                                            <select id="quizSubject" class="w-full px-3 py-2 bg-white text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                                <option value="">Pilih Mapel</option>
-                                                <option value="Matematika">Matematika</option>
-                                                <option value="Bahasa Indonesia">Bahasa Indonesia</option>
-                                                <option value="Bahasa Inggris">Bahasa Inggris</option>
-                                                <option value="IPA">IPA</option>
-                                                <option value="IPS">IPS</option>
-                                                <option value="PKN">PKN</option>
-                                                <option value="Agama">Agama</option>
-                                                <option value="Seni Budaya">Seni Budaya</option>
-                                                <option value="PJOK">PJOK</option>
-                                                <option value="Prakarya">Prakarya</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label class="block text-gray-700 font-medium mb-2">Kelas</label>
-                                            <select id="quizClass" class="w-full px-3 py-2 bg-white text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                                <option value="">Pilih Kelas</option>
-                                                <option value="4A">4A</option>
-                                                <option value="4B">4B</option>
-                                                <option value="5A">5A</option>
-                                                <option value="5B">5B</option>
-                                                <option value="6A">6A</option>
-                                                <option value="6B">6B</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="grid grid-cols-2 gap-3">
-                                        <div>
-                                            <label class="block text-gray-700 font-medium mb-2">Nama Guru</label>
-                                            <input type="text" id="teacherName" placeholder="Nama Anda" class="w-full px-3 py-2 bg-white text-gray-800 placeholder-gray-500 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                        </div>
-                                        <div>
-                                            <label class="block text-gray-700 font-medium mb-2">Waktu per Soal</label>
-                                            <select id="adminTimeLimit" class="w-full px-3 py-2 bg-white text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                                <option value="10">10 detik</option>
-                                                <option value="15" selected>15 detik</option>
-                                                <option value="30">30 detik</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                        <div id="liveStats" class="space-y-4 mb-6">
+                            <div class="bg-white/10 rounded-lg p-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-white/80">Kuis Tersimpan</span>
+                                    <span class="text-white font-bold text-xl" id="savedQuizCount">0</span>
                                 </div>
-                                
-                                <!-- Action Buttons -->
-                                <div class="space-y-3">
-                                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Pilih Metode Pembuatan</h3>
-                                    
-                                    <button onclick="showQuestionBuilder()" class="w-full bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105">
-                                        <i class="fas fa-edit mr-2"></i>Buat Soal Sendiri
-                                    </button>
-                                    
-                                    <button onclick="showExcelImport()" class="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105">
-                                        <i class="fas fa-file-excel mr-2"></i>Import dari Excel
-                                    </button>
-                                    
-                                    <button onclick="createQuizWithSamples()" class="w-full bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105">
-                                        <i class="fas fa-rocket mr-2"></i>Pakai Contoh Soal
-                                    </button>
+                            </div>
+                            <div class="bg-white/10 rounded-lg p-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-white/80">Total Peserta</span>
+                                    <span class="text-white font-bold text-xl" id="totalParticipants">0</span>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Quiz Library Section -->
-                <div id="adminQuizLibrary" class="admin-section hidden p-6">
-                    <div class="max-w-6xl mx-auto">
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                            <div class="flex items-center justify-between mb-6">
-                                <div class="flex items-center">
-                                    <i class="fas fa-book text-blue-500 text-xl mr-3"></i>
-                                    <h2 class="text-xl font-bold text-gray-800">Library Kuis</h2>
-                                </div>
-                                <button onclick="refreshQuizLibrary()" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-                                    <i class="fas fa-sync-alt mr-2"></i>Refresh
-                                </button>
-                            </div>
-                            
-                            <!-- Search and Filter -->
-                            <div class="bg-gray-50 rounded-lg p-4 mb-6">
-                                <div class="grid md:grid-cols-3 gap-4">
-                                    <div>
-                                        <label class="block text-gray-700 text-sm font-medium mb-2">Cari Kuis</label>
-                                        <input type="text" id="searchQuizLibrary" placeholder="Nama kuis atau guru..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 text-sm font-medium mb-2">Status</label>
-                                        <select id="filterStatus" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                            <option value="">Semua Status</option>
-                                            <option value="waiting">Menunggu</option>
-                                            <option value="active">Aktif</option>
-                                            <option value="completed">Selesai</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 text-sm font-medium mb-2">Kelas</label>
-                                        <select id="filterClassLibrary" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                            <option value="">Semua Kelas</option>
-                                            <option value="4A">4A</option>
-                                            <option value="4B">4B</option>
-                                            <option value="5A">5A</option>
-                                            <option value="5B">5B</option>
-                                            <option value="6A">6A</option>
-                                            <option value="6B">6B</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Quiz List -->
-                            <div id="quizLibraryList" class="space-y-4">
-                                <div class="text-center py-12">
-                                    <i class="fas fa-book-open text-6xl text-gray-300 mb-4"></i>
-                                    <h3 class="text-xl font-semibold text-gray-600 mb-2">Library Kuis</h3>
-                                    <p class="text-gray-500 mb-6">Kelola semua kuis yang telah dibuat</p>
-                                    <button onclick="loadQuizLibrary()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
-                                        <i class="fas fa-sync-alt mr-2"></i>Muat Kuis
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Monitoring Section -->
-                <div id="adminMonitoring" class="admin-section hidden p-6">
-                    <div class="max-w-6xl mx-auto">
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                            <div class="flex items-center justify-between mb-6">
-                                <div class="flex items-center">
-                                    <i class="fas fa-chart-line text-orange-500 text-xl mr-3"></i>
-                                    <h2 class="text-xl font-bold text-gray-800">Monitoring Live</h2>
-                                </div>
-                                <button onclick="startActiveMonitoring()" class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-                                    <i class="fas fa-play mr-2"></i>Mulai Monitoring
-                                </button>
-                            </div>
-                            
-                            <!-- Active Quiz Info -->
-                            <div class="bg-orange-50 border border-orange-200 rounded-lg p-6 mb-6">
-                                <div class="grid md:grid-cols-4 gap-4">
-                                    <div class="text-center">
-                                        <div class="text-2xl text-orange-500 mb-2">🎯</div>
-                                        <div class="text-lg font-bold text-gray-800" id="monitorQuizName">-</div>
-                                        <div class="text-sm text-gray-600" id="monitorQuizCode">Kode: -</div>
-                                    </div>
-                                    <div class="text-center">
-                                        <div class="text-2xl text-orange-500 mb-2">👥</div>
-                                        <div class="text-2xl font-bold text-gray-800" id="monitorParticipantCount">0</div>
-                                        <div class="text-sm text-gray-600">Peserta</div>
-                                    </div>
-                                    <div class="text-center">
-                                        <div class="text-2xl text-orange-500 mb-2">📚</div>
-                                        <div class="text-lg font-bold text-gray-800" id="monitorQuizClass">-</div>
-                                        <div class="text-sm text-gray-600">Kelas</div>
-                                    </div>
-                                    <div class="text-center">
-                                        <div class="text-2xl text-orange-500 mb-2">⏱️</div>
-                                        <div class="text-lg font-bold text-gray-800" id="monitorTimeLimit">-</div>
-                                        <div class="text-sm text-gray-600">Waktu/Soal</div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Live Participants -->
-                            <div class="bg-gray-50 rounded-lg p-6">
-                                <h3 class="text-lg font-semibold text-gray-800 mb-4">Peserta Live</h3>
-                                <div id="monitoringParticipants" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    <div class="text-center py-8">
-                                        <i class="fas fa-users text-4xl text-gray-300 mb-3"></i>
-                                        <p class="text-gray-500">Belum ada peserta yang bergabung</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Results Section -->
-                <div id="adminResults" class="admin-section hidden p-6">
-                    <div class="max-w-6xl mx-auto">
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                            <div class="flex items-center justify-between mb-6">
-                                <div class="flex items-center">
-                                    <i class="fas fa-clipboard-list text-purple-500 text-xl mr-3"></i>
-                                    <h2 class="text-xl font-bold text-gray-800">Kelola Hasil</h2>
-                                </div>
-                                <button onclick="exportAllResults()" class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-                                    <i class="fas fa-download mr-2"></i>Export Semua
-                                </button>
-                            </div>
-                            
-                            <!-- Filter Results -->
-                            <div class="bg-gray-50 rounded-lg p-4 mb-6">
-                                <div class="grid md:grid-cols-4 gap-4">
-                                    <div>
-                                        <label class="block text-gray-700 text-sm font-medium mb-2">Cari Kuis</label>
-                                        <input type="text" id="searchResults" placeholder="Nama kuis..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 text-sm font-medium mb-2">Kelas</label>
-                                        <select id="filterClassResults" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                            <option value="">Semua Kelas</option>
-                                            <option value="4A">4A</option>
-                                            <option value="4B">4B</option>
-                                            <option value="5A">5A</option>
-                                            <option value="5B">5B</option>
-                                            <option value="6A">6A</option>
-                                            <option value="6B">6B</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 text-sm font-medium mb-2">Mapel</label>
-                                        <select id="filterSubjectResults" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                            <option value="">Semua Mapel</option>
-                                            <option value="Matematika">Matematika</option>
-                                            <option value="Bahasa Indonesia">Bahasa Indonesia</option>
-                                            <option value="Bahasa Inggris">Bahasa Inggris</option>
-                                            <option value="IPA">IPA</option>
-                                            <option value="IPS">IPS</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 text-sm font-medium mb-2">Periode</label>
-                                        <select id="filterPeriod" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                            <option value="">Semua Waktu</option>
-                                            <option value="today">Hari Ini</option>
-                                            <option value="week">Minggu Ini</option>
-                                            <option value="month">Bulan Ini</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Results List -->
-                            <div id="resultsListContent" class="space-y-4">
-                                <div class="text-center py-12">
-                                    <i class="fas fa-chart-bar text-6xl text-gray-300 mb-4"></i>
-                                    <h3 class="text-xl font-semibold text-gray-600 mb-2">Hasil Kuis</h3>
-                                    <p class="text-gray-500">Lihat dan kelola hasil kuis yang telah selesai</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Stats Section -->
-                <div id="adminStats" class="admin-section hidden p-6">
-                    <div class="max-w-6xl mx-auto">
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                            <div class="flex items-center mb-6">
-                                <i class="fas fa-chart-bar text-teal-500 text-xl mr-3"></i>
-                                <h2 class="text-xl font-bold text-gray-800">Statistik Dashboard</h2>
-                            </div>
-                            
-                            <div class="grid md:grid-cols-4 gap-6 mb-8">
-                                <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-6 text-white">
-                                    <div class="flex items-center justify-between">
-                                        <div>
-                                            <p class="text-blue-100 text-sm">Total Kuis</p>
-                                            <p class="text-2xl font-bold" id="statsQuizCount">0</p>
-                                        </div>
-                                        <i class="fas fa-book text-3xl text-blue-200"></i>
-                                    </div>
-                                </div>
-                                
-                                <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white">
-                                    <div class="flex items-center justify-between">
-                                        <div>
-                                            <p class="text-green-100 text-sm">Total Peserta</p>
-                                            <p class="text-2xl font-bold" id="statsParticipantCount">0</p>
-                                        </div>
-                                        <i class="fas fa-users text-3xl text-green-200"></i>
-                                    </div>
-                                </div>
-                                
-                                <div class="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-6 text-white">
-                                    <div class="flex items-center justify-between">
-                                        <div>
-                                            <p class="text-orange-100 text-sm">Kuis Aktif</p>
-                                            <p class="text-2xl font-bold" id="statsActiveQuiz">0</p>
-                                        </div>
-                                        <i class="fas fa-play-circle text-3xl text-orange-200"></i>
-                                    </div>
-                                </div>
-                                
-                                <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-6 text-white">
-                                    <div class="flex items-center justify-between">
-                                        <div>
-                                            <p class="text-purple-100 text-sm">Kuis Selesai</p>
-                                            <p class="text-2xl font-bold" id="statsCompletedQuiz">0</p>
-                                        </div>
-                                        <i class="fas fa-check-circle text-3xl text-purple-200"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Recent Activity -->
-                            <div class="bg-gray-50 rounded-lg p-6">
-                                <h3 class="text-lg font-semibold text-gray-800 mb-4">Aktivitas Terbaru</h3>
-                                <div id="recentActivity" class="space-y-3">
-                                    <div class="text-center py-8">
-                                        <i class="fas fa-history text-4xl text-gray-300 mb-3"></i>
-                                        <p class="text-gray-500">Belum ada aktivitas terbaru</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="text-center mt-6">
-                                <button onclick="refreshAllStats()" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
-                                    <i class="fas fa-sync-alt mr-2"></i>Refresh Semua Data
-                                </button>
-                            </div>
+                        
+                        <div class="grid grid-cols-1 gap-3">
+                            <button onclick="showQuizLibrary()" class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 text-sm">
+                                📚 Buka Library Kuis
+                            </button>
+                            <button onclick="showMonitoringPanel()" class="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 text-sm">
+                                📊 Monitoring Live
+                            </button>
+                            <button onclick="showResultsManager()" class="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 text-sm">
+                                📋 Kelola Hasil
+                            </button>
+                            <button onclick="refreshStats()" class="bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 text-sm">
+                                🔄 Refresh Data
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Collapsed Sidebar Toggle -->
-            <div id="adminSidebarToggle" class="hidden fixed left-0 top-1/2 transform -translate-y-1/2 z-60">
-                <button onclick="toggleAdminSidebar()" class="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-r-lg shadow-lg transition-colors">
-                    <i class="fas fa-chevron-right text-sm"></i>
-                </button>
+        <!-- Excel Import Panel -->
+        <div id="excelImport" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 max-w-4xl w-full border border-white/20 max-h-[90vh] overflow-y-auto">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold text-white">📊 Import Soal dari Excel</h2>
+                    <button onclick="closeExcelImport()" class="text-white/60 hover:text-white text-2xl">✕</button>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Upload Section -->
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-2xl p-6 border border-white/30">
+                            <h3 class="text-xl font-bold text-white mb-4">📁 Upload File Excel</h3>
+                            
+                            <div class="space-y-4">
+                                <div class="border-2 border-dashed border-white/30 rounded-lg p-6 text-center">
+                                    <div class="text-4xl mb-4">📄</div>
+                                    <input type="file" id="excelFile" accept=".xlsx,.xls" class="hidden" onchange="handleExcelFile(event)">
+                                    <button onclick="document.getElementById('excelFile').click()" class="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300">
+                                        📂 Pilih File Excel
+                                    </button>
+                                    <p class="text-white/60 text-sm mt-2">Format: .xlsx atau .xls</p>
+                                </div>
+                                
+                                <div id="fileInfo" class="hidden bg-white/10 rounded-lg p-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="text-white font-medium" id="fileName">file.xlsx</div>
+                                            <div class="text-white/60 text-sm" id="fileSize">0 KB</div>
+                                        </div>
+                                        <div class="text-green-400">✅</div>
+                                    </div>
+                                </div>
+                                
+                                <button onclick="processExcelFile()" id="processBtn" class="w-full bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 disabled:opacity-50" disabled>
+                                    🔄 Proses File Excel
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Template Download -->
+                        <div class="bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl p-6 border border-white/30">
+                            <h3 class="text-xl font-bold text-white mb-4">📋 Template Excel</h3>
+                            <p class="text-white/70 text-sm mb-4">Download template untuk format yang benar</p>
+                            <button onclick="downloadTemplate()" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300">
+                                ⬇️ Download Template
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Preview Section -->
+                    <div class="bg-gradient-to-br from-green-500/20 to-teal-500/20 rounded-2xl p-6 border border-white/30">
+                        <h3 class="text-xl font-bold text-white mb-4">👁️ Preview Soal (<span id="excelQuestionCount">0</span>)</h3>
+                        <div id="excelQuestionsList" class="space-y-3 max-h-96 overflow-y-auto">
+                            <div class="text-white/60 text-center py-8">
+                                Upload file Excel untuk melihat preview soal
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-white/20">
+                            <button onclick="createQuizFromExcel()" id="createFromExcelBtn" class="w-full bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 disabled:opacity-50" disabled>
+                                🚀 Buat Kuis dari Excel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monitoring Panel -->
+        <div id="monitoringPanel" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 max-w-6xl w-full border border-white/20 max-h-[90vh] overflow-y-auto">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold text-white">📊 Monitoring Live Kuis</h2>
+                    <button onclick="closeMonitoringPanel()" class="text-white/60 hover:text-white text-2xl">✕</button>
+                </div>
+                
+                <!-- Active Quiz Info -->
+                <div id="activeQuizInfo" class="bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl p-6 border border-white/30 mb-8">
+                    <div class="grid md:grid-cols-4 gap-4">
+                        <div class="bg-white/10 rounded-lg p-4 text-center">
+                            <div class="text-2xl mb-2">🎯</div>
+                            <div class="text-white font-bold" id="monitorQuizTitle">Tidak Ada Kuis Aktif</div>
+                            <div class="text-white/60 text-sm" id="monitorQuizCode">-</div>
+                        </div>
+                        <div class="bg-white/10 rounded-lg p-4 text-center">
+                            <div class="text-2xl mb-2">👥</div>
+                            <div class="text-white font-bold text-xl" id="monitorParticipantCount">0</div>
+                            <div class="text-white/60 text-sm">Peserta Terdaftar</div>
+                        </div>
+                        <div class="bg-white/10 rounded-lg p-4 text-center">
+                            <div class="text-2xl mb-2">📚</div>
+                            <div class="text-white font-bold" id="monitorQuizClass">-</div>
+                            <div class="text-white/60 text-sm">Kelas</div>
+                        </div>
+                        <div class="bg-white/10 rounded-lg p-4 text-center">
+                            <div class="text-2xl mb-2">📖</div>
+                            <div class="text-white font-bold" id="monitorQuizSubject">-</div>
+                            <div class="text-white/60 text-sm">Mata Pelajaran</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 text-center">
+                        <button onclick="startActiveQuiz()" id="startQuizBtn" class="bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 disabled:opacity-50" disabled>
+                            🚀 Mulai Kuis Sekarang
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Live Participants -->
+                <div class="bg-gradient-to-br from-green-500/20 to-teal-500/20 rounded-2xl p-6 border border-white/30">
+                    <h3 class="text-xl font-bold text-white mb-4">👥 Peserta Live (<span id="liveParticipantCount">0</span>)</h3>
+                    <div id="liveParticipantsList" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-96 overflow-y-auto">
+                        <div class="text-white/60 text-center py-8 col-span-full">
+                            Belum ada peserta yang bergabung
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Manager Panel -->
+        <div id="resultsManager" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 max-w-6xl w-full border border-white/20 max-h-[90vh] overflow-y-auto">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold text-white">📋 Kelola Hasil Kuis</h2>
+                    <button onclick="closeResultsManager()" class="text-white/60 hover:text-white text-2xl">✕</button>
+                </div>
+                
+                <!-- Filter Results -->
+                <div class="bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl p-6 border border-white/30 mb-8">
+                    <div class="grid md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-white/80 mb-2">🔍 Cari Kuis</label>
+                            <input type="text" id="searchResults" placeholder="Nama kuis..." class="w-full px-3 py-2 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50" onkeyup="filterResults()">
+                        </div>
+                        <div>
+                            <label class="block text-white/80 mb-2">📚 Kelas</label>
+                            <select id="filterClass" class="w-full px-3 py-2 rounded-lg bg-white/20 text-white border border-white/30" style="background-color: rgba(255,255,255,0.2) !important; color: white !important;" onchange="filterResults()">
+                                <option value="" style="background-color: #1f2937; color: white;">Semua Kelas</option>
+                                <option value="4A" style="background-color: #1f2937; color: white;">4A</option>
+                                <option value="4B" style="background-color: #1f2937; color: white;">4B</option>
+                                <option value="5A" style="background-color: #1f2937; color: white;">5A</option>
+                                <option value="5B" style="background-color: #1f2937; color: white;">5B</option>
+                                <option value="6A" style="background-color: #1f2937; color: white;">6A</option>
+                                <option value="6B" style="background-color: #1f2937; color: white;">6B</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-white/80 mb-2">📖 Mapel</label>
+                            <select id="filterSubject" class="w-full px-3 py-2 rounded-lg bg-white/20 text-white border border-white/30" onchange="filterResults()">
+                                <option value="">Semua Mapel</option>
+                                <option value="Matematika">Matematika</option>
+                                <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                                <option value="Bahasa Inggris">Bahasa Inggris</option>
+                                <option value="IPA">IPA</option>
+                                <option value="IPS">IPS</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-white/80 mb-2">📅 Periode</label>
+                            <select id="filterPeriod" class="w-full px-3 py-2 rounded-lg bg-white/20 text-white border border-white/30" onchange="filterResults()">
+                                <option value="">Semua Waktu</option>
+                                <option value="today">Hari Ini</option>
+                                <option value="week">Minggu Ini</option>
+                                <option value="month">Bulan Ini</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Results List -->
+                <div id="resultsList" class="space-y-4">
+                    <!-- Results will be loaded here -->
+                </div>
+                
+                <!-- Empty State -->
+                <div id="resultsEmptyState" class="hidden text-center py-12">
+                    <div class="text-6xl mb-4">📊</div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Belum Ada Hasil</h3>
+                    <p class="text-white/70">Buat dan jalankan kuis untuk melihat hasil</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Library Panel -->
+        <div id="quizLibrary" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 max-w-6xl w-full border border-white/20 max-h-[90vh] overflow-y-auto">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold text-white">📚 Library Kuis</h2>
+                    <button onclick="closeQuizLibrary()" class="text-white/60 hover:text-white text-2xl">✕</button>
+                </div>
+                
+                <!-- Search and Filter -->
+                <div class="bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl p-6 border border-white/30 mb-8">
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-white/80 mb-2">🔍 Cari Kuis</label>
+                            <input type="text" id="searchQuiz" placeholder="Nama kuis atau guru..." class="w-full px-3 py-2 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50" onkeyup="filterQuizzes()">
+                        </div>
+                        <div>
+                            <label class="block text-white/80 mb-2">📊 Status</label>
+                            <select id="statusFilter" class="w-full px-3 py-2 rounded-lg bg-white/20 text-white border border-white/30" onchange="filterQuizzes()">
+                                <option value="">Semua Status</option>
+                                <option value="waiting">Menunggu</option>
+                                <option value="active">Aktif</option>
+                                <option value="completed">Selesai</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-white/80 mb-2">📅 Urutkan</label>
+                            <select id="sortOrder" class="w-full px-3 py-2 rounded-lg bg-white/20 text-white border border-white/30" onchange="filterQuizzes()">
+                                <option value="newest">Terbaru</option>
+                                <option value="oldest">Terlama</option>
+                                <option value="name">Nama A-Z</option>
+                                <option value="participants">Peserta Terbanyak</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quiz List -->
+                <div id="quizList" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Quizzes will be loaded here -->
+                </div>
+                
+                <!-- Empty State -->
+                <div id="emptyState" class="hidden text-center py-12">
+                    <div class="text-6xl mb-4">📝</div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Belum Ada Kuis</h3>
+                    <p class="text-white/70 mb-6">Buat kuis pertama Anda untuk mulai mengajar!</p>
+                    <button onclick="closeQuizLibrary()" class="bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300">
+                        ➕ Buat Kuis Baru
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Builder Panel -->
+        <div id="questionBuilder" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 max-w-4xl w-full border border-white/20 max-h-[90vh] overflow-y-auto">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold text-white">✏️ Buat Soal Kuis</h2>
+                    <button onclick="closeQuestionBuilder()" class="text-white/60 hover:text-white text-2xl">✕</button>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Question Form -->
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl p-6 border border-white/30">
+                            <h3 class="text-xl font-bold text-white mb-4">📝 Soal #<span id="questionNumber">1</span></h3>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-white/80 mb-2">Pertanyaan</label>
+                                    <textarea id="questionInput" placeholder="Tulis pertanyaan di sini..." class="w-full px-3 py-2 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 h-20 resize-none"></textarea>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-white/80 mb-2">Pilihan Jawaban</label>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center space-x-2">
+                                            <input type="radio" name="correctAnswer" value="0" id="correct0" class="text-green-500">
+                                            <label class="text-white/60 text-sm">A.</label>
+                                            <input type="text" id="option0" placeholder="Pilihan A" class="flex-1 px-3 py-2 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50">
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <input type="radio" name="correctAnswer" value="1" id="correct1" class="text-green-500">
+                                            <label class="text-white/60 text-sm">B.</label>
+                                            <input type="text" id="option1" placeholder="Pilihan B" class="flex-1 px-3 py-2 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50">
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <input type="radio" name="correctAnswer" value="2" id="correct2" class="text-green-500">
+                                            <label class="text-white/60 text-sm">C.</label>
+                                            <input type="text" id="option2" placeholder="Pilihan C" class="flex-1 px-3 py-2 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50">
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <input type="radio" name="correctAnswer" value="3" id="correct3" class="text-green-500">
+                                            <label class="text-white/60 text-sm">D.</label>
+                                            <input type="text" id="option3" placeholder="Pilihan D" class="flex-1 px-3 py-2 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50">
+                                        </div>
+                                    </div>
+                                    <p class="text-white/60 text-xs mt-2">💡 Pilih radio button untuk jawaban yang benar</p>
+                                </div>
+                                
+                                <div class="flex space-x-3">
+                                    <button onclick="addQuestion()" class="flex-1 bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300">
+                                        ➕ Tambah Soal
+                                    </button>
+                                    <button onclick="finishQuestions()" class="flex-1 bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300">
+                                        ✅ Selesai & Mulai
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Questions Preview -->
+                    <div class="bg-gradient-to-br from-green-500/20 to-teal-500/20 rounded-2xl p-6 border border-white/30">
+                        <h3 class="text-xl font-bold text-white mb-4">📋 Daftar Soal (<span id="questionCount">0</span>)</h3>
+                        <div id="questionsList" class="space-y-3 max-h-96 overflow-y-auto">
+                            <div class="text-white/60 text-center py-8">
+                                Belum ada soal. Mulai buat soal pertama!
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-white/20">
+                            <button onclick="clearAllQuestions()" class="w-full bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-bold py-2 px-4 rounded-xl transition-all duration-300 text-sm">
+                                🗑️ Hapus Semua Soal
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -594,7 +598,7 @@
         <div id="lobbyScreen" class="hidden">
             <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 max-w-4xl mx-auto border border-white/20">
                 <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-white mb-2" id="lobbyTitle">Ruang Tunggu Kuis</h2>
+                    <h2 class="text-3xl font-bold text-white mb-2" id="lobbyTitle">Ruang Tunggu Kelas</h2>
                     <p class="text-white/80" id="lobbySubtitle">Menunggu guru memulai kuis...</p>
                 </div>
                 
@@ -603,9 +607,7 @@
                         👥 Peserta Online (<span id="participantCount">0</span>)
                     </h3>
                     <div id="participantsList" class="space-y-3">
-                        <div class="text-center py-4 text-white/60">
-                            Menunggu peserta bergabung...
-                        </div>
+                        <!-- Participants will be loaded from database -->
                     </div>
                 </div>
                 
@@ -631,15 +633,13 @@
                         <span class="text-white/80">Soal <span id="currentQuestion">1</span> dari <span id="totalQuestions">10</span></span>
                         <span class="text-white/80">Skor: <span id="currentScore" class="text-yellow-400 font-bold">0</span></span>
                     </div>
-                    <h3 id="questionText" class="text-2xl font-bold text-white mb-2">Memuat pertanyaan...</h3>
+                    <h3 id="questionText" class="text-2xl font-bold text-white mb-2">Loading...</h3>
                     <div id="timeRemaining" class="text-xl text-yellow-400 font-bold">⏰ 15</div>
                 </div>
                 
                 <!-- Answer Options -->
                 <div id="answerOptions" class="grid md:grid-cols-2 gap-4">
-                    <div class="text-center py-8 text-white/60">
-                        Memuat pilihan jawaban...
-                    </div>
+                    <!-- Options will be loaded dynamically -->
                 </div>
             </div>
         </div>
@@ -650,16 +650,14 @@
                 <div class="text-center mb-8">
                     <div class="text-6xl mb-4">🏆</div>
                     <h2 class="text-4xl font-bold text-white mb-2">Kuis Selesai!</h2>
-                    <p class="text-xl text-white/80">Terima kasih telah berpartisipasi</p>
+                    <p class="text-xl text-white/80">Hasil dari database real-time</p>
                 </div>
                 
                 <!-- Leaderboard -->
                 <div class="bg-white/10 rounded-2xl p-6 mb-8">
                     <h3 class="text-2xl font-bold text-white mb-6 text-center">🥇 Papan Peringkat</h3>
                     <div id="leaderboard" class="space-y-4">
-                        <div class="text-center py-8 text-white/60">
-                            Memuat hasil...
-                        </div>
+                        <!-- Leaderboard will be loaded from database -->
                     </div>
                 </div>
                 
@@ -1904,7 +1902,7 @@
                     </div>
                     
                     <div class="mt-6 text-center">
-                        <p class="text-white/60 text-sm">2025 &copy; MAHFUD SIDIK<br><i>Guru Kreatif, Siswa Aktif</i></p>
+                        <p class="text-white/60 text-sm">💡 Password: <code class="bg-white/20 px-2 py-1 rounded">guruhebat2025</code></p>
                     </div>
                 </div>
             `;
@@ -1923,11 +1921,7 @@
             if (password === 'guruhebat2025') {
                 closeAdminPasswordDialog();
                 document.getElementById('adminPanel').classList.remove('hidden');
-                
-                // Initialize admin panel
-                showAdminSection('createQuiz');
-                refreshSidebarStats();
-                
+                refreshStats();
                 alert('✅ Selamat datang di Panel Admin!');
             } else {
                 alert('❌ Password salah! Coba lagi.');
@@ -1945,103 +1939,6 @@
 
         function closeAdminPanel() {
             document.getElementById('adminPanel').classList.add('hidden');
-        }
-
-        // Admin Sidebar Functions
-        function toggleAdminSidebar() {
-            const sidebar = document.getElementById('adminSidebar');
-            const mainContent = document.getElementById('adminMainContent');
-            const toggle = document.getElementById('adminSidebarToggle');
-            
-            if (sidebar.style.transform === 'translateX(-100%)') {
-                // Show sidebar
-                sidebar.style.transform = 'translateX(0)';
-                mainContent.classList.remove('ml-0');
-                mainContent.classList.add('ml-80');
-                toggle.classList.add('hidden');
-            } else {
-                // Hide sidebar
-                sidebar.style.transform = 'translateX(-100%)';
-                mainContent.classList.remove('ml-80');
-                mainContent.classList.add('ml-0');
-                toggle.classList.remove('hidden');
-            }
-        }
-
-        function showAdminSection(sectionName) {
-            // Hide all sections
-            const sections = document.querySelectorAll('.admin-section');
-            sections.forEach(section => section.classList.add('hidden'));
-            
-            // Remove active state from all nav buttons
-            const navButtons = document.querySelectorAll('.admin-nav-btn');
-            navButtons.forEach(btn => {
-                btn.classList.remove('bg-blue-100', 'text-blue-700');
-                btn.classList.add('hover:bg-gray-100');
-            });
-            
-            // Show selected section
-            const targetSection = document.getElementById('admin' + sectionName.charAt(0).toUpperCase() + sectionName.slice(1));
-            if (targetSection) {
-                targetSection.classList.remove('hidden');
-            }
-            
-            // Add active state to clicked nav button
-            const activeButton = event.target.closest('.admin-nav-btn');
-            if (activeButton) {
-                activeButton.classList.add('bg-blue-100', 'text-blue-700');
-                activeButton.classList.remove('hover:bg-gray-100');
-            }
-            
-            // Load section-specific data
-            switch(sectionName) {
-                case 'stats':
-                    refreshAllStats();
-                    break;
-                case 'createQuiz':
-                    refreshSidebarStats();
-                    break;
-            }
-        }
-
-        async function refreshSidebarStats() {
-            try {
-                const { data: savedQuizzes } = await supabase.from('quizzes').select('id');
-                const { data: participants } = await supabase.from('participants').select('id').eq('is_active', true);
-                const { data: activeQuizzes } = await supabase.from('quizzes').select('id').eq('status', 'active');
-                
-                document.getElementById('sidebarQuizCount').textContent = savedQuizzes?.length || 0;
-                document.getElementById('sidebarParticipantCount').textContent = participants?.length || 0;
-                document.getElementById('sidebarActiveQuiz').textContent = activeQuizzes?.length || 0;
-            } catch (error) {
-                console.error('Error refreshing sidebar stats:', error);
-            }
-        }
-
-        async function refreshAllStats() {
-            try {
-                const { data: allQuizzes } = await supabase.from('quizzes').select('id, status');
-                const { data: allParticipants } = await supabase.from('participants').select('id');
-                
-                const totalQuizzes = allQuizzes?.length || 0;
-                const totalParticipants = allParticipants?.length || 0;
-                const activeQuizzes = allQuizzes?.filter(q => q.status === 'active').length || 0;
-                const completedQuizzes = allQuizzes?.filter(q => q.status === 'completed').length || 0;
-                
-                // Update stats section
-                document.getElementById('statsQuizCount').textContent = totalQuizzes;
-                document.getElementById('statsParticipantCount').textContent = totalParticipants;
-                document.getElementById('statsActiveQuiz').textContent = activeQuizzes;
-                document.getElementById('statsCompletedQuiz').textContent = completedQuizzes;
-                
-                // Update sidebar stats
-                document.getElementById('sidebarQuizCount').textContent = totalQuizzes;
-                document.getElementById('sidebarParticipantCount').textContent = totalParticipants;
-                document.getElementById('sidebarActiveQuiz').textContent = activeQuizzes;
-                
-            } catch (error) {
-                console.error('Error refreshing all stats:', error);
-            }
         }
 
         async function refreshStats() {
@@ -2789,207 +2686,6 @@
                 showScreen('loginScreen');
             }
         }
-    
-
-/* ===== START: Injected fixes by assistant ===== */
-
-/* Robust shuffleArray */
-function shuffleArray(array) {
-    const shuffled = Array.isArray(array) ? [...array] : [];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-}
-
-/* Robust startGameFromDatabase */
-async function startGameFromDatabase() {
-    try {
-        // Ensure supabase and gameState.currentQuiz are available
-        if (!window.supabase) throw new Error('Supabase client not initialized');
-        if (!gameState || !gameState.currentQuiz || !gameState.currentQuiz.id) throw new Error('No quiz selected');
-
-        const { data: questions, error } = await supabase
-            .from('questions')
-            .select('*')
-            .eq('quiz_id', gameState.currentQuiz.id)
-            .order('order_number', { ascending: true });
-
-        if (error) throw error;
-
-        const normalized = (questions || []).map(q => {
-            let opts = q.options;
-            if (typeof opts === 'string') {
-                try { opts = JSON.parse(opts); } catch(e) { opts = []; }
-            }
-            return { ...q, options: Array.isArray(opts) ? opts : [] };
-        });
-
-        gameState.questions = shuffleArray([...normalized]);
-
-        gameState.questions = gameState.questions.map(question => {
-            const originalOptions = Array.isArray(question.options) ? [...question.options] : [];
-            const indices = originalOptions.map((_, i) => i);
-            const shuffledIndices = shuffleArray(indices);
-            const shuffledOptions = shuffledIndices.map(i => originalOptions[i]);
-            const originalCorrect = typeof question.correct_answer === 'number' ? question.correct_answer : 0;
-            const newCorrect = shuffledIndices.indexOf(originalCorrect);
-            return { ...question, options: shuffledOptions, correct_answer: newCorrect };
-        });
-
-        gameState.currentQuestionIndex = 0;
-        gameState.score = 0;
-
-        if (typeof showScreen === 'function') showScreen('gameScreen');
-        if (typeof loadCurrentQuestion === 'function') loadCurrentQuestion();
-
-    } catch (error) {
-        console.error('Error starting game:', error);
-        try { alert('❌ Gagal memulai game: ' + (error.message || error)); } catch(e) {}
-    }
-}
-
-/* startTimer with clearInterval + UI safe updates */
-function startTimer() {
-    try {
-        if (!gameState) return;
-        if (gameState.timer) {
-            clearInterval(gameState.timer);
-            gameState.timer = null;
-        }
-        const timeLimit = (gameState.currentQuiz && Number(gameState.currentQuiz.time_limit)) ? Number(gameState.currentQuiz.time_limit) : 15;
-        gameState.timeRemaining = timeLimit;
-        const el = document.getElementById('timeRemaining');
-        if (el) el.textContent = `⏰ ${gameState.timeRemaining}`;
-
-        const bar = document.getElementById('timerBar');
-        if (bar) bar.style.width = '100%';
-
-        gameState.timer = setInterval(() => {
-            gameState.timeRemaining--;
-            const elInner = document.getElementById('timeRemaining');
-            if (elInner) elInner.textContent = `⏰ ${gameState.timeRemaining}`;
-
-            const percentage = (gameState.timeRemaining / timeLimit) * 100;
-            const barInner = document.getElementById('timerBar');
-            if (barInner) barInner.style.width = Math.max(0, percentage) + '%';
-
-            if (gameState.timeRemaining <= 0) {
-                clearInterval(gameState.timer);
-                gameState.timer = null;
-                const answerButtons = document.querySelectorAll('.answer-btn');
-                answerButtons.forEach(b => b.disabled = true);
-                if (typeof selectAnswer === 'function') selectAnswer(-1);
-            }
-        }, 1000);
-    } catch (e) {
-        console.error('startTimer error', e);
-    }
-}
-
-/* Helper to disable answer buttons to prevent double submissions */
-function disableAnswerButtons() {
-    const answerButtons = document.querySelectorAll('.answer-btn');
-    answerButtons.forEach(b => b.disabled = true);
-}
-
-/* When selecting an answer, immediately disable buttons (if function exists) */
-const _origSelectAnswer = typeof selectAnswer === 'function' ? selectAnswer : null;
-function selectAnswerWrapper(idx) {
-    disableAnswerButtons();
-    if (_origSelectAnswer) return _origSelectAnswer(idx);
-    // fallback: emit to console
-    console.log('selectAnswer called with', idx);
-}
-
-/* Make wrapper available if original exists */
-if (!window.selectAnswer && _origSelectAnswer) {
-    window.selectAnswer = selectAnswerWrapper;
-}
-
-/* ===== END: Injected fixes by assistant ===== */
-
-
-
-/* ===== Modal control functions injected by assistant ===== */
-function openExcelImport() {
-  const modal = document.getElementById("excelImport");
-  if (modal) modal.style.display = "flex";
-}
-function closeExcelImport() {
-  const modal = document.getElementById("excelImport");
-  if (modal) modal.style.display = "none";
-}
-function openQuestionBuilder() {
-  const modal = document.getElementById("questionBuilder");
-  if (modal) modal.style.display = "flex";
-}
-function closeQuestionBuilder() {
-  const modal = document.getElementById("questionBuilder");
-  if (modal) modal.style.display = "none";
-}
-/* ===== End modal control functions ===== */
-
-</script>
-
-<!-- Injected minimal Excel import and Question Builder modals (assistant added) -->
-<div id="excelImport" style="display:none; position:fixed; inset:0; z-index:40; align-items:center; justify-content:center; padding:16px;">
-  <div style="background:#fff; padding:16px; border-radius:8px; max-width:780px; width:100%;">
-    <h3>Import Soal dari Excel</h3>
-    <input id="excelFileInput" type="file" accept=".xlsx,.xls" />
-    <div id="fileInfo" style="display:none;">
-      <div>Nama: <span id="fileName"></span></div>
-      <div>Ukuran: <span id="fileSize"></span></div>
-    </div>
-    <div>Jumlah Soal: <span id="excelQuestionCount">0</span></div>
-    <div id="excelQuestionsList"></div>
-    <div style="margin-top:8px;">
-      <button id="processBtn" disabled>Proses</button>
-      <button id="createFromExcelBtn" disabled>Buat Kuis</button>
-      <button onclick="document.getElementById('excelImport').style.display='none'">Tutup</button>
-    </div>
-  </div>
-</div>
-
-<div id="questionBuilder" style="display:none; position:fixed; inset:0; z-index:40; align-items:center; justify-content:center; padding:16px;">
-  <div style="background:#fff; padding:16px; border-radius:8px; max-width:780px; width:100%;">
-    <h3>Buat Soal</h3>
-    <input id="questionInput" placeholder="Pertanyaan" style="width:100%; margin-bottom:8px;" />
-    <input id="option0" placeholder="Pilihan A" style="width:100%; margin-bottom:6px;" />
-    <input id="option1" placeholder="Pilihan B" style="width:100%; margin-bottom:6px;" />
-    <input id="option2" placeholder="Pilihan C" style="width:100%; margin-bottom:6px;" />
-    <input id="option3" placeholder="Pilihan D" style="width:100%; margin-bottom:6px;" />
-    <div>
-      <label><input type="radio" name="correctAnswer" value="0"> A</label>
-      <label><input type="radio" name="correctAnswer" value="1"> B</label>
-      <label><input type="radio" name="correctAnswer" value="2"> C</label>
-      <label><input type="radio" name="correctAnswer" value="3"> D</label>
-    </div>
-    <div style="margin-top:8px;">
-      <button onclick="addQuestion && addQuestion()">Tambah Soal</button>
-      <button onclick="finishQuestions && finishQuestions()">Buat Kuis</button>
-      <button onclick="document.getElementById('questionBuilder').style.display='none'">Tutup</button>
-    </div>
-    <div id="questionsList" style="margin-top:8px;"></div>
-    <div>Jumlah: <span id="questionCount">0</span></div>
-  </div>
-</div>
-<!-- ===== Placeholders injected for missing IDs ===== -->
-
-<!-- Sidebar Stats -->
-<div id="sidebarStats" style="display:none;">
-  <p>Total soal: <span id="totalQuestions">0</span></p>
-  <p>Peserta: <span id="totalParticipants">0</span></p>
-  <p>Rata-rata skor: <span id="averageScore">0</span></p>
-</div>
-
-<!-- Question Builder Counters -->
-<div id="builderCounters" style="display:none;">
-  Jumlah soal builder: <span id="questionCount">0</span>
-</div>
-
-<!-- ===== End placeholders ===== -->
-
-</body>
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9893affd667e6034',t:'MTc1OTU3MDUwOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
