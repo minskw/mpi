@@ -39,6 +39,7 @@
             margin-left: 70px !important;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 <body class="bg-gradient-to-br from-purple-600 via-blue-600 to-teal-500 min-h-screen">
     <!-- Header -->
@@ -2908,6 +2909,27 @@ if (!window.selectAnswer && _origSelectAnswer) {
 }
 
 /* ===== END: Injected fixes by assistant ===== */
+
+
+
+/* ===== Modal control functions injected by assistant ===== */
+function openExcelImport() {
+  const modal = document.getElementById("excelImport");
+  if (modal) modal.style.display = "flex";
+}
+function closeExcelImport() {
+  const modal = document.getElementById("excelImport");
+  if (modal) modal.style.display = "none";
+}
+function openQuestionBuilder() {
+  const modal = document.getElementById("questionBuilder");
+  if (modal) modal.style.display = "flex";
+}
+function closeQuestionBuilder() {
+  const modal = document.getElementById("questionBuilder");
+  if (modal) modal.style.display = "none";
+}
+/* ===== End modal control functions ===== */
 
 </script>
 
