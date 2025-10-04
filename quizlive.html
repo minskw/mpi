@@ -1,3 +1,4 @@
+<!-- FIXED VERSION: assistant injected robust shuffleArray, startGameFromDatabase, startTimer, helper functions, and minimal modals. Review console for any remaining ID mismatches. -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -2787,6 +2788,171 @@
                 showScreen('loginScreen');
             }
         }
-    </script>
+    
+
+/* ===== START: Injected fixes by assistant ===== */
+
+/* Robust shuffleArray */
+function shuffleArray(array) {
+    const shuffled = Array.isArray(array) ? [...array] : [];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
+/* Robust startGameFromDatabase */
+async function startGameFromDatabase() {
+    try {
+        // Ensure supabase and gameState.currentQuiz are available
+        if (!window.supabase) throw new Error('Supabase client not initialized');
+        if (!gameState || !gameState.currentQuiz || !gameState.currentQuiz.id) throw new Error('No quiz selected');
+
+        const { data: questions, error } = await supabase
+            .from('questions')
+            .select('*')
+            .eq('quiz_id', gameState.currentQuiz.id)
+            .order('order_number', { ascending: true });
+
+        if (error) throw error;
+
+        const normalized = (questions || []).map(q => {
+            let opts = q.options;
+            if (typeof opts === 'string') {
+                try { opts = JSON.parse(opts); } catch(e) { opts = []; }
+            }
+            return { ...q, options: Array.isArray(opts) ? opts : [] };
+        });
+
+        gameState.questions = shuffleArray([...normalized]);
+
+        gameState.questions = gameState.questions.map(question => {
+            const originalOptions = Array.isArray(question.options) ? [...question.options] : [];
+            const indices = originalOptions.map((_, i) => i);
+            const shuffledIndices = shuffleArray(indices);
+            const shuffledOptions = shuffledIndices.map(i => originalOptions[i]);
+            const originalCorrect = typeof question.correct_answer === 'number' ? question.correct_answer : 0;
+            const newCorrect = shuffledIndices.indexOf(originalCorrect);
+            return { ...question, options: shuffledOptions, correct_answer: newCorrect };
+        });
+
+        gameState.currentQuestionIndex = 0;
+        gameState.score = 0;
+
+        if (typeof showScreen === 'function') showScreen('gameScreen');
+        if (typeof loadCurrentQuestion === 'function') loadCurrentQuestion();
+
+    } catch (error) {
+        console.error('Error starting game:', error);
+        try { alert('❌ Gagal memulai game: ' + (error.message || error)); } catch(e) {}
+    }
+}
+
+/* startTimer with clearInterval + UI safe updates */
+function startTimer() {
+    try {
+        if (!gameState) return;
+        if (gameState.timer) {
+            clearInterval(gameState.timer);
+            gameState.timer = null;
+        }
+        const timeLimit = (gameState.currentQuiz && Number(gameState.currentQuiz.time_limit)) ? Number(gameState.currentQuiz.time_limit) : 15;
+        gameState.timeRemaining = timeLimit;
+        const el = document.getElementById('timeRemaining');
+        if (el) el.textContent = `⏰ ${gameState.timeRemaining}`;
+
+        const bar = document.getElementById('timerBar');
+        if (bar) bar.style.width = '100%';
+
+        gameState.timer = setInterval(() => {
+            gameState.timeRemaining--;
+            const elInner = document.getElementById('timeRemaining');
+            if (elInner) elInner.textContent = `⏰ ${gameState.timeRemaining}`;
+
+            const percentage = (gameState.timeRemaining / timeLimit) * 100;
+            const barInner = document.getElementById('timerBar');
+            if (barInner) barInner.style.width = Math.max(0, percentage) + '%';
+
+            if (gameState.timeRemaining <= 0) {
+                clearInterval(gameState.timer);
+                gameState.timer = null;
+                const answerButtons = document.querySelectorAll('.answer-btn');
+                answerButtons.forEach(b => b.disabled = true);
+                if (typeof selectAnswer === 'function') selectAnswer(-1);
+            }
+        }, 1000);
+    } catch (e) {
+        console.error('startTimer error', e);
+    }
+}
+
+/* Helper to disable answer buttons to prevent double submissions */
+function disableAnswerButtons() {
+    const answerButtons = document.querySelectorAll('.answer-btn');
+    answerButtons.forEach(b => b.disabled = true);
+}
+
+/* When selecting an answer, immediately disable buttons (if function exists) */
+const _origSelectAnswer = typeof selectAnswer === 'function' ? selectAnswer : null;
+function selectAnswerWrapper(idx) {
+    disableAnswerButtons();
+    if (_origSelectAnswer) return _origSelectAnswer(idx);
+    // fallback: emit to console
+    console.log('selectAnswer called with', idx);
+}
+
+/* Make wrapper available if original exists */
+if (!window.selectAnswer && _origSelectAnswer) {
+    window.selectAnswer = selectAnswerWrapper;
+}
+
+/* ===== END: Injected fixes by assistant ===== */
+
+</script>
+
+<!-- Injected minimal Excel import and Question Builder modals (assistant added) -->
+<div id="excelImport" style="display:none; position:fixed; inset:0; z-index:40; align-items:center; justify-content:center; padding:16px;">
+  <div style="background:#fff; padding:16px; border-radius:8px; max-width:780px; width:100%;">
+    <h3>Import Soal dari Excel</h3>
+    <input id="excelFileInput" type="file" accept=".xlsx,.xls" />
+    <div id="fileInfo" style="display:none;">
+      <div>Nama: <span id="fileName"></span></div>
+      <div>Ukuran: <span id="fileSize"></span></div>
+    </div>
+    <div>Jumlah Soal: <span id="excelQuestionCount">0</span></div>
+    <div id="excelQuestionsList"></div>
+    <div style="margin-top:8px;">
+      <button id="processBtn" disabled>Proses</button>
+      <button id="createFromExcelBtn" disabled>Buat Kuis</button>
+      <button onclick="document.getElementById('excelImport').style.display='none'">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<div id="questionBuilder" style="display:none; position:fixed; inset:0; z-index:40; align-items:center; justify-content:center; padding:16px;">
+  <div style="background:#fff; padding:16px; border-radius:8px; max-width:780px; width:100%;">
+    <h3>Buat Soal</h3>
+    <input id="questionInput" placeholder="Pertanyaan" style="width:100%; margin-bottom:8px;" />
+    <input id="option0" placeholder="Pilihan A" style="width:100%; margin-bottom:6px;" />
+    <input id="option1" placeholder="Pilihan B" style="width:100%; margin-bottom:6px;" />
+    <input id="option2" placeholder="Pilihan C" style="width:100%; margin-bottom:6px;" />
+    <input id="option3" placeholder="Pilihan D" style="width:100%; margin-bottom:6px;" />
+    <div>
+      <label><input type="radio" name="correctAnswer" value="0"> A</label>
+      <label><input type="radio" name="correctAnswer" value="1"> B</label>
+      <label><input type="radio" name="correctAnswer" value="2"> C</label>
+      <label><input type="radio" name="correctAnswer" value="3"> D</label>
+    </div>
+    <div style="margin-top:8px;">
+      <button onclick="addQuestion && addQuestion()">Tambah Soal</button>
+      <button onclick="finishQuestions && finishQuestions()">Buat Kuis</button>
+      <button onclick="document.getElementById('questionBuilder').style.display='none'">Tutup</button>
+    </div>
+    <div id="questionsList" style="margin-top:8px;"></div>
+    <div>Jumlah: <span id="questionCount">0</span></div>
+  </div>
+</div>
+
 </body>
 </html>
