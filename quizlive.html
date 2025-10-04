@@ -925,6 +925,521 @@
             }
         }
 
+    // TAMBAHKAN FUNCTION INI - Admin Sidebar Functions
+    function toggleAdminSidebar() {
+        const sidebar = document.getElementById('adminSidebar');
+        const mainContent = document.getElementById('adminMainContent');
+        const toggle = document.getElementById('adminSidebarToggle');
+        
+        if (sidebar.classList.contains('admin-sidebar-collapsed')) {
+            // Expand sidebar
+            sidebar.classList.remove('admin-sidebar-collapsed');
+            sidebar.classList.remove('w-16');
+            sidebar.classList.add('w-64');
+            mainContent.classList.remove('admin-main-expanded');
+            mainContent.classList.remove('ml-16');
+            mainContent.classList.add('ml-64');
+            toggle.classList.add('hidden');
+        } else {
+            // Collapse sidebar
+            sidebar.classList.add('admin-sidebar-collapsed');
+            sidebar.classList.remove('w-64');
+            sidebar.classList.add('w-16');
+            mainContent.classList.add('admin-main-expanded');
+            mainContent.classList.remove('ml-64');
+            mainContent.classList.add('ml-16');
+            toggle.classList.remove('hidden');
+        }
+    }
+
+    // TAMBAHKAN FUNCTION INI - Refresh Sidebar Stats
+    async function refreshSidebarStats() {
+        try {
+            const { data: savedQuizzes } = await supabase.from('quizzes').select('id');
+            const { data: participants } = await supabase.from('participants').select('id').eq('is_active', true);
+            const { data: activeQuizzes } = await supabase.from('quizzes').select('id').eq('status', 'active');
+            
+            // Update stats in the appropriate section, not in sidebar
+            document.getElementById('statsQuizCount').textContent = savedQuizzes?.length || 0;
+            document.getElementById('statsParticipantCount').textContent = participants?.length || 0;
+            document.getElementById('statsActiveQuiz').textContent = activeQuizzes?.length || 0;
+        } catch (error) {
+            console.error('Error refreshing sidebar stats:', error);
+        }
+    }
+
+    // TAMBAHKAN FUNCTION INI - Refresh All Stats
+    async function refreshAllStats() {
+        try {
+            const { data: allQuizzes } = await supabase.from('quizzes').select('id, status');
+            const { data: allParticipants } = await supabase.from('participants').select('id');
+            
+            const totalQuizzes = allQuizzes?.length || 0;
+            const totalParticipants = allParticipants?.length || 0;
+            const activeQuizzes = allQuizzes?.filter(q => q.status === 'active').length || 0;
+            const completedQuizzes = allQuizzes?.filter(q => q.status === 'completed').length || 0;
+            
+            // Update stats section
+            document.getElementById('statsQuizCount').textContent = totalQuizzes;
+            document.getElementById('statsParticipantCount').textContent = totalParticipants;
+            document.getElementById('statsActiveQuiz').textContent = activeQuizzes;
+            document.getElementById('statsCompletedQuiz').textContent = completedQuizzes;
+            
+        } catch (error) {
+            console.error('Error refreshing all stats:', error);
+        }
+    }
+
+    // TAMBAHKAN FUNCTION INI - Show Question Builder
+    function showQuestionBuilder() {
+        // Inisialisasi state question builder
+        if (!window.questionBuilder) {
+            window.questionBuilder = {
+                questions: [],
+                currentQuestionNumber: 1
+            };
+        }
+        
+        // Reset form
+        document.getElementById('questionInput').value = '';
+        document.getElementById('option0').value = '';
+        document.getElementById('option1').value = '';
+        document.getElementById('option2').value = '';
+        document.getElementById('option3').value = '';
+        document.querySelectorAll('input[name="correctAnswer"]').forEach(radio => radio.checked = false);
+        
+        // Update UI
+        updateQuestionNumber();
+        updateQuestionsList();
+        
+        // Show panel
+        document.getElementById('questionBuilder').classList.remove('hidden');
+    }
+
+    // TAMBAHKAN FUNCTION INI - Close Question Builder
+    function closeQuestionBuilder() {
+        document.getElementById('questionBuilder').classList.add('hidden');
+    }
+
+    // TAMBAHKAN FUNCTION INI - Update Question Number
+    function updateQuestionNumber() {
+        document.getElementById('questionNumber').textContent = window.questionBuilder?.currentQuestionNumber || 1;
+    }
+
+    // TAMBAHKAN FUNCTION INI - Update Questions List
+    function updateQuestionsList() {
+        const questionsList = document.getElementById('questionsList');
+        const questionCount = document.getElementById('questionCount');
+        
+        const questions = window.questionBuilder?.questions || [];
+        questionCount.textContent = questions.length;
+        
+        if (questions.length === 0) {
+            questionsList.innerHTML = `
+                <div class="text-white/60 text-center py-8">
+                    Belum ada soal. Mulai buat soal pertama!
+                </div>
+            `;
+            return;
+        }
+
+        questionsList.innerHTML = questions.map((q, index) => `
+            <div class="bg-white/20 rounded-lg p-3">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-white font-bold text-sm">Soal ${index + 1}</span>
+                    <button onclick="removeQuestion(${index})" class="text-red-400 hover:text-red-300 text-sm">🗑️</button>
+                </div>
+                <p class="text-white/80 text-sm mb-2">${q.question_text}</p>
+                <div class="text-xs text-white/60">
+                    Jawaban: ${String.fromCharCode(65 + q.correct_answer)}. ${q.options[q.correct_answer]}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // TAMBAHKAN FUNCTION INI - Add Question
+    function addQuestion() {
+        if (!window.questionBuilder) {
+            window.questionBuilder = {
+                questions: [],
+                currentQuestionNumber: 1
+            };
+        }
+
+        const questionText = document.getElementById('questionInput').value.trim();
+        const options = [
+            document.getElementById('option0').value.trim(),
+            document.getElementById('option1').value.trim(),
+            document.getElementById('option2').value.trim(),
+            document.getElementById('option3').value.trim()
+        ];
+        
+        const correctAnswer = document.querySelector('input[name="correctAnswer"]:checked');
+        
+        if (!questionText) {
+            alert('❌ Masukkan pertanyaan!');
+            return;
+        }
+        
+        if (options.some(opt => !opt)) {
+            alert('❌ Isi semua pilihan jawaban!');
+            return;
+        }
+        
+        if (!correctAnswer) {
+            alert('❌ Pilih jawaban yang benar!');
+            return;
+        }
+
+        const question = {
+            question_text: questionText,
+            options: options,
+            correct_answer: parseInt(correctAnswer.value),
+            order_number: window.questionBuilder.questions.length + 1
+        };
+
+        window.questionBuilder.questions.push(question);
+        window.questionBuilder.currentQuestionNumber++;
+        
+        // Clear form
+        document.getElementById('questionInput').value = '';
+        document.getElementById('option0').value = '';
+        document.getElementById('option1').value = '';
+        document.getElementById('option2').value = '';
+        document.getElementById('option3').value = '';
+        document.querySelectorAll('input[name="correctAnswer"]').forEach(radio => radio.checked = false);
+        
+        updateQuestionNumber();
+        updateQuestionsList();
+        
+        alert(`✅ Soal ${window.questionBuilder.questions.length} berhasil ditambahkan!`);
+    }
+
+    // TAMBAHKAN FUNCTION INI - Remove Question
+    function removeQuestion(index) {
+        if (confirm('Hapus soal ini?')) {
+            window.questionBuilder.questions.splice(index, 1);
+            // Update order numbers
+            window.questionBuilder.questions.forEach((q, i) => {
+                q.order_number = i + 1;
+            });
+            updateQuestionsList();
+        }
+    }
+
+    // TAMBAHKAN FUNCTION INI - Show Excel Import
+    function showExcelImport() {
+        if (!window.excelImport) {
+            window.excelImport = {
+                file: null,
+                questions: []
+            };
+        }
+        
+        window.excelImport.file = null;
+        window.excelImport.questions = [];
+        document.getElementById('fileInfo').classList.add('hidden');
+        document.getElementById('processBtn').disabled = true;
+        document.getElementById('createFromExcelBtn').disabled = true;
+        updateExcelQuestionsList();
+        document.getElementById('excelImport').classList.remove('hidden');
+    }
+
+    // TAMBAHKAN FUNCTION INI - Close Excel Import
+    function closeExcelImport() {
+        document.getElementById('excelImport').classList.add('hidden');
+    }
+
+    // TAMBAHKAN FUNCTION INI - Create Quiz with Samples
+    async function createQuizWithSamples() {
+        const title = document.getElementById('quizName').value || 'Kuis Baru';
+        const teacherName = document.getElementById('teacherName').value || 'Guru';
+        const subject = document.getElementById('quizSubject').value;
+        const quizClass = document.getElementById('quizClass').value;
+        const timeLimit = parseInt(document.getElementById('adminTimeLimit').value);
+        
+        if (!subject || !quizClass) {
+            alert('❌ Pilih mata pelajaran dan kelas terlebih dahulu!');
+            return;
+        }
+        
+        try {
+            // Generate unique code
+            const code = generateGameCode();
+            
+            // Create quiz
+            const { data: quiz, error: quizError } = await supabase
+                .from('quizzes')
+                .insert([{
+                    title: title,
+                    code: code,
+                    creator_name: teacherName,
+                    subject: subject,
+                    class: quizClass,
+                    question_count: 5,
+                    time_limit: timeLimit,
+                    status: 'waiting'
+                }])
+                .select()
+                .single();
+
+            if (quizError) throw quizError;
+
+            // Insert sample questions
+            const sampleQuestions = [
+                {
+                    question_text: "Apa ibu kota Indonesia?",
+                    options: ["Jakarta", "Bandung", "Surabaya", "Medan"],
+                    correct_answer: 0,
+                    order_number: 1
+                },
+                {
+                    question_text: "Siapa presiden pertama Indonesia?",
+                    options: ["Soekarno", "Soeharto", "Habibie", "Megawati"],
+                    correct_answer: 0,
+                    order_number: 2
+                },
+                {
+                    question_text: "Berapa jumlah pulau di Indonesia?",
+                    options: ["13.000", "17.508", "20.000", "15.000"],
+                    correct_answer: 1,
+                    order_number: 3
+                },
+                {
+                    question_text: "Apa mata uang Indonesia?",
+                    options: ["Ringgit", "Rupiah", "Baht", "Peso"],
+                    correct_answer: 1,
+                    order_number: 4
+                },
+                {
+                    question_text: "Gunung tertinggi di Indonesia adalah?",
+                    options: ["Gunung Merapi", "Gunung Bromo", "Puncak Jaya", "Gunung Rinjani"],
+                    correct_answer: 2,
+                    order_number: 5
+                }
+            ];
+
+            const questionsToInsert = sampleQuestions.map(q => ({
+                ...q,
+                quiz_id: quiz.id
+            }));
+
+            const { error: questionsError } = await supabase
+                .from('questions')
+                .insert(questionsToInsert);
+
+            if (questionsError) throw questionsError;
+
+            gameState.currentQuiz = quiz;
+            document.getElementById('codeDisplay').textContent = code;
+            document.getElementById('gameCode').classList.remove('hidden');
+            
+            closeAdminPanel();
+            alert(`✅ Kuis "${title}" berhasil dibuat!\nKode: ${code}\nBagikan kode ini ke siswa.`);
+            
+            // Start quiz immediately
+            await startQuiz();
+            
+        } catch (error) {
+            console.error('Error creating quiz:', error);
+            alert('❌ Gagal membuat kuis: ' + error.message);
+        }
+    }
+
+    // TAMBAHKAN FUNCTION INI - Load Participants
+    async function loadParticipants() {
+        if (!gameState.currentQuiz) return;
+
+        try {
+            const { data: participants, error } = await supabase
+                .from('participants')
+                .select('*')
+                .eq('quiz_id', gameState.currentQuiz.id)
+                .eq('is_active', true)
+                .order('joined_at');
+
+            if (error) throw error;
+
+            const participantsList = document.getElementById('participantsList');
+            const participantCount = document.getElementById('participantCount');
+            
+            participantCount.textContent = participants.length;
+            
+            participantsList.innerHTML = participants.map(participant => `
+                <div class="bg-white/20 rounded-lg p-3 flex items-center animate-slide-in">
+                    <div class="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold mr-3">
+                        ${participant.name.charAt(0).toUpperCase()}
+                    </div>
+                    <span class="text-white font-medium">${participant.name}</span>
+                    ${participant.id === gameState.currentParticipant?.id ? '<span class="ml-auto text-yellow-400">👤</span>' : ''}
+                </div>
+            `).join('');
+            
+        } catch (error) {
+            console.error('Error loading participants:', error);
+        }
+    }
+
+    // TAMBAHKAN FUNCTION INI - Start Game from Database
+    async function startGameFromDatabase() {
+        try {
+            // Load questions
+            const { data: questions, error } = await supabase
+                .from('questions')
+                .select('*')
+                .eq('quiz_id', gameState.currentQuiz.id)
+                .order('order_number');
+
+            if (error) throw error;
+
+            gameState.questions = questions;
+            gameState.currentQuestionIndex = 0;
+            gameState.score = 0;
+            
+            showScreen('gameScreen');
+            loadCurrentQuestion();
+            
+        } catch (error) {
+            console.error('Error starting game:', error);
+            alert('❌ Gagal memulai game: ' + error.message);
+        }
+    }
+
+    // TAMBAHKAN FUNCTION INI - Load Current Question
+    function loadCurrentQuestion() {
+        const question = gameState.questions[gameState.currentQuestionIndex];
+        if (!question) return;
+
+        document.getElementById('currentQuestion').textContent = gameState.currentQuestionIndex + 1;
+        document.getElementById('totalQuestions').textContent = gameState.questions.length;
+        document.getElementById('questionText').textContent = question.question_text;
+        document.getElementById('currentScore').textContent = gameState.score;
+
+        // Create answer options
+        const answerOptions = document.getElementById('answerOptions');
+        answerOptions.innerHTML = question.options.map((option, index) => `
+            <button onclick="selectAnswer(${index})" class="answer-btn bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white font-bold py-6 px-6 rounded-xl text-lg transition-all duration-300 transform hover:scale-105">
+                ${String.fromCharCode(65 + index)}. ${option}
+            </button>
+        `).join('');
+
+        // Start timer
+        gameState.timeRemaining = gameState.currentQuiz.time_limit;
+        startTimer();
+    }
+
+    // TAMBAHKAN FUNCTION INI - Start Timer
+    function startTimer() {
+        const timeLimit = gameState.currentQuiz.time_limit;
+        gameState.timer = setInterval(() => {
+            gameState.timeRemaining--;
+            document.getElementById('timeRemaining').textContent = `⏰ ${gameState.timeRemaining}`;
+            
+            const percentage = (gameState.timeRemaining / timeLimit) * 100;
+            document.getElementById('timerBar').style.width = percentage + '%';
+            
+            if (gameState.timeRemaining <= 0) {
+                clearInterval(gameState.timer);
+                selectAnswer(-1); // Time's up
+            }
+        }, 1000);
+    }
+
+    // TAMBAHKAN FUNCTION INI - Select Answer
+    async function selectAnswer(selectedIndex) {
+        clearInterval(gameState.timer);
+        
+        const question = gameState.questions[gameState.currentQuestionIndex];
+        const isCorrect = selectedIndex === question.correct_answer;
+        
+        if (isCorrect) {
+            gameState.score += 100;
+        }
+
+        // Save answer to database
+        try {
+            await supabase
+                .from('quiz_answers')
+                .insert([{
+                    quiz_id: gameState.currentQuiz.id,
+                    participant_id: gameState.currentParticipant.id,
+                    question_number: gameState.currentQuestionIndex + 1,
+                    selected_answer: selectedIndex,
+                    is_correct: isCorrect
+                }]);
+
+            // Update participant score
+            await supabase
+                .from('participants')
+                .update({ score: gameState.score })
+                .eq('id', gameState.currentParticipant.id);
+
+        } catch (error) {
+            console.error('Error saving answer:', error);
+        }
+
+        // Show result
+        const answerButtons = document.querySelectorAll('.answer-btn');
+        answerButtons.forEach(btn => btn.disabled = true);
+        answerButtons[question.correct_answer].classList.add('ring-4', 'ring-green-400');
+        
+        if (selectedIndex !== question.correct_answer && selectedIndex >= 0) {
+            answerButtons[selectedIndex].classList.add('ring-4', 'ring-red-400');
+        }
+
+        setTimeout(() => {
+            // Next question or results
+            gameState.currentQuestionIndex++;
+            if (gameState.currentQuestionIndex < gameState.questions.length) {
+                loadCurrentQuestion();
+            } else {
+                showResults();
+            }
+        }, 2000);
+    }
+
+    // TAMBAHKAN FUNCTION INI - Show Results
+    async function showResults() {
+        try {
+            // Get final leaderboard
+            const { data: participants, error } = await supabase
+                .from('participants')
+                .select('*')
+                .eq('quiz_id', gameState.currentQuiz.id)
+                .order('score', { ascending: false });
+
+            if (error) throw error;
+
+            const leaderboard = document.getElementById('leaderboard');
+            leaderboard.innerHTML = participants.map((participant, index) => {
+                const medals = ['🥇', '🥈', '🥉'];
+                const medal = medals[index] || '🏅';
+                
+                return `
+                    <div class="bg-white/20 rounded-lg p-4 flex items-center justify-between animate-slide-in ${participant.id === gameState.currentParticipant?.id ? 'ring-2 ring-yellow-400' : ''}">
+                        <div class="flex items-center">
+                            <span class="text-2xl mr-4">${medal}</span>
+                            <div>
+                                <div class="text-white font-bold text-lg">${participant.name}</div>
+                                <div class="text-white/60">Peringkat ${index + 1}</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-yellow-400 font-bold text-xl">${participant.score}</div>
+                            <div class="text-white/60">poin</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            showScreen('resultsScreen');
+            
+        } catch (error) {
+            console.error('Error loading results:', error);
+            alert('❌ Gagal memuat hasil: ' + error.message);
+        }
+    }
+
         // Initialize admin panel on first load
         document.addEventListener('DOMContentLoaded', function() {
             const createQuizBtn = document.querySelector('[onclick="showAdminSection(\'createQuiz\')"]');
