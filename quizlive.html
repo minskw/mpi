@@ -2086,9 +2086,8 @@
                                     🚀 Mainkan Kuis
                                 </button>
                             ` : quiz.status === 'active' ? `
-                                <button onclick="hostQuiz('${quiz.id}')" 
-                                  class="w-full bg-gradient-to-r from-green-600 to-teal-700 hover:from-green-700 hover:to-teal-800 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 text-sm">
-                                  📡 Host Quiz (${quiz.code})
+                                <button onclick="joinActiveQuiz('${quiz.code}')" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 text-sm">
+                                    🎯 Gabung Kuis (${quiz.code})
                                 </button>
                             ` : `
                                 <button onclick="viewQuizResults('${quiz.id}')" class="w-full bg-gradient-to-r from-gray-500 to-slate-600 hover:from-gray-600 hover:to-slate-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 text-sm">
@@ -2304,29 +2303,6 @@
                 alert('❌ Gagal menghapus kuis: ' + error.message);
             }
         }
-async function hostQuiz(quizId) {
-  try {
-    // Ubah status kuis jadi "waiting"
-    const { error } = await supabase
-      .from("quizzes")
-      .update({ status: "waiting" })
-      .eq("id", quizId);
-
-    if (error) {
-      console.error("❌ Gagal host quiz:", error);
-      alert("Gagal meng-host kuis.");
-      return;
-    }
-
-    // Tampilkan panel monitoring guru
-    openMonitoringPanel(quizId);
-
-    alert("✅ Quiz berhasil di-host. Siswa bisa join dengan kode kuis!");
-  } catch (err) {
-    console.error(err);
-    alert("Terjadi error saat host quiz.");
-  }
-}
 
         // Show monitoring panel
         async function showMonitoringPanel() {
